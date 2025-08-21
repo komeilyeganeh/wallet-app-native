@@ -1,1 +1,1 @@
-export {default} from "./SuccessResetPassword"
+export {default} from "./SuccessResetPass"
