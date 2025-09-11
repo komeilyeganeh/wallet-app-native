@@ -1,11 +1,10 @@
-import { Redirect, Stack } from "expo-router";
-import 'react-native-gesture-handler';
+import { Stack } from "expo-router";
 
 export default function RootLayout() {
-  const isAuth = false;
-  if (!isAuth) {
-    return <Redirect href="/(auth)/login" />
-  }
+  // const isAuth = false;
+  // if (!isAuth) {
+  //   return <Redirect href="/(auth)/login" />
+  // }
   // **** jsx ***
   return (
     <Stack
