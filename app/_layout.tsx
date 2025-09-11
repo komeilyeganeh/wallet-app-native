@@ -3,6 +3,9 @@ import 'react-native-gesture-handler';
 
 export default function RootLayout() {
   const isAuth = false;
+  if (!isAuth) {
+    return <Redirect href="/(auth)/login" />
+  }
   // **** jsx ***
   return (
     <Stack
@@ -16,11 +19,7 @@ export default function RootLayout() {
         },
       }}
     >
-      {isAuth ? (
-        <Stack.Screen name="(main)/(tabs)" options={{ headerShown: false }} />
-      ) : (
-        <Redirect href="/(auth)/login" />
-      )}
+      <Stack.Screen name="(main)/(tabs)" options={{ headerShown: false }} />
     </Stack>
   );
 }
