@@ -196,11 +196,10 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     marginTop: 15,
-    display: "flex",
-    flexDirection: "row",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: 14,
+    rowGap: 14,
   },
   carousel: {
     justifyContent: "center",

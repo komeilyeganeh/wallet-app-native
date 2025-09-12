@@ -1,12 +1,13 @@
 import { HomeCardItemType } from "@/types/homeCardItem";
 import { Link } from "expo-router";
 import { FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 
 const CardItem: FC<HomeCardItemType> = ({ icon, title, href }) => {
+   const { width } = useWindowDimensions();
   return (
     <Link href={href}>
-      <View style={styles.container}>
+      <View style={[styles.container, { width: width * 0.27 }]}>
         {icon}
         <Text style={styles.cardTitle}>{title}</Text>
       </View>
@@ -16,7 +17,7 @@ const CardItem: FC<HomeCardItemType> = ({ icon, title, href }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 105,
+    elevation: 3,
     height: 100,
     borderRadius: 15,
     boxShadow: "0 5px 30px 0 rgba(0,0,0,0.1)",
