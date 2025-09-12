@@ -17,6 +17,7 @@ export default function RootLayout() {
           backgroundColor: "#3629B7",
         },
       }}
+      initialRouteName="(main)/(tabs)"
     >
       <Stack.Screen name="(main)/(tabs)" options={{ headerShown: false }} />
     </Stack>
