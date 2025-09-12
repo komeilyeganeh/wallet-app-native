@@ -14,9 +14,10 @@ export default function TabLayout() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarStyle: {
-          height: 60,
+          height: 90,
           paddingHorizontal: 20,
           paddingTop: 10,
+          paddingBottom: 50,
           borderTopWidth: 0,
           boxShadow: "0 -5px 30px #291c9d1a"
         },

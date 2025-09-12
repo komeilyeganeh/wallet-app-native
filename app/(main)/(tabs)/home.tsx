@@ -2,14 +2,21 @@ import CreditCard from "@/components/creditCard/CreditCard";
 import CardItem from "@/components/home/cardItem/CardItem";
 import { CreditCardPropsType } from "@/types/creditCard";
 import {
-    FontAwesome,
-    FontAwesome5,
-    FontAwesome6,
-    Ionicons,
-    MaterialIcons,
+  FontAwesome,
+  FontAwesome5,
+  FontAwesome6,
+  Ionicons,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import { FC, useRef } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 
 const { width: screenWidth } = Dimensions.get("window");
@@ -21,7 +28,7 @@ const cards: CreditCardPropsType[] = [
     accountLevel: "Amazon Platinium",
     cardNumber: "4756 **** **** 9018",
     accountBalance: "3.469.52",
-    theme: "blue"
+    theme: "blue",
   },
   {
     id: 2,
@@ -29,7 +36,7 @@ const cards: CreditCardPropsType[] = [
     accountLevel: "Amazon Platinium",
     cardNumber: "6164 **** **** 0022",
     accountBalance: "9.200",
-    theme: "yellow"
+    theme: "yellow",
   },
 ];
 
@@ -61,69 +68,77 @@ const HomeScreen: FC = () => {
           </View>
         </View>
       </View>
-      <View style={styles.contentWrapper}>
-        <Carousel
-          ref={carouselRef}
-          loop={true}
-          width={screenWidth * 0.88}
-          height={250}
-          autoPlay={false}
-          data={cards}
-          scrollAnimationDuration={500}
-          renderItem={renderItem}
-          mode="vertical-stack"
-          style={styles.carousel}
-        />
-        <View style={styles.cardsContainer}>
-          <CardItem
-            icon={<FontAwesome5 name="wallet" size={28} color="#3629B7" />}
-            title="Account and Card"
-            href="/(main)/(screens)/home/AccountAndCard"
+      <ScrollView style={styles.contentWrapper}>
+        <View style={{ paddingBottom: 40 }}>
+          <Carousel
+            ref={carouselRef}
+            loop={true}
+            width={screenWidth * 0.88}
+            height={250}
+            autoPlay={false}
+            data={cards}
+            scrollAnimationDuration={500}
+            renderItem={renderItem}
+            mode="vertical-stack"
+            style={styles.carousel}
           />
-          <CardItem
-            icon={<Ionicons name="git-compare-outline" size={30} color="#FF4267" />}
-            title="Transfer"
-            href="/(main)/(screens)/home/Transfer"
-          />
-          <CardItem
-            icon={<Ionicons name="card" size={28} color="#0890FE" />}
-            title="Withdraw"
-            href="/(main)/(screens)/home/Withdraw"
-          />
-          <CardItem
-            icon={<FontAwesome name="dollar" size={28} color="#FFAF2A" />}
-            title="Mobile prepaid"
-            href="/(main)/(screens)/home/MobilePrepaid"
-          />
-          <CardItem
-            icon={<FontAwesome name="bookmark" size={28} color="#52D5BA" />}
-            title="Pay the bill"
-            href="/(main)/(screens)/home/PayBill"
-          />
-          <CardItem
-            icon={<Ionicons name="save" size={28} color="#5655B9" />}
-            title="Save online"
-            href="/(main)/(screens)/home/SaveOnline"
-          />
-          <CardItem
-            icon={<Ionicons name="card" size={28} color="#FB6B18" />}
-            title="Credit card"
-            href="/(main)/(screens)/home/CreditCard"
-          />
-          <CardItem
-            icon={<MaterialIcons name="list-alt" size={28} color="#3629B7" />}
-            title="Transaction report"
-            href="/(main)/(screens)/home/TransactionReport"
-          />
-          <CardItem
-            icon={
-              <FontAwesome6 name="contact-book" size={28} color="#FF4267" />
-            }
-            title="Beneficiary"
-            href="/(main)/(screens)/home/Beneficiary"
-          />
+          <View style={styles.cardsContainer}>
+            <CardItem
+              icon={<FontAwesome5 name="wallet" size={28} color="#3629B7" />}
+              title="Account and Card"
+              href="/(main)/(screens)/home/AccountAndCard"
+            />
+            <CardItem
+              icon={
+                <Ionicons
+                  name="git-compare-outline"
+                  size={30}
+                  color="#FF4267"
+                />
+              }
+              title="Transfer"
+              href="/(main)/(screens)/home/Transfer"
+            />
+            <CardItem
+              icon={<Ionicons name="card" size={28} color="#0890FE" />}
+              title="Withdraw"
+              href="/(main)/(screens)/home/Withdraw"
+            />
+            <CardItem
+              icon={<FontAwesome name="dollar" size={28} color="#FFAF2A" />}
+              title="Mobile prepaid"
+              href="/(main)/(screens)/home/MobilePrepaid"
+            />
+            <CardItem
+              icon={<FontAwesome name="bookmark" size={28} color="#52D5BA" />}
+              title="Pay the bill"
+              href="/(main)/(screens)/home/PayBill"
+            />
+            <CardItem
+              icon={<Ionicons name="save" size={28} color="#5655B9" />}
+              title="Save online"
+              href="/(main)/(screens)/home/SaveOnline"
+            />
+            <CardItem
+              icon={<Ionicons name="card" size={28} color="#FB6B18" />}
+              title="Credit card"
+              href="/(main)/(screens)/home/CreditCard"
+            />
+            <CardItem
+              icon={<MaterialIcons name="list-alt" size={28} color="#3629B7" />}
+              title="Transaction report"
+              href="/(main)/(screens)/home/TransactionReport"
+            />
+            <CardItem
+              icon={
+                <FontAwesome6 name="contact-book" size={28} color="#FF4267" />
+              }
+              title="Beneficiary"
+              href="/(main)/(screens)/home/Beneficiary"
+            />
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -180,7 +195,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   cardsContainer: {
-    marginTop: 32,
+    marginTop: 15,
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
