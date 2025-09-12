@@ -17,7 +17,6 @@ const CardItem: FC<HomeCardItemType> = ({ icon, title, href }) => {
 
 const styles = StyleSheet.create({
   container: {
-    elevation: 3,
     height: 100,
     borderRadius: 15,
     boxShadow: "0 5px 30px 0 rgba(0,0,0,0.1)",

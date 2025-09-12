@@ -20,7 +20,11 @@ const TransactionReportScreen = () => {
       </View>
       <View style={styles.content}>
         <View style={styles.cardContainer}>
-          <CreditCard />
+          <CreditCard  name="Komeil"
+              accountLevel="Amazon Platinium"
+              cardNumber="6164 **** **** 0022"
+              accountBalance="9.200"
+              theme="yellow"/>
         </View>
         <ScrollView style={{paddingTop: 15, marginTop: -90}}>
           <View

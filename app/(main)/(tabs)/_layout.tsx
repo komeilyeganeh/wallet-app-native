@@ -1,23 +1,27 @@
+import { lazy } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, Text, View } from "react-native";
-import HomeScreen from "@/app/(main)/(tabs)/home";
-import SearchScreen from "@/app/(main)/(tabs)/search";
-import MessagesScreen from "@/app/(main)/(tabs)/message";
-import SettingsScreen from "@/app/(main)/(tabs)/setting";
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+const HomeScreen = lazy(() => import("@/app/(main)/(tabs)/home"))
+const SearchScreen = lazy(() => import("@/app/(main)/(tabs)/search"))
+const MessagesScreen = lazy(() => import("@/app/(main)/(tabs)/message"));
+const SettingsScreen = lazy(() => import("@/app/(main)/(tabs)/setting"));
 
 const Tab = createBottomTabNavigator();
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
+  const hasBottomNavigation = insets.bottom > 0;
   // **** jsx ****
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarStyle: {
-          height: 90,
+          height: hasBottomNavigation ? 90 : 60,
           paddingHorizontal: 20,
           paddingTop: 10,
-          paddingBottom: 50,
+          paddingBottom: hasBottomNavigation ? 50 : 0,
           borderTopWidth: 0,
           boxShadow: "0 -5px 30px #291c9d1a"
         },
