@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3629B7",
   },
   headerWrapper: {
-    height: 140,
+    height: 110,
     paddingTop: 8,
     paddingHorizontal: 20,
     display: "flex",

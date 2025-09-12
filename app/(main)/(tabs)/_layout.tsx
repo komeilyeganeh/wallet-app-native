@@ -1,32 +1,40 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-const HomeScreen = lazy(() => import("@/app/(main)/(tabs)/home"))
-const SearchScreen = lazy(() => import("@/app/(main)/(tabs)/search"))
-const MessagesScreen = lazy(() => import("@/app/(main)/(tabs)/message"));
-const SettingsScreen = lazy(() => import("@/app/(main)/(tabs)/setting"));
 
 const Tab = createBottomTabNavigator();
 
+const createLazyScreen = (importFunc: any) => {
+  const LazyComponent = lazy(importFunc);
+  
+  return (props: any) => (
+    <Suspense fallback={
+      <Text style={{ margin: "auto", fontWeight: 700, fontSize: 18 }}>is loading...</Text>
+    }>
+      <LazyComponent {...props} />
+    </Suspense>
+  );
+};
+const HomeScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/home"));
+const SearchScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/search"));
+const MessagesScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/message"));
+const SettingsScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/setting"));
+
 export default function TabLayout() {
-  const insets = useSafeAreaInsets();
-  const hasBottomNavigation = insets.bottom > 0;
   // **** jsx ****
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarStyle: {
-          height: hasBottomNavigation ? 90 : 60,
+          height: 60,
           paddingHorizontal: 20,
           paddingTop: 10,
-          paddingBottom: hasBottomNavigation ? 50 : 0,
           borderTopWidth: 0,
-          boxShadow: "0 -5px 30px #291c9d1a"
+          boxShadow: "0 -5px 30px #291c9d1a",
         },
         tabBarIconStyle: {
-          width: "auto"
+          width: "auto",
         },
         headerShown: false,
         tabBarIcon: ({ focused }) => {
@@ -43,21 +51,43 @@ export default function TabLayout() {
           }
 
           return (
-            <View style={[styles.tabWrapper, { backgroundColor: focused ? "#3629B7" : "#FFF", width: focused ? 99 : "auto" }]}>
-              <Ionicons name={iconName} size={20} color={focused ? "#FFF" : "#898989"} />
-              {focused && <View style={styles.tabItemWrapper}>
-                <Text style={{ color: "#FFF", fontSize: 12, textTransform: "capitalize" }}>{route.name}</Text>
-                </View>}
+            <View
+              style={[
+                styles.tabWrapper,
+                {
+                  backgroundColor: focused ? "#3629B7" : "#FFF",
+                  width: focused ? 99 : "auto",
+                },
+              ]}
+            >
+              <Ionicons
+                name={iconName}
+                size={20}
+                color={focused ? "#FFF" : "#898989"}
+              />
+              {focused && (
+                <View style={styles.tabItemWrapper}>
+                  <Text
+                    style={{
+                      color: "#FFF",
+                      fontSize: 12,
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {route.name}
+                  </Text>
+                </View>
+              )}
             </View>
           );
         },
         tabBarLabel: () => null,
       })}
     >
-      <Tab.Screen name="home" component={HomeScreen} />
-      <Tab.Screen name="search" component={SearchScreen} />
-      <Tab.Screen name="message" component={MessagesScreen} />
-      <Tab.Screen name="setting" component={SettingsScreen} />
+        <Tab.Screen name="home" component={HomeScreen} />
+        <Tab.Screen name="search" component={SearchScreen} />
+        <Tab.Screen name="message" component={MessagesScreen} />
+        <Tab.Screen name="setting" component={SettingsScreen} />
     </Tab.Navigator>
   );
 }
@@ -77,5 +107,5 @@ const styles = StyleSheet.create({
   tabItemWrapper: {
     padding: 5,
     borderRadius: 12,
-  }
-})
+  },
+});

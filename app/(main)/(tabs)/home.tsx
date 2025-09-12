@@ -149,13 +149,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#3629B7",
   },
   headerWrapper: {
-    height: 140,
+    height: 110,
     paddingHorizontal: 20,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: 40,
+    paddingTop: 20,
   },
   userWrapper: {
     display: "flex",

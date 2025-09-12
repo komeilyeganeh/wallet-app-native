@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   headerWrapper: {
     height: 220,
     paddingHorizontal: 20,
-    paddingTop: 60,
+    paddingTop: 40,
   },
   headerContent: {
     display: "flex",

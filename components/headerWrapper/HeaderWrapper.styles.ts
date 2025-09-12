@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     columnGap: 20,
+    paddingBottom: 10
   },
   headerTitle: {
     fontSize: 20,

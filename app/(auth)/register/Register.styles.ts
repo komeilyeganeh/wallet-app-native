@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerWrapper: {
-    paddingTop: 60,
+    paddingTop: 20,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
