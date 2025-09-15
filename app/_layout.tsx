@@ -1,7 +1,24 @@
 import { Stack } from "expo-router";
+import { useEffect } from "react";
+import { I18nManager } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import RNRestart from "react-native-restart";
 
 export default function RootLayout() {
+  useEffect(() => {
+    const forceRTL = () => {
+      if (I18nManager.isRTL) {
+        I18nManager.forceRTL(false);
+        I18nManager.allowRTL(false);
+
+        setTimeout(() => {
+          RNRestart.restart();
+        }, 100)
+      }
+    }
+
+    forceRTL();
+  }, [])
   // **** jsx ***
   return (
     <SafeAreaProvider>
