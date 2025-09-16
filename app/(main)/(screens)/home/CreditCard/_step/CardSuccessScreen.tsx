@@ -7,8 +7,8 @@ const CardSuccessScreen = () => {
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <Image
-          source={require("../../../../../../assets/images/success-prepaid.png")}
-          style={{ marginHorizontal: "auto" }}
+          source={require("../../../../../../assets/images/success-prepaid.webp")}
+          style={{ marginHorizontal: "auto", width: 316, height: 196 }}
         />
         <Text style={styles.title}>Transaction successfully!</Text>
         <Text style={styles.desc}>

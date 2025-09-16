@@ -1,18 +1,15 @@
 import { LoginFormType } from "@/types/authForm";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link, Redirect } from "expo-router";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "expo-router";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Image,
   Alert,
-  ActivityIndicator,
 } from "react-native";
 import * as yup from "yup";
 import * as LocalAuthentication from "expo-local-authentication";

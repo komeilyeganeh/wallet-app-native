@@ -42,8 +42,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "55d22a86-6033-4b35-982b-d00fbac5cacd"
+        "projectId": "faeae5af-6e96-4f81-908b-d21a7ec8d812"
       }
-    }
+    },
+    "owner": "kml_ygh"
   }
 }
