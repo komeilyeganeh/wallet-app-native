@@ -59,7 +59,7 @@ const HomeScreen: FC = () => {
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.userWrapper}>
-          <Image source={require("../../../assets/images/user.png")} />
+          <Image source={require("../../../assets/images/user.png")} style={{ width: 50, height: 50 }}/>
           <Text style={styles.userTitle}>Hi, Push Puttichai</Text>
         </View>
         <View style={styles.notificationSection}>

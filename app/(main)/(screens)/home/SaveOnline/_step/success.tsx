@@ -6,8 +6,8 @@ const AddSaveOnlineSuccess = () => {
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <Image
-          source={require("../../../../../../assets/images/add-save-online.png")}
-          style={{ marginHorizontal: "auto" }}
+          source={require("../../../../../../assets/images/add-save-online.webp")}
+          style={{ marginHorizontal: "auto", width: 316, height: 234 }}
         />
         <Text style={styles.title}>Save online successfully!</Text>
         <Text style={styles.desc}>

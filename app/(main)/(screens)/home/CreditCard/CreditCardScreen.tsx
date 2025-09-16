@@ -10,6 +10,7 @@ import {
 } from "react-native";
 // import CreditCardSuccess from "./_step/success";
 import styles from "./CreditCard.styles";
+import { useKeyboard } from "@react-native-community/hooks";
 
 const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"));
 const SelectBox = lazy(() => import("@/components/input/selectBox/SelectBox"));
@@ -25,11 +26,12 @@ const data = [
 
 const CreditCardScreen = () => {
   const [selectedItem, setSelectedItem] = useState(null);
+  const keyboard = useKeyboard();
   // **** jsx ****
   return (
     <>
       {/* <CreditCardSuccess /> */}
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingBottom: keyboard.keyboardShown ? keyboard.keyboardHeight : 0 }]}>
         <View style={styles.headerWrapper}>
           <Link href="..">
             <AntDesign name="left" color="#FFF" size={20} />

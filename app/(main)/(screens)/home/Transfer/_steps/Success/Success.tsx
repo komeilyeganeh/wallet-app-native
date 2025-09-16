@@ -1,9 +1,4 @@
-import {
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import * as yup from "yup";
 import styles from "./Success.styles";
 
@@ -18,7 +13,10 @@ const TransferSuccess = () => {
   // **** jsx ****
   return (
     <View style={styles.container}>
-      <Image source={require("../../../../../../../assets/images/withdraw.png")} />
+      <Image
+        source={require("../../../../../../../assets/images/withdraw.webp")}
+        style={{ marginHorizontal: "auto", width: 342, height: 188 }}
+      />
       <Text style={styles.title}>Transfer successful!</Text>
       <Text style={styles.desc}>
         You have successfully transferred{" "}
