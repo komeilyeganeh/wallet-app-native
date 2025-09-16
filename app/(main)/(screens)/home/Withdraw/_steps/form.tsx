@@ -1,6 +1,5 @@
-import SelectBox from "@/components/input/selectBox/SelectBox";
+import { lazy, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   StyleSheet,
@@ -10,6 +9,8 @@ import {
   View,
 } from "react-native";
 import * as yup from "yup";
+
+const SelectBox = lazy(() => import("@/components/input/selectBox/SelectBox"))
 
 // form validation
 const schema = yup.object().shape({

@@ -1,7 +1,8 @@
-import LoginForm from "@/components/auth/login/LoginForm";
-import { FC } from "react";
+import { FC, lazy } from "react";
 import { Image, Text, View } from "react-native";
 import styles from "./Login.styles";
+
+const LoginForm = lazy(() => import("@/components/auth/login/LoginForm"))
 
 const LoginScreen: FC = () => {
   // **** jsx ****
@@ -17,7 +18,8 @@ const LoginScreen: FC = () => {
         </Text>
         <View style={styles.imageWrapper}>
           <Image
-            source={require("../../../assets/images/login-auth-image.png")}
+            source={require("../../../assets/images/login-auth.webp")}
+            style={{ width: 213, height: 165 }}
           />
         </View>
         <LoginForm /> 

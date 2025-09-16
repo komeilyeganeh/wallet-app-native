@@ -1,7 +1,10 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
-import ChangePasswordForm from "@/components/setting/changePassword/ChangePassForm";
+import { lazy } from "react";
 import { View } from "react-native";
 import styles from "./ChangePass.styles";
+
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+const ChangePasswordForm = lazy(() => import("@/components/setting/changePassword/ChangePassForm"))
+
 
 const ChangePasswordScreen = () => {
   // **** jsx ****

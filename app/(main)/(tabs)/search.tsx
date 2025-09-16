@@ -8,7 +8,7 @@ const SearchScreen: FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <HeaderWrapper title="Search"/>
+        <HeaderWrapper title="Search" />
         <View style={styles.linksContainer}>
           <Link href="/(main)/(tabs)/home">
             <View style={styles.linkItem}>
@@ -16,34 +16,52 @@ const SearchScreen: FC = () => {
                 <Text style={styles.linkTitle}>Branch</Text>
                 <Text style={styles.linkSubTitle}>Search for branch</Text>
               </View>
-              <Image source={require("../../../assets/images/bank.png")} />
+              <Image
+                source={require("../../../assets/images/bank.webp")}
+                style={{ width: 100, height: 78 }}
+              />
             </View>
           </Link>
           <Link href="/(main)/(tabs)/home">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Interest rate</Text>
-                <Text style={styles.linkSubTitle}>Search for interest rate</Text>
+                <Text style={styles.linkSubTitle}>
+                  Search for interest rate
+                </Text>
               </View>
-              <Image source={require("../../../assets/images/intereset-rate.png")} />
+              <Image
+                source={require("../../../assets/images/intereset-rate.webp")}
+                style={{ width: 100, height: 78 }}
+              />
             </View>
           </Link>
           <Link href="/(main)/(tabs)/home">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Exchange rate</Text>
-                <Text style={styles.linkSubTitle}>Search for exchange rate</Text>
+                <Text style={styles.linkSubTitle}>
+                  Search for exchange rate
+                </Text>
               </View>
-              <Image source={require("../../../assets/images/exchange.png")} />
+              <Image
+                source={require("../../../assets/images/exchange.webp")}
+                style={{ width: 100, height: 78 }}
+              />
             </View>
           </Link>
           <Link href="/(main)/(tabs)/home">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Exchange</Text>
-                <Text style={styles.linkSubTitle}>Exchange amount of money</Text>
+                <Text style={styles.linkSubTitle}>
+                  Exchange amount of money
+                </Text>
               </View>
-              <Image source={require("../../../assets/images/amount-money.png")} />
+              <Image
+                source={require("../../../assets/images/amount-money.webp")}
+                style={{ width: 100, height: 78 }}
+              />
             </View>
           </Link>
         </View>
@@ -66,7 +84,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     display: "flex",
     flexDirection: "column",
-    rowGap: 28
+    rowGap: 28,
   },
   linkItem: {
     width: "100%",

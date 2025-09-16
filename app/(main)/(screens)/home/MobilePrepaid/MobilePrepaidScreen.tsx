@@ -1,7 +1,11 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
 import { View } from "react-native";
-import PrepaidForm from "./_steps/Form";
 import styles from "./MobilePrepaid.styles";
+// import ConfirmPrepaidScreen from "./_steps/Confirm";
+// import PrepaidSuccessScreen from "./_steps/Success";
+import PrepaidFormScreen from "./_steps/Form";
+import { lazy } from "react";
+
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
 
 const MobilePrepaidScreen = () => {
     // **** jsx ****
@@ -10,9 +14,9 @@ const MobilePrepaidScreen = () => {
       <View style={styles.wrapper}>
         <HeaderWrapper title="Mobile prepaid"/>
         <View style={styles.content}>
-           <PrepaidForm />
-           {/* <ConfirmPrepaid /> */}
-           {/* <PrepaidSuccess /> */}
+           <PrepaidFormScreen />
+           {/* <ConfirmPrepaidScreen /> */}
+           {/* <PrepaidSuccessScreen /> */}
         </View>
       </View>
     </View>

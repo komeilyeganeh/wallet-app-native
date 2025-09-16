@@ -1,9 +1,10 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import AccountTab from "./_tabs/Account";
 import CardTab from "./_tabs/Card";
 import styles from "./AccountCard.styles";
+
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
 
 const AccountCardScreen = () => {
   const [activeTab, setActiveTab] = useState(1);

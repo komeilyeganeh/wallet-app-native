@@ -1,7 +1,9 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
+import { lazy } from "react";
 import { Link } from "expo-router";
 import { Image, Text, View } from "react-native";
 import styles from "./PayBill.styles";
+
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
 
 const PayTheBillScreen = () => {
     // **** jsx ****
@@ -19,7 +21,8 @@ const PayTheBillScreen = () => {
                 </Text>
               </View>
               <Image
-                source={require("../../../../../assets/images/electric.png")}
+                source={require("../../../../../assets/images/electric.webp")}
+                style={{ width: 90, height: 81 }}
               />
             </View>
           </Link>
@@ -32,7 +35,8 @@ const PayTheBillScreen = () => {
                 </Text>
               </View>
               <Image
-                source={require("../../../../../assets/images/water.png")}
+                source={require("../../../../../assets/images/water.webp")}
+                style={{ width: 90, height: 81 }}
               />
             </View>
           </Link>
@@ -45,7 +49,8 @@ const PayTheBillScreen = () => {
                 </Text>
               </View>
               <Image
-                source={require("../../../../../assets/images/mobile.png")}
+                source={require("../../../../../assets/images/mobile.webp")}
+                style={{ width: 90, height: 81 }}
               />
             </View>
           </Link>
@@ -58,7 +63,8 @@ const PayTheBillScreen = () => {
                 </Text>
               </View>
               <Image
-                source={require("../../../../../assets/images/internet.png")}
+                source={require("../../../../../assets/images/internet.webp")}
+                style={{ width: 90, height: 81 }}
               />
             </View>
           </Link>

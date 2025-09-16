@@ -1,9 +1,6 @@
-import CreditCard from "@/components/creditCard/CreditCard";
-import SelectBox from "@/components/input/selectBox/SelectBox";
-import ReportCard from "@/components/reportCard/ReportCard";
+import { lazy, useState } from "react";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { useState } from "react";
 import {
   ScrollView,
   Text,
@@ -13,6 +10,10 @@ import {
 } from "react-native";
 // import CreditCardSuccess from "./_step/success";
 import styles from "./CreditCard.styles";
+
+const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"));
+const SelectBox = lazy(() => import("@/components/input/selectBox/SelectBox"));
+const ReportCard = lazy(() => import("@/components/reportCard/ReportCard"));
 
 const data = [
   { key: "190089885456", label: "1900 8988 5456" },

@@ -1,13 +1,16 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
-import { AntDesign } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { lazy } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+const HeaderWrapper = lazy(
+  () => import("@/components/headerWrapper/HeaderWrapper")
+);
+
 const CardDetail = () => {
+  // **** jsx ****
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <HeaderWrapper title="Card"/>
+        <HeaderWrapper title="Card" />
         <View style={styles.content}>
           <View style={styles.item}>
             <Text style={styles.itemKey}>Name</Text>
@@ -31,7 +34,9 @@ const CardDetail = () => {
           </View>
         </View>
         <TouchableOpacity style={styles.deleteButton}>
-            <Text style={{ color: "#FF4267", fontSize: 16, textAlign: "center" }}>Delete card</Text>
+          <Text style={{ color: "#FF4267", fontSize: 16, textAlign: "center" }}>
+            Delete card
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -45,7 +50,7 @@ const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: "#FFF",
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 20,
     paddingHorizontal: 20,
   },
   headerWrapper: {
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
   content: {
     display: "flex",
     rowGap: 16,
-    marginTop: 16
+    marginTop: 16,
   },
   item: {
     width: "100%",
@@ -77,20 +82,20 @@ const styles = StyleSheet.create({
   },
   itemKey: {
     fontSize: 16,
-    color: "#989898"
+    color: "#989898",
   },
   itemValue: {
     fontSize: 16,
     color: "#281C9D",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   deleteButton: {
     height: 44,
     marginTop: "100%",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });
 
 export default CardDetail;

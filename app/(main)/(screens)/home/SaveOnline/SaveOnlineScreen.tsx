@@ -1,7 +1,9 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
+import { lazy } from "react";
 import { Link } from "expo-router";
 import { Image, Text, View } from "react-native";
 import styles from "./SaveOnline.styles";
+
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
 
 const SaveOnlineScreen = () => {
     // **** jsx ****
@@ -19,7 +21,8 @@ const SaveOnlineScreen = () => {
                 </Text>
               </View>
               <Image
-                source={require("../../../../../assets/images/save-online.png")}
+                source={require("../../../../../assets/images/save-online.webp")}
+                style={{ width: 100, height: 78 }}
               />
             </View>
           </Link>
@@ -32,7 +35,8 @@ const SaveOnlineScreen = () => {
                 </Text>
               </View>
               <Image
-                source={require("../../../../../assets/images/save-online-2.png")}
+                source={require("../../../../../assets/images/save-online-2.webp")}
+                style={{ width: 100, height: 78 }}
               />
             </View>
           </Link>

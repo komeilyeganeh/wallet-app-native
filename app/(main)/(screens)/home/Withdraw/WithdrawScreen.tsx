@@ -1,12 +1,14 @@
-
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
-import { useState } from "react";
-import { Image, View } from "react-native";
+import { lazy, useState } from "react";
+import { Image, View, Dimensions } from "react-native";
 import WithdrawForm from "./_steps/form";
 import WithdrawSuccess from "./_steps/success";
 import styles from "./Withdraw.styles";
 
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+
+
 const WithdrawScreen = () => {
+  const { width } = Dimensions.get("window");
   const [step, setStep] = useState(1);
   // **** jsx ****
   return (
@@ -15,7 +17,9 @@ const WithdrawScreen = () => {
         <HeaderWrapper title="Withdraw" />
         <View style={styles.content}>
           <Image
-            source={require("../../../../../assets/images/withdraw.png")}
+            source={require("../../../../../assets/images/withdraw.webp")}
+            style={{ width: width - 40, height: 220 }}
+            resizeMode="contain"
           />
           {step === 1 && <WithdrawForm setStep={() => setStep(2)} />}
           {step === 2 && <WithdrawSuccess />}

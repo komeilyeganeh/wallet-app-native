@@ -1,9 +1,8 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
-import SelectBox from "@/components/input/selectBox/SelectBox";
+import { lazy, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
+  Dimensions,
   Image,
   Text,
   TextInput,
@@ -12,6 +11,9 @@ import {
 } from "react-native";
 import * as yup from "yup";
 import styles from "./Form.styles";
+
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+const SelectBox = lazy(() => import("@/components/input/selectBox/SelectBox"))
 
 const schema = yup.object().shape({
   card: yup.string().required(),
@@ -28,6 +30,7 @@ const data = [
 ];
 
 const AddForm = () => {
+  const { width } = Dimensions.get("window");
   const [selectedItem, setSelectedItem] = useState(null);
   const {
     control,
@@ -48,8 +51,9 @@ const AddForm = () => {
         <HeaderWrapper title="Add" />
         <View style={styles.content}>
           <Image
-            source={require("../../../../../../../assets/images/add-save-online.png")}
-            style={{ marginHorizontal: "auto" }}
+            source={require("../../../../../../../assets/images/add-save-online.webp")}
+            style={{ width: width - 40, height: 220 }}
+            resizeMode="contain"
           />
           <View style={styles.formContainer}>
             <View style={styles.inputs}>

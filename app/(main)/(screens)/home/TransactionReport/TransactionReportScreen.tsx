@@ -1,10 +1,12 @@
-import ReportChart from "@/components/charts/ReportChart";
-import CreditCard from "@/components/creditCard/CreditCard";
-import ReportCard from "@/components/reportCard/ReportCard";
+import { lazy } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import styles from "./TransactionReport.styles";
+
+const ReportChart = lazy(() => import("@/components/charts/ReportChart"))
+const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"))
+const ReportCard = lazy(() => import("@/components/reportCard/ReportCard"))
 
 const TransactionReportScreen = () => {
     // **** jsx ****

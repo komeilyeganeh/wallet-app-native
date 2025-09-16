@@ -1,5 +1,4 @@
-import CreditCard from "@/components/creditCard/CreditCard";
-import CardItem from "@/components/home/cardItem/CardItem";
+import { FC, lazy, useRef } from "react";
 import { CreditCardPropsType } from "@/types/creditCard";
 import {
   FontAwesome,
@@ -8,7 +7,6 @@ import {
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { FC, useRef } from "react";
 import {
   Dimensions,
   Image,
@@ -18,6 +16,9 @@ import {
   View,
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
+
+const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"));
+const CardItem = lazy(() => import("@/components/home/cardItem/CardItem"));
 
 const { width: screenWidth } = Dimensions.get("window");
 

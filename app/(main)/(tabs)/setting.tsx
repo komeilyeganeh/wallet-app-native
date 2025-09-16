@@ -1,8 +1,9 @@
-import Profile from "@/components/profile/Profile";
+import { FC, useState, lazy } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { FC, useState } from "react";
-import { Image, StyleSheet, Switch, Text, View } from "react-native";
+import { StyleSheet, Switch, Text, View } from "react-native";
+
+const Profile = lazy(() => import("@/components/profile/Profile"));
 
 const SettingScreen: FC = () => {
   const [isEnabled, setIsEnabled] = useState(true);

@@ -1,10 +1,13 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
+import { lazy } from "react";
 import {
   ScrollView,
   View,
 } from "react-native";
-import styles from "./Language.styles";
 import Languages from "./_components";
+import styles from "./Language.styles";
+
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+
 
 const LanguagesScreen = () => {
   // *** jsx ****

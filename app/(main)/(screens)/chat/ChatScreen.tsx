@@ -1,8 +1,10 @@
-import ChatBox from "@/components/chat/Chat";
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
+import { lazy } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
 import styles from "./Chat.styles";
+
+const ChatBox = lazy(() => import("@/components/chat/Chat"))
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
 
 const ChatScreen = () => {
   const params = useLocalSearchParams();

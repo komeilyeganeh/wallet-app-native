@@ -1,8 +1,11 @@
-import Profile from "@/components/profile/Profile";
+import { lazy } from "react";
 import { Text, View } from "react-native";
 import styles from "./Account.styles";
 
+const Profile = lazy(() => import("@/components/profile/Profile"))
+
 const AccountTab = () => {
+  // **** jsx ****
   return (
     <View style={styles.accountTab}>
       <Profile />

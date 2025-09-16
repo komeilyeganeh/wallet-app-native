@@ -1,24 +1,27 @@
-import ForgotForm from "@/components/auth/forgotPassword";
-import ForgotCodeForm from "@/components/auth/forgotPassword/forgotCodeForm";
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
-import { FC, useState } from "react";
+import { FC, lazy, useState } from "react";
 import { View } from "react-native";
 import styles from "./ForgotPassword.styles";
 
+const ForgotForm = lazy(() => import("@/components/auth/forgotPassword"));
+const ForgotCodeForm = lazy(
+  () => import("@/components/auth/forgotPassword/forgotCodeForm")
+);
+const HeaderWrapper = lazy(
+  () => import("@/components/headerWrapper/HeaderWrapper")
+);
+
 const ForgotPasswordScreen: FC = () => {
-    const [step, setStep] = useState(1);
+  const [step, setStep] = useState(1);
   // **** jsx ****
   return (
     <View style={styles.container}>
       <View style={styles.forgotWrapper}>
-        <HeaderWrapper href="/(auth)/login" title="Forgot password"/>
-        {step === 1 && <ForgotForm onChangeStep={(s: number) => setStep(s)}/>}
+        <HeaderWrapper href="/(auth)/login" title="Forgot password" />
+        {step === 1 && <ForgotForm onChangeStep={(s: number) => setStep(s)} />}
         {step === 2 && <ForgotCodeForm />}
       </View>
     </View>
   );
 };
-
-
 
 export default ForgotPasswordScreen;

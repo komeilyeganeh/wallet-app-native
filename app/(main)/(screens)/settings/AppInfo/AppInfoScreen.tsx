@@ -1,6 +1,9 @@
-import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
+import { lazy } from "react";
 import { Text, View } from "react-native";
 import styles from "./AppInfo.styles";
+
+const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+
 
 const AppInfoScreen = () => {
     // **** jsx ****

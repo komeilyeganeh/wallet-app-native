@@ -1,7 +1,8 @@
-import RegisterForm from "@/components/auth/register/RegisterForm";
-import { FC } from "react";
+import { FC, lazy } from "react";
 import { Image, Text, View } from "react-native";
 import styles from "./Register.styles";
+
+const RegisterForm = lazy(() => import("@/components/auth/register/RegisterForm"))
 
 const RegisterScreen: FC = () => {
   return (
@@ -15,7 +16,7 @@ const RegisterScreen: FC = () => {
           Hello there, create New account
         </Text>
         <View style={styles.imageWrapper}>
-          <Image source={require("../../../assets/images/register-auth-image.png")} />
+          <Image source={require("../../../assets/images/register-auth.webp")} style={{ width: 213, height: 165 }} />
         </View>
         <RegisterForm />
       </View>

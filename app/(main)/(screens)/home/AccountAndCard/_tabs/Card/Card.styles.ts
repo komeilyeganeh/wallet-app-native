@@ -9,11 +9,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 65,
+    marginTop: 35,
   },
   buttonText: {
     color: "#FFF",
     fontSize: 16,
   },
+  cardsWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: 15
+  }
 });
 export default styles;
