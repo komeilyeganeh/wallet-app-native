@@ -1,7 +1,7 @@
 import { Redirect } from "expo-router";
 
 export default function Index() {
-    const isAuth = true;
+    const isAuth = false;
 
     if (!isAuth) {
         return <Redirect href="/(auth)/login" />

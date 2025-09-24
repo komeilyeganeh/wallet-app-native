@@ -1,30 +1,29 @@
 import { LoginFormType } from "@/types/authForm";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Alert,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import * as yup from "yup";
 import * as LocalAuthentication from "expo-local-authentication";
 import styles from "./LoginForm.styles";
+import { useLogin, useLoginReq } from "./api/useLogin";
+import { MaterialIndicator } from "react-native-indicators";
+import { useToast } from "react-native-toast-notifications";
+import { tokenStorage } from "@/lib/storage/tokenStorage";
 
 // form validation
 const schema = yup.object().shape({
-  phoneNumber: yup
+  username: yup
     .string()
-    .matches(/^[0-9]{11}$/, "phone number is invalid")
+    // .matches(/^[0-9]{11}$/, "phone number is invalid")
     .required("phone number field is required."),
   password: yup
     .string()
     .min(6, "password must be at least 6 characters.")
     .required("password field is required."),
+  remember: yup.boolean().required(),
 });
 
 type BiometricType = "face" | "fingerprint" | "iris" | "none";
@@ -39,6 +38,25 @@ const LoginForm: FC = () => {
   const [biometricType, setBiometricType] = useState<BiometricType>("none");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
+  const { mutate: loginReq, isPending: isPendingLoginReq } = useLoginReq();
+  const { mutate: login, isPending: isPendingLogin } = useLogin();
+  const router = useRouter();
+  const toast = useToast();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<LoginFormType>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      username: "",
+      password: "",
+      remember: true,
+    },
+  });
+
+  const isFormValid = isValid && !isPendingLoginReq && !isPendingLogin;
 
   const checkBiometricSupport = useCallback(async (): Promise<void> => {
     try {
@@ -125,40 +143,69 @@ const LoginForm: FC = () => {
     setIsLoading(false);
   }, [authenticate]);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm<LoginFormType>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      phoneNumber: "",
-      password: "",
-    },
-  });
-
   //   **** functions ****
   const onSubmit = (data: any) => {
-    console.log(data);
+    loginReq(data, {
+      onSuccess: (res) => {
+        login(
+          {
+            token: res?.data?.data?.token,
+            otp: "123456",
+          },
+          {
+            onSuccess: (res) => {
+              console.log(res);
+              
+              toast.show("You have successfully logged in to your account.", {
+                type: "success",
+              });
+              router.replace("/(main)/(tabs)/home");
+            },
+            onError: (error: any) => {
+              const errorMessage =
+                error?.response?.data?.message ||
+                error?.response?.data?.error?.message ||
+                error?.message ||
+                "Registration failed. Please try again.";
+
+              toast.show(errorMessage, {
+                type: "danger",
+              });
+            },
+          }
+        );
+      },
+      onError: (error: any) => {
+        const errorMessage =
+          error?.response?.data?.message ||
+          error?.response?.data?.error?.message ||
+          error?.message ||
+          "Registration failed. Please try again.";
+
+        toast.show(errorMessage, {
+          type: "danger",
+        });
+      },
+    });
   };
   //   **** jsx ****
   return (
     <View style={styles.formContainer}>
       <View>
         <Controller
-          name="phoneNumber"
+          name="username"
           control={control}
           render={({ field }) => (
             <TextInput
               onChangeText={field.onChange}
-              placeholder="Phone Number"
+              placeholder="User Name"
               placeholderTextColor="#CACACA"
               style={styles.input}
             />
           )}
         />
         {errors && (
-          <Text style={styles.errorMessage}>{errors.phoneNumber?.message}</Text>
+          <Text style={styles.errorMessage}>{errors.username?.message}</Text>
         )}
       </View>
       <View>
@@ -185,10 +232,19 @@ const LoginForm: FC = () => {
 
       <TouchableOpacity
         onPress={handleSubmit(onSubmit)}
-        style={[styles.submitButton, !isValid && styles.submitButtonDisabled]}
-        disabled={!isValid}
+        style={[
+          styles.submitButton,
+          !isFormValid && styles.submitButtonDisabled,
+        ]}
+        disabled={!isFormValid}
       >
-        <Text style={styles.submitButtonText}>Sign in</Text>
+        <Text style={styles.submitButtonText}>
+          {isPendingLoginReq || isPendingLogin ? (
+            <MaterialIndicator size={25} />
+          ) : (
+            "Sign in"
+          )}
+        </Text>
       </TouchableOpacity>
       <View style={styles.biometric}>
         <TouchableOpacity

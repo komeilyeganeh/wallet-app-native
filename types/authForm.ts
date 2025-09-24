@@ -1,11 +1,16 @@
 export type RegisterFormType = {
     name: string;
-    phoneNumber: string;
+    userName: string;
+    phoneNumber?: string;
     password: string;
+    email?: string;
+    family?: string;
+    displayCurrencyCode?: string;
 }
 export type LoginFormType = {
-    phoneNumber: string;
+    username: string;
     password: string;
+    remember: boolean;
 }
 export type ForgotFormType = {
     phoneNumber: string;

@@ -2,24 +2,33 @@ import { lazy, Suspense } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, Text, View } from "react-native";
+import { SkypeIndicator } from "react-native-indicators"
 
 const Tab = createBottomTabNavigator();
 
 const createLazyScreen = (importFunc: any) => {
   const LazyComponent = lazy(importFunc);
-  
+
   return (props: any) => (
-    <Suspense fallback={
-      <Text style={{ margin: "auto", fontWeight: 700, fontSize: 18 }}>is loading...</Text>
-    }>
+    <Suspense
+      fallback={
+        <SkypeIndicator color="#0000ff" size={40}/>
+      }
+    >
       <LazyComponent {...props} />
     </Suspense>
   );
 };
 const HomeScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/home"));
-const SearchScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/search"));
-const MessagesScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/message"));
-const SettingsScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/setting"));
+const SearchScreen = createLazyScreen(
+  () => import("@/app/(main)/(tabs)/search")
+);
+const MessagesScreen = createLazyScreen(
+  () => import("@/app/(main)/(tabs)/message")
+);
+const SettingsScreen = createLazyScreen(
+  () => import("@/app/(main)/(tabs)/setting")
+);
 
 export default function TabLayout() {
   // **** jsx ****
@@ -84,10 +93,10 @@ export default function TabLayout() {
         tabBarLabel: () => null,
       })}
     >
-        <Tab.Screen name="home" component={HomeScreen} />
-        <Tab.Screen name="search" component={SearchScreen} />
-        <Tab.Screen name="message" component={MessagesScreen} />
-        <Tab.Screen name="setting" component={SettingsScreen} />
+      <Tab.Screen name="home" component={HomeScreen} />
+      <Tab.Screen name="search" component={SearchScreen} />
+      <Tab.Screen name="message" component={MessagesScreen} />
+      <Tab.Screen name="setting" component={SettingsScreen} />
     </Tab.Navigator>
   );
 }

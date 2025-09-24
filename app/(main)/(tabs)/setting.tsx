@@ -29,7 +29,7 @@ const SettingScreen: FC = () => {
             </View>
           </Link>
           <View style={styles.linkItem}>
-            <Text>Touch ID</Text>
+            <Text onPress={toggleSwitch}>Touch ID</Text>
             <Switch
               trackColor={{ false: "#ddd", true: "#3629B7" }}
               thumbColor={isEnabled ? "#FFF" : "#999"}
