@@ -15,9 +15,6 @@
       "autoIncrement": true,
       "android": {
         "buildType": "apk"
-      },
-      "env": {
-        "API_BASE_URL": process.env.API_BASE_URL
       }
     }
   },
