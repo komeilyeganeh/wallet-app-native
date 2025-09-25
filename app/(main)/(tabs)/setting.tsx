@@ -1,12 +1,14 @@
 import { FC, useState, lazy } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { StyleSheet, Switch, Text, View } from "react-native";
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
+import { useLogOut } from "@/lib/hooks/useLogOut";
 
 const Profile = lazy(() => import("@/components/profile/Profile"));
 
 const SettingScreen: FC = () => {
   const [isEnabled, setIsEnabled] = useState(true);
+  const { logOut } = useLogOut();
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   // **** jsx ****
   return (
@@ -58,6 +60,9 @@ const SettingScreen: FC = () => {
               19008989
             </Text>
           </View>
+          <TouchableOpacity onPress={logOut}>
+            <Text style={{ color: "red" }}>Logout</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

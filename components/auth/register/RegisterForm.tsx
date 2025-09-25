@@ -1,16 +1,15 @@
 import { RegisterFormType } from "@/types/authForm";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CheckBox from "expo-checkbox";
-import { Link, useNavigation, useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { FC, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as yup from "yup";
 import styles from "./RegisterForm.styles";
 import { useSignUpFirst, useSignUpLast } from "./api/useSignup";
 import { MaterialIndicator } from "react-native-indicators";
 import { useToast } from "react-native-toast-notifications";
-import { tokenStorage } from "@/lib/storage/tokenStorage";
 
 // form validation
 const schema = yup.object().shape({
@@ -54,14 +53,6 @@ const RegisterForm: FC = () => {
   const onSubmit = (data: any) => {
     signUpFirst(data, {
       onSuccess: async (res) => {
-        if (res?.data?.token) {
-          try {
-            await tokenStorage.setToken(res?.data?.token);
-          } catch (err) {
-            toast.show("Error saving session", { type: "danger" });
-            return;
-          }
-        }
         signUpLast(
           {
             token: res?.data?.token,

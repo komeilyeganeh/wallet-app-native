@@ -147,6 +147,9 @@ const LoginForm: FC = () => {
   const onSubmit = (data: any) => {
     loginReq(data, {
       onSuccess: (res) => {
+        if (res?.data?.data?.token) {
+          tokenStorage.setToken(res?.data?.data?.token);
+        }
         login(
           {
             token: res?.data?.data?.token,
@@ -154,8 +157,6 @@ const LoginForm: FC = () => {
           },
           {
             onSuccess: (res) => {
-              console.log(res);
-              
               toast.show("You have successfully logged in to your account.", {
                 type: "success",
               });
