@@ -59,7 +59,10 @@ const HomeScreen: FC = () => {
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.userWrapper}>
-          <Image source={require("../../../assets/images/user.png")} style={{ width: 50, height: 50 }}/>
+          <Image
+            source={require("../../../assets/images/user.png")}
+            style={{ width: 50, height: 50 }}
+          />
           <Text style={styles.userTitle}>Hi, Push Puttichai</Text>
         </View>
         <View style={styles.notificationSection}>
@@ -197,8 +200,8 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     marginTop: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     flexWrap: "wrap",
     rowGap: 14,
   },
