@@ -2,9 +2,6 @@
 
 # dependencies
 node_modules/
-app.json
-eas.json
-app.config.js
 
 # Expo
 .expo/
