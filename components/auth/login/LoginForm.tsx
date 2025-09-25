@@ -18,7 +18,7 @@ const schema = yup.object().shape({
   username: yup
     .string()
     // .matches(/^[0-9]{11}$/, "phone number is invalid")
-    .required("phone number field is required."),
+    .required("user name field is required."),
   password: yup
     .string()
     .min(6, "password must be at least 6 characters.")

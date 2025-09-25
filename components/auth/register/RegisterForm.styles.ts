@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 11.5,
     fontSize: 14,
+    color: "#333"
   },
   section: {
     display: "flex",
