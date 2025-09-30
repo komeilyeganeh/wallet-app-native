@@ -12,10 +12,17 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "API_BASE_URL": "$(API_BASE_URL)"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "distribution": "internal",
+      "env": {
+        "API_BASE_URL": "$(API_BASE_URL)"
+      }
     }
   },
   "submit": {
