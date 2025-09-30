@@ -25,7 +25,7 @@ export default function RootLayout() {
   }, []);
   // **** jsx ***
   return (
-    <ToastProvider>
+    <ToastProvider placement="top" style={{ marginTop: 35 }}>
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <SafeAreaView style={{ flex: 1 }}>

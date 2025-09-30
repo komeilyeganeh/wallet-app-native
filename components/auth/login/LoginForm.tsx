@@ -144,11 +144,11 @@ const LoginForm: FC = () => {
   }, [authenticate]);
 
   //   **** functions ****
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     loginReq(data, {
-      onSuccess: (res) => {
+      onSuccess: async (res) => {
         if (res?.data?.data?.token) {
-          tokenStorage.setToken(res?.data?.data?.token);
+          await tokenStorage.setToken(res?.data?.data?.token);
         }
         login(
           {

@@ -108,10 +108,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 18,
-    paddingHorizontal: 12,
-    transitionProperty: "background-color, width",
-    transitionDuration: "0.3s",
-    transitionTimingFunction: "ease-in-out",
+    paddingHorizontal: 12
   },
   tabItemWrapper: {
     padding: 5,

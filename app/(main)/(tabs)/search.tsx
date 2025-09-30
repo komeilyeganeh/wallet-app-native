@@ -36,7 +36,7 @@ const SearchScreen: FC = () => {
               />
             </View>
           </Link>
-          <Link href="/(main)/(tabs)/home">
+          <Link href="/(main)/(screens)/search/ExchangeRate">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Exchange rate</Text>
@@ -50,7 +50,7 @@ const SearchScreen: FC = () => {
               />
             </View>
           </Link>
-          <Link href="/(main)/(tabs)/home">
+          <Link href="/(main)/(screens)/search/Exchange">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Exchange</Text>
