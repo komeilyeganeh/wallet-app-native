@@ -54,7 +54,7 @@ const PayTheBillScreen = () => {
               />
             </View>
           </Link>
-          <Link href="..">
+          <Link href="/(main)/(screens)/home/PayBill/InternetBill">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Internet bill</Text>
