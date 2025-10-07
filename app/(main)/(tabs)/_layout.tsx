@@ -2,22 +2,22 @@ import { lazy, Suspense } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, Text, View } from "react-native";
-import { SkypeIndicator } from "react-native-indicators"
+import { SkypeIndicator } from "react-native-indicators";
 
 const Tab = createBottomTabNavigator();
 
 const createLazyScreen = (importFunc: any) => {
   const LazyComponent = lazy(importFunc);
-
-  return (props: any) => (
-    <Suspense
-      fallback={
-        <SkypeIndicator color="#0000ff" size={40}/>
-      }
-    >
-      <LazyComponent {...props} />
-    </Suspense>
-  );
+  function LazyScreen(props: any) {
+    return (
+      <Suspense
+        fallback={<SkypeIndicator color="#0000ff" size={40} />}
+      >
+        <LazyComponent {...props} />
+      </Suspense>
+    );
+  }
+  return LazyScreen;
 };
 const HomeScreen = createLazyScreen(() => import("@/app/(main)/(tabs)/home"));
 const SearchScreen = createLazyScreen(
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 18,
-    paddingHorizontal: 12
+    paddingHorizontal: 12,
   },
   tabItemWrapper: {
     padding: 5,
