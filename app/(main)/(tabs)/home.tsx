@@ -1,4 +1,4 @@
-import { FC, lazy, useRef } from "react";
+import { FC, lazy, useEffect, useRef, useState } from "react";
 import { CreditCardPropsType } from "@/types/creditCard";
 import {
   FontAwesome,
@@ -16,6 +16,7 @@ import {
   View,
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"));
 const CardItem = lazy(() => import("@/components/home/cardItem/CardItem"));
@@ -42,6 +43,25 @@ const cards: CreditCardPropsType[] = [
 ];
 
 const HomeScreen: FC = () => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      const userData = await AsyncStorage.getItem('userData');
+      
+      if (userData !== null) {
+        setUser(JSON.parse(userData));
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+  };
+  
+  
   const carouselRef = useRef<any>(null);
   const renderItem = ({ item }: { item: any }) => {
     return (
@@ -63,7 +83,7 @@ const HomeScreen: FC = () => {
             source={require("../../../assets/images/user.png")}
             style={{ width: 50, height: 50 }}
           />
-          <Text style={styles.userTitle}>Hi, Push Puttichai</Text>
+          <Text style={styles.userTitle}>Hi, {user?.name!}</Text>
         </View>
         <View style={styles.notificationSection}>
           <MaterialIcons name="notifications" size={26} color="white" />

@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     rowGap: 4,
   },
   reportItems: {
-    marginTop: 23,
     display: "flex",
     flexDirection: "column",
     rowGap: 14,

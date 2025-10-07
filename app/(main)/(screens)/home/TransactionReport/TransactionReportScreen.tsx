@@ -1,14 +1,31 @@
 import { lazy } from "react";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import styles from "./TransactionReport.styles";
+import { useGetTransactions } from "./api/useTransactions";
+import { TransactionType } from "@/types/transactions";
+import { SkypeIndicator } from "react-native-indicators";
 
-const ReportChart = lazy(() => import("@/components/charts/ReportChart"));
+// const ReportChart = lazy(() => import("@/components/charts/ReportChart"));
 const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"));
 const ReportCard = lazy(() => import("@/components/reportCard/ReportCard"));
 
+const transactionTitle = [
+  "Undefinde",
+  "Transfer",
+  "Deposit",
+  "Withdrawal",
+  "Payment",
+  "Refund",
+  "Fee",
+  "Adjustment",
+];
+
 const TransactionReportScreen = () => {
+  const { data: transactions, isPending } = useGetTransactions();
+  
+  
   // **** jsx ****
   return (
     <View style={styles.container}>
@@ -32,7 +49,7 @@ const TransactionReportScreen = () => {
         </View>
         <ScrollView style={{ paddingTop: 15, marginTop: -90 }}>
           <View style={{ paddingHorizontal: 20, paddingBottom: 50 }}>
-            <View style={styles.chart}>
+            {/* <View style={styles.chart}>
               <Text
                 style={{ color: "#343434", fontSize: 12, fontWeight: "bold" }}
               >
@@ -57,17 +74,33 @@ const TransactionReportScreen = () => {
                 </Text>
               </View>
               <ReportChart />
-            </View>
+            </View> */}
             <View style={styles.reportItems}>
-              <Text style={styles.day}>Today</Text>
-              <ReportCard
-                icon={<Ionicons name="water" size={24} color="white" />}
-                color="#3629B7"
-                title="Water Bill"
-                description="Unsuccessfully"
-                amount={-280}
-              />
-              <Text style={styles.day}>Yesterday</Text>
+              {/* <Text style={styles.day}>Today</Text> */}
+              {isPending ? (
+                <SkypeIndicator color="#0000ff" size={40} />
+              ) : (
+                transactions?.data?.data?.map(
+                  (transaction: TransactionType) => (
+                    <ReportCard
+                    key={transaction.id}
+                      icon={
+                        <FontAwesome6
+                          name="money-bill-transfer"
+                          size={24}
+                          color="#fff"
+                        />
+                      }
+                      color="#3629B7"
+                      title={transactionTitle[transaction.type]}
+                      description="Successfully"
+                      amount={transaction?.amount}
+                    />
+                  )
+                )
+              )}
+
+              {/* <Text style={styles.day}>Yesterday</Text>
               <ReportCard
                 icon={<Ionicons name="water" size={24} color="white" />}
                 color="#FF4267"
@@ -88,7 +121,7 @@ const TransactionReportScreen = () => {
                 title="Internet Bill"
                 description="Unsuccessfully"
                 amount={-190}
-              />
+              /> */}
             </View>
           </View>
         </ScrollView>

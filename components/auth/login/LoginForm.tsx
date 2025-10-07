@@ -5,7 +5,9 @@ import { Link, useRouter } from "expo-router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as yup from "yup";
+import { jwtDecode } from "jwt-decode";
 import * as LocalAuthentication from "expo-local-authentication";
 import styles from "./LoginForm.styles";
 import { useLogin, useLoginReq } from "./api/useLogin";
@@ -156,10 +158,15 @@ const LoginForm: FC = () => {
             otp: "123456",
           },
           {
-            onSuccess: (res) => {
+            onSuccess: async (res) => {
               toast.show("You have successfully logged in to your account.", {
                 type: "success",
               });
+              if (res.data) {
+                const userDecode = jwtDecode(res?.data?.data?.token);
+                await AsyncStorage.setItem("userData", JSON.stringify(userDecode));
+              }
+              
               router.replace("/(main)/(tabs)/home");
             },
             onError: (error: any) => {
