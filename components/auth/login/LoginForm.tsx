@@ -164,6 +164,8 @@ const LoginForm: FC = () => {
               });
               if (res.data) {
                 const userDecode = jwtDecode(res?.data?.data?.token);
+                await AsyncStorage.setItem("userId", JSON.stringify(userDecode?.sub))
+                await AsyncStorage.setItem("token", res?.data?.data?.token);
                 await AsyncStorage.setItem("userData", JSON.stringify(userDecode));
               }
               

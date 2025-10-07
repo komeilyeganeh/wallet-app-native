@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Text, View } from "react-native";
 import styles from "./CreditCard.styles";
 
-const CreditCard: FC<CreditCardPropsType> = ({ name, accountLevel, cardNumber, accountBalance, theme }) => {
+const CreditCard: FC<CreditCardPropsType> = ({ name, accountLevel, cardNumber, accountBalance, theme,bankName }) => {
   // **** jsx ****
   return (
     <View style={[styles.cardWrapper, { backgroundColor: theme === "blue" ? "#1573FF" : "#FFAF2A" }]}>
@@ -33,7 +33,7 @@ const CreditCard: FC<CreditCardPropsType> = ({ name, accountLevel, cardNumber, a
                 fontStyle: "italic",
               }}
             >
-              VISA
+              {bankName}
             </Text>
           </View>
         </View>
