@@ -13,5 +13,6 @@ export default ({ config }) => ({
   android: {
     ...config.android,
     package: "com.kml123.walletapp",
+    usesCleartextTraffic: true,
   },
 });
