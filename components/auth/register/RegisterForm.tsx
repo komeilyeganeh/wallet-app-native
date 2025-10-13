@@ -156,7 +156,7 @@ const RegisterForm: FC = () => {
         />
         <Text>
           By creating an account your aggree to our{" "}
-          <Link href=".." style={styles.link}>
+          <Link href="/(auth)/" style={styles.link}>
             Term and Condtions
           </Link>
         </Text>
