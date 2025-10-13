@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     paddingBottom: 14,
+    rowGap: 25
   },
   inputs: {
     display: "flex",

@@ -49,6 +49,7 @@ const CreditCardScreen = () => {
               cardNumber="6164 **** **** 0022"
               accountBalance="9.200"
               theme="yellow"
+              bankName="Sepah"
             />
             <View style={{ marginTop: 32, gap: 12 }}>
               <ReportCard

@@ -1,27 +1,30 @@
 import { FC, lazy } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import {
+  Image,
+  Text,
+  View,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./Register.styles";
-import { useKeyboard } from "@react-native-community/hooks";
 
 const RegisterForm = lazy(
   () => import("@/components/auth/register/RegisterForm")
 );
 
 const RegisterScreen: FC = () => {
-  const keyboard = useKeyboard();
   // **** jsx ****
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingBottom: keyboard.keyboardShown ? keyboard.keyboardHeight : 0 },
-      ]}
-    >
+    <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <Text style={styles.headerTitle}>Sign up</Text>
       </View>
       <View style={styles.registerWrapper}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView
+          enableOnAndroid={true}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          style={{ flexGrow: 1 }}
+        >
           <Text style={styles.registerWrapperTitle}>Welcome to us,</Text>
           <Text style={styles.registerWrapperSubTitle}>
             Hello there, create New account
@@ -33,7 +36,7 @@ const RegisterScreen: FC = () => {
             />
           </View>
           <RegisterForm />
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </View>
     </View>
   );

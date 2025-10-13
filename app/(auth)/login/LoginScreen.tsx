@@ -1,25 +1,32 @@
 import { FC, lazy } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import styles from "./Login.styles";
-import { useKeyboard } from "@react-native-community/hooks";
 
 const LoginForm = lazy(() => import("@/components/auth/login/LoginForm"));
 
 const LoginScreen: FC = () => {
-  const keyboard = useKeyboard();
   // **** jsx ****
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingBottom: keyboard.keyboardShown ? keyboard.keyboardHeight : 0 },
-      ]}
-    >
+    <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <Text style={styles.headerTitle}>Sign in</Text>
       </View>
       <View style={styles.loginWrapper}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView
+          enableOnAndroid={true}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          style={{ flexGrow: 1 }}
+        >
           <Text style={styles.loginWrapperTitle}>Welcome Back</Text>
           <Text style={styles.loginWrapperSubTitle}>
             Hello there, sign in to continue
@@ -31,7 +38,7 @@ const LoginScreen: FC = () => {
             />
           </View>
           <LoginForm />
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </View>
     </View>
   );
