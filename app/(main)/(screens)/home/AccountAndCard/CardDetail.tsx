@@ -1,9 +1,5 @@
-import { lazy } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-const HeaderWrapper = lazy(
-  () => import("@/components/headerWrapper/HeaderWrapper")
-);
+import HeaderWrapper from "@/components/headerWrapper";
 
 const CardDetail = () => {
   // **** jsx ****

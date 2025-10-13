@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { useState } from "react";
 import { Link } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./Card.styles";
@@ -6,8 +6,7 @@ import { useGetCards } from "./api/useCards";
 import { SkypeIndicator } from "react-native-indicators";
 import NewCardForm from "@/components/home/newCardForm";
 import { cardNumberFormat } from "@/lib/cardNumberFormat";
-
-const CreditCard = lazy(() => import("@/components/creditCard"));
+import CreditCard from "@/components/creditCard";
 
 const CardTab = () => {
   const [isShowForm, setIsShowForm] = useState(false);

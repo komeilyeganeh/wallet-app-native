@@ -1,8 +1,6 @@
-import { lazy } from "react";
 import { Text, View } from "react-native";
 import styles from "./AccountManagement.styles";
-
-const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+import HeaderWrapper from "@/components/headerWrapper";
 
 const AccountManagementScreen = () => {
     // **** jsx ****

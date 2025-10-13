@@ -1,9 +1,7 @@
-import { lazy } from "react";
 import { Entypo } from "@expo/vector-icons";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import HeaderWrapper from "@/components/headerWrapper";
 import styles from "./Beneficiary.styles";
-
-const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
 
 const BeneficiaryScreen = () => {
     // **** jsx ****

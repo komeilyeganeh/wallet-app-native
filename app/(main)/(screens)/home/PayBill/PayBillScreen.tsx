@@ -1,9 +1,7 @@
-import { lazy } from "react";
 import { Link } from "expo-router";
 import { Image, Text, View } from "react-native";
 import styles from "./PayBill.styles";
-
-const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+import HeaderWrapper from "@/components/headerWrapper";
 
 const PayTheBillScreen = () => {
     // **** jsx ****

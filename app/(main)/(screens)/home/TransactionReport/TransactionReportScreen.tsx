@@ -1,15 +1,12 @@
-import { lazy } from "react";
-import { AntDesign, FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import styles from "./TransactionReport.styles";
 import { useGetTransactions } from "./api/useTransactions";
 import { TransactionType } from "@/types/transactions";
 import { SkypeIndicator } from "react-native-indicators";
-
-// const ReportChart = lazy(() => import("@/components/charts/ReportChart"));
-const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"));
-const ReportCard = lazy(() => import("@/components/reportCard/ReportCard"));
+import CreditCard from "@/components/creditCard";
+import ReportCard from "@/components/reportCard";
 
 const transactionTitle = [
   "Undefinde",
@@ -45,6 +42,7 @@ const TransactionReportScreen = () => {
             cardNumber="6164 **** **** 0022"
             accountBalance="9.200"
             theme="yellow"
+            bankName="Sepah"
           />
         </View>
         <ScrollView style={{ paddingTop: 15, marginTop: -90 }}>

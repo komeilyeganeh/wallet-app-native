@@ -3,9 +3,7 @@ import styles from "./MobilePrepaid.styles";
 // import ConfirmPrepaidScreen from "./_steps/Confirm";
 // import PrepaidSuccessScreen from "./_steps/Success";
 import PrepaidFormScreen from "./_steps/Form";
-import { lazy } from "react";
-
-const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+import HeaderWrapper from "@/components/headerWrapper";
 
 const MobilePrepaidScreen = () => {
     // **** jsx ****

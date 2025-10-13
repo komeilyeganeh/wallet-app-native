@@ -1,5 +1,5 @@
 import HeaderWrapper from "@/components/headerWrapper";
-import { ScrollView, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import styles from "./InternetBill.styles";
 import InternetBillForm from "@/components/internetBill/form";
 import InfoBill from "@/components/internetBill/infoBill";
@@ -10,24 +10,26 @@ const InternetBill = () => {
   const keyboard = useKeyboard();
   // **** return jsx ****
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingBottom: keyboard.keyboardShown ? keyboard.keyboardHeight : 0 },
-      ]}
-    >
+    <View style={styles.container}>
       <View style={styles.wrapper}>
         <HeaderWrapper title="Internet bill" />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 35 }}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
         >
-          <View style={styles.content}>
-            {/* <InternetBillForm /> */}
-            <InfoBill />
-            {/* <CardSuccessScreen /> */}
-          </View>
-        </ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            <View style={styles.content}>
+              {/* <InternetBillForm /> */}
+              <InfoBill />
+              {/* <CardSuccessScreen /> */}
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     </View>
   );

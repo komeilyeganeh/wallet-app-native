@@ -1,4 +1,4 @@
-import { FC, lazy, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { CreditCardPropsType } from "@/types/creditCard";
 import {
   FontAwesome,
@@ -17,9 +17,8 @@ import {
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"));
-const CardItem = lazy(() => import("@/components/home/cardItem/CardItem"));
+import CreditCard from "@/components/creditCard";
+import CardItem from "@/components/home/cardItem/CardItem";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -31,6 +30,7 @@ const cards: CreditCardPropsType[] = [
     cardNumber: "4756 **** **** 9018",
     accountBalance: "3.469.52",
     theme: "blue",
+    bankName: "Sepah"
   },
   {
     id: 2,
@@ -39,6 +39,7 @@ const cards: CreditCardPropsType[] = [
     cardNumber: "6164 **** **** 0022",
     accountBalance: "9.200",
     theme: "yellow",
+    bankName: "Mehr"
   },
 ];
 
@@ -71,6 +72,7 @@ const HomeScreen: FC = () => {
         cardNumber={item?.cardNumber}
         accountBalance={item?.accountBalance}
         theme={item?.theme}
+        bankName={item?.bankName}
       />
     );
   };

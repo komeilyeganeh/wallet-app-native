@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { useState } from "react";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import {
@@ -11,12 +11,11 @@ import {
   View,
 } from "react-native";
 // import CreditCardSuccess from "./_step/success";
-import styles from "./CreditCard.styles";
 import { useKeyboard } from "@react-native-community/hooks";
-
-const CreditCard = lazy(() => import("@/components/creditCard/CreditCard"));
-const SelectBox = lazy(() => import("@/components/input/selectBox/SelectBox"));
-const ReportCard = lazy(() => import("@/components/reportCard/ReportCard"));
+import CreditCard from "@/components/creditCard";
+import SelectBox from "@/components/input/selectBox";
+import ReportCard from "@/components/reportCard";
+import styles from "./CreditCard.styles";
 
 const data = [
   { key: "190089885456", label: "1900 8988 5456" },
@@ -41,7 +40,7 @@ const CreditCardScreen = () => {
           <Text style={styles.headerTitle}>Credit card</Text>
         </View>
         <KeyboardAvoidingView
-        style={{ flex: 1 }}
+          style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         >

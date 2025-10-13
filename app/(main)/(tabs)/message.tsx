@@ -1,9 +1,8 @@
-import { FC, lazy } from "react";
+import { FC } from "react";
 import { Entypo, FontAwesome, FontAwesome5, FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
-
-const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"));
-const MessageItem = lazy(() => import("@/components/message/MessageCard"));
+import HeaderWrapper from "@/components/headerWrapper";
+import MessageItem from "@/components/message/MessageCard";
 
 const MessageScreen: FC = () => {
   // **** jsx ****

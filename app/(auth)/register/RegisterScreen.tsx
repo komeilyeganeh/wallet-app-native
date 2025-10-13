@@ -1,4 +1,4 @@
-import { FC, lazy } from "react";
+import { FC } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -8,10 +8,7 @@ import {
   View,
 } from "react-native";
 import styles from "./Register.styles";
-
-const RegisterForm = lazy(
-  () => import("@/components/auth/register/RegisterForm")
-);
+import RegisterForm from "@/components/auth/register";
 
 const RegisterScreen: FC = () => {
   // **** jsx ****

@@ -1,14 +1,9 @@
-import { FC, lazy, useState } from "react";
+import { FC, useState } from "react";
 import { View } from "react-native";
+import ForgotForm from "@/components/auth/forgotPassword";
+import ForgotCodeForm from "@/components/auth/forgotPassword/forgotCodeForm";
+import HeaderWrapper from "@/components/headerWrapper";
 import styles from "./ForgotPassword.styles";
-
-const ForgotForm = lazy(() => import("@/components/auth/forgotPassword"));
-const ForgotCodeForm = lazy(
-  () => import("@/components/auth/forgotPassword/forgotCodeForm")
-);
-const HeaderWrapper = lazy(
-  () => import("@/components/headerWrapper/HeaderWrapper")
-);
 
 const ForgotPasswordScreen: FC = () => {
   const [step, setStep] = useState(1);

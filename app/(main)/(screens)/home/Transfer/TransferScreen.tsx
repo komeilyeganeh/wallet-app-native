@@ -1,28 +1,34 @@
-import { lazy } from "react";
-import { View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import TransferForm from "./_steps/Form";
 import styles from "./Transfer.styles";
-import { useKeyboard } from "@react-native-community/hooks";
-
-const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
-
+import HeaderWrapper from "@/components/headerWrapper";
 
 const TransferScreen = () => {
-  const keyboard = useKeyboard();
   // **** jsx ****
   return (
-    <View style={[styles.container, { paddingBottom: keyboard.keyboardShown ? keyboard.keyboardHeight : 0 }]}>
+    <View style={styles.container}>
       <View style={styles.wrapper}>
-        <HeaderWrapper title="Transfer"/>
-        <View style={styles.content}>
-          <TransferForm />
-          {/* <ConfirmTransfer /> */}
-          {/* <TransferSuccess /> */}
-        </View>
+        <HeaderWrapper title="Transfer" />
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 50}
+        >
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            <View style={styles.content}>
+              <TransferForm />
+              {/* <ConfirmTransfer /> */}
+              {/* <TransferSuccess /> */}
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     </View>
   );
 };
-
 
 export default TransferScreen;

@@ -1,8 +1,7 @@
 import HeaderWrapper from "@/components/headerWrapper";
-import { Dimensions, Image, View } from "react-native";
+import { Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import styles from "./Exchange.styles";
 import ExchangeForm from "@/components/exchangeForm/Exchange";
-
 
 const Exchange = () => {
   const { width } = Dimensions.get("window");
@@ -11,14 +10,26 @@ const Exchange = () => {
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <HeaderWrapper title="Exchange" />
-        <View style={styles.content}>
-          <Image
-            source={require("../../../../../assets/images/exchange-rate.webp")}
-            style={{ width: width - 40, height: 220 }}
-            resizeMode="contain"
-          />
-          <ExchangeForm />
-        </View>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 50}
+        >
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            <View style={styles.content}>
+              <Image
+                source={require("../../../../../assets/images/exchange-rate.webp")}
+                style={{ width: width - 40, height: 220 }}
+                resizeMode="contain"
+              />
+              <ExchangeForm />
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     </View>
   );

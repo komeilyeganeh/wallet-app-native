@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,10 +10,7 @@ import {
 import AccountTab from "./_tabs/Account";
 import CardTab from "./_tabs/Card";
 import styles from "./AccountCard.styles";
-
-const HeaderWrapper = lazy(
-  () => import("@/components/headerWrapper/HeaderWrapper")
-);
+import HeaderWrapper from "@/components/headerWrapper";
 
 const AccountCardScreen = () => {
   const [activeTab, setActiveTab] = useState(1);

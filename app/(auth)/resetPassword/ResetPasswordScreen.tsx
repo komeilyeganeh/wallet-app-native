@@ -1,13 +1,8 @@
-import { FC, lazy } from "react";
+import { FC } from "react";
 import { View } from "react-native";
+import ResetPasswordForm from "@/components/auth/resetPassword";
+import HeaderWrapper from "@/components/headerWrapper";
 import styles from "./ResetPassword.styles";
-
-const ResetPasswordForm = lazy(
-  () => import("@/components/auth/resetPassword/ResetPassForm")
-);
-const HeaderWrapper = lazy(
-  () => import("@/components/headerWrapper/HeaderWrapper")
-);
 
 const ResetPasswordScreen: FC = () => {
   // **** jsx ****

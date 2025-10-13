@@ -1,9 +1,12 @@
-import { lazy, useState } from "react";
+import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import {
   Dimensions,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -12,11 +15,8 @@ import {
 import * as yup from "yup";
 import styles from "./Form.styles";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
-const HeaderWrapper = lazy(
-  () => import("@/components/headerWrapper/HeaderWrapper")
-);
-const SelectBox = lazy(() => import("@/components/input/selectBox/SelectBox"));
+import HeaderWrapper from "@/components/headerWrapper";
+import SelectBox from "@/components/input/selectBox";
 
 const schema = yup.object().shape({
   card: yup.string().required(),
@@ -52,76 +52,81 @@ const AddForm = () => {
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <HeaderWrapper title="Add" />
-        <KeyboardAwareScrollView
-          enableOnAndroid={true}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          style={{ flexGrow: 1 }}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 50}
         >
-          <View style={styles.content}>
-            <Image
-              source={require("../../../../../../../assets/images/add-save-online.webp")}
-              style={{ width: width - 40, height: 220 }}
-              resizeMode="contain"
-            />
-            <View style={styles.formContainer}>
-              <View style={styles.inputs}>
-                <View>
-                  <Controller
-                    name="card"
-                    control={control}
-                    render={({ field }) => (
-                      <SelectBox
-                        {...field}
-                        data={data}
-                        onChange={(e) => {
-                          setSelectedItem(e.label);
-                          field.onChange(e.key);
-                        }}
-                        label="Choose account/ card"
-                        value={selectedItem}
-                      />
-                    )}
-                  />
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            <View style={styles.content}>
+              <Image
+                source={require("../../../../../../../assets/images/add-save-online.webp")}
+                style={{ width: width - 40, height: 220 }}
+                resizeMode="contain"
+              />
+              <View style={styles.formContainer}>
+                <View style={styles.inputs}>
+                  <View>
+                    <Controller
+                      name="card"
+                      control={control}
+                      render={({ field }) => (
+                        <SelectBox
+                          {...field}
+                          data={data}
+                          onChange={(e) => {
+                            setSelectedItem(e.label);
+                            field.onChange(e.key);
+                          }}
+                          label="Choose account/ card"
+                          value={selectedItem}
+                        />
+                      )}
+                    />
+                  </View>
+                  <View>
+                    <Controller
+                      name="phoneNumber"
+                      control={control}
+                      render={({ field }) => (
+                        <TextInput
+                          onChangeText={field.onChange}
+                          placeholder="Choose time deposit"
+                          placeholderTextColor="#CACACA"
+                          style={styles.input}
+                        />
+                      )}
+                    />
+                  </View>
+                  <View>
+                    <Controller
+                      name="amount"
+                      control={control}
+                      render={({ field }) => (
+                        <TextInput
+                          onChangeText={field.onChange}
+                          placeholder="Amount (At least $1000)"
+                          placeholderTextColor="#CACACA"
+                          style={styles.input}
+                        />
+                      )}
+                    />
+                  </View>
                 </View>
-                <View>
-                  <Controller
-                    name="phoneNumber"
-                    control={control}
-                    render={({ field }) => (
-                      <TextInput
-                        onChangeText={field.onChange}
-                        placeholder="Choose time deposit"
-                        placeholderTextColor="#CACACA"
-                        style={styles.input}
-                      />
-                    )}
-                  />
-                </View>
-                <View>
-                  <Controller
-                    name="amount"
-                    control={control}
-                    render={({ field }) => (
-                      <TextInput
-                        onChangeText={field.onChange}
-                        placeholder="Amount (At least $1000)"
-                        placeholderTextColor="#CACACA"
-                        style={styles.input}
-                      />
-                    )}
-                  />
-                </View>
+                <TouchableOpacity
+                  style={[styles.button, !isValid && styles.buttonDisabled]}
+                  disabled={!isValid}
+                >
+                  <Text style={styles.buttonText}>Verify</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={[styles.button, !isValid && styles.buttonDisabled]}
-                disabled={!isValid}
-              >
-                <Text style={styles.buttonText}>Verify</Text>
-              </TouchableOpacity>
             </View>
-          </View>
-        </KeyboardAwareScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     </View>
   );

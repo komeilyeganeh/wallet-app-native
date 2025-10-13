@@ -1,9 +1,7 @@
-import { lazy } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
-
-const SuccessResetPassword = lazy(() => import("@/components/auth/successResetPass/SuccessResetPass"))
+import SuccessResetPassword from "@/components/auth/successResetPass";
 
 const SuccessResetPasswordPage = () => {
   return (

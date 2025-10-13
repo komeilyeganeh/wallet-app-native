@@ -1,33 +1,29 @@
 import { Feather } from "@expo/vector-icons";
-import { useKeyboard } from "@react-native-community/hooks";
-import { FC, useRef, useState } from "react";
+import { FC, useState } from "react";
 import {
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import styles from "./Chat.styles";
 
 const ChatBox: FC = () => {
-  const scrollViewRef = useRef<any>(null);
-  const keyboard = useKeyboard();
   const [msg, setMsg] = useState("");
   // **** jsx ****
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingBottom: keyboard.keyboardShown ? keyboard.keyboardHeight : 0 },
-      ]}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 90}
     >
       <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1 }}
-        ref={scrollViewRef}
-        onContentSizeChange={() =>
-          scrollViewRef?.current?.scrollToEnd({ animated: true })
-        }
       >
         <View style={styles.messages}>
           <Text style={styles.date}>8/10/2018</Text>
@@ -99,7 +95,7 @@ const ChatBox: FC = () => {
           <Feather name="arrow-right" size={24} color="white" />
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
