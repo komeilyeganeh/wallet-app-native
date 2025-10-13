@@ -1,10 +1,19 @@
 import { lazy, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import AccountTab from "./_tabs/Account";
 import CardTab from "./_tabs/Card";
 import styles from "./AccountCard.styles";
 
-const HeaderWrapper = lazy(() => import("@/components/headerWrapper/HeaderWrapper"))
+const HeaderWrapper = lazy(
+  () => import("@/components/headerWrapper/HeaderWrapper")
+);
 
 const AccountCardScreen = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -48,10 +57,22 @@ const AccountCardScreen = () => {
           </TouchableOpacity>
         </View>
         {/* tabs render */}
-        <View style={styles.content}>
-          {activeTab === 1 && <AccountTab />}
-          {activeTab === 2 && <CardTab />}
-        </View>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+        >
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            <View style={styles.content}>
+              {activeTab === 1 && <AccountTab />}
+              {activeTab === 2 && <CardTab />}
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     </View>
   );

@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
   },
   tabsContainer: {
     marginTop: 29,
+    paddingBottom: 10,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
   },
   content: {
-    marginTop: 24,
+    marginTop: 14,
   },
 });
 export default styles;

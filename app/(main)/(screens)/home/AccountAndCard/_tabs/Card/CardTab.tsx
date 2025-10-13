@@ -14,7 +14,7 @@ const CardTab = () => {
   const { data: myCards, isPending, refetch } = useGetCards();
   // **** return jsx ****
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 135 }}>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 70 }}>
       <View style={styles.cardsWrapper}>
         {isPending ? (
           <SkypeIndicator color="#0000ff" size={40} />
