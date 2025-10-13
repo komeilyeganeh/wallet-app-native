@@ -8,20 +8,20 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "http://185.4.31.70:4040/api"
+        "EXPO_PUBLIC_API_BASE_URL": "https://wapi.innowaves.app/api"
       }
     },
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "http://185.4.31.70:4040/api"
+        "EXPO_PUBLIC_API_BASE_URL": "https://wapi.innowaves.app/api"
       }
     },
     "production": {
       "autoIncrement": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "http://185.4.31.70:4040/api"
+        "EXPO_PUBLIC_API_BASE_URL": "https://wapi.innowaves.app/api"
       }
     }
   },
