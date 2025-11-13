@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { Link } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import styles from "./Card.styles";
-import { useGetCards } from "./api/useCards";
+import styles from "./Wallet.styles";
 import { SkypeIndicator } from "react-native-indicators";
 import NewCardForm from "@/components/home/newCardForm";
 import { cardNumberFormat } from "@/lib/cardNumberFormat";
 import CreditCard from "@/components/creditCard";
+import { useGetMyWallets } from "@/services/wallet/hooks/useWallet";
+import { useUserData } from "@/hooks/useUserData";
 
-const CardTab = () => {
+const WalletTab = () => {
   const [isShowForm, setIsShowForm] = useState(false);
-  const { data: myCards, isPending, refetch } = useGetCards();
+   const { user, userId, loading: userLoading, error: userError } = useUserData();
+  const { data: myWallets, isPending, error } = useGetMyWallets(userId);
   
   // **** return jsx ****
   return (
@@ -21,8 +23,8 @@ const CardTab = () => {
       <View style={styles.cardsWrapper}>
         {isPending ? (
           <SkypeIndicator color="#0000ff" size={40} />
-        ) : myCards?.data?.count ? (
-          myCards?.data?.data?.map((card: any, index: any) => (
+        ) : myWallets?.data?.count ? (
+          myWallets?.data?.data?.map((card: any, index: any) => (
             <Link
               href={{
                 pathname: "/(main)/(screens)/home/AccountAndCard/CardDetail",
@@ -68,4 +70,4 @@ const CardTab = () => {
   );
 };
 
-export default CardTab;
+export default WalletTab;

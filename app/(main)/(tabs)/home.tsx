@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef } from "react";
 import {
   FontAwesome,
   FontAwesome5,
@@ -15,49 +15,53 @@ import {
   View,
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import CreditCard from "@/components/creditCard";
 import CardItem from "@/components/home/cardItem/CardItem";
 import { cardNumberFormat } from "@/lib/cardNumberFormat";
-import { useGetCards } from "../(screens)/home/AccountAndCard/_tabs/Card/api/useCards";
 import { MaterialIndicator } from "react-native-indicators";
+import { useGetMyWallets } from "@/services/wallet/hooks/useWallet"; // import hook wallets
+import { useUserData } from "@/hooks/useUserData";
 
 const { width: screenWidth } = Dimensions.get("window");
 
 const HomeScreen: FC = () => {
-  const [user, setUser] = useState<any>(null);
-  const { data: myCards, isPending } = useGetCards();
-  
-  useEffect(() => {
-    (async () => {
-      await loadUserData();
-    })();
-  }, []);
-  const loadUserData = async () => {
-    try {
-      const userData = await AsyncStorage.getItem("userData");
+  const {
+    user,
+    userId,
+    loading: userLoading,
+    error: userError,
+  } = useUserData();
 
-      if (userData !== null) {
-        setUser(JSON.parse(userData));
-      }
-    } catch (error) {
-      console.error("Error loading user data:", error);
-    }
-  };
+  const {
+    data: myWallets,
+    isPending: walletsPending,
+    error: walletsError,
+  } = useGetMyWallets(userId);
+
+  const loading = userLoading || walletsPending;
 
   const carouselRef = useRef<any>(null);
-  const renderItem = ({ index, item }: { item: any; index: number }) => {
+
+  const renderWalletItem = ({ item, index }: { item: any; index: number }) => {
     return (
       <CreditCard
-        name={`${item?.user?.firstName} ${item?.user?.lastName}`}
-        accountLevel={item?.cardBrand}
-        cardNumber={cardNumberFormat(item?.cardToken)}
-        accountBalance={"120"}
-        theme={index % 2 !== 0 ? "yellow" : "blue"}
-        bankName={item?.bankName}
+        name={user?.name || "User"}
+        accountLevel="Wallet"
+        cardNumber={cardNumberFormat(item?.cardNumber || item?.id)}
+        accountBalance={item?.balance ? item.balance : "$0"}
+        theme={getTheme(index)}
+        bankName={item?.bankName || "Bank"}
       />
     );
   };
+
+  const getTheme = (index: number) => {
+    const themes = ["blue", "yellow"];
+    return themes[index % themes.length];
+  };
+
+  const walletsData = myWallets?.data?.data || [];
+
   // **** jsx ****
   return (
     <View style={styles.container}>
@@ -67,7 +71,7 @@ const HomeScreen: FC = () => {
             source={require("../../../assets/images/user.png")}
             style={{ width: 50, height: 50 }}
           />
-          <Text style={styles.userTitle}>Hi, {user?.name!}</Text>
+          <Text style={styles.userTitle}>Hi, {user?.name || "User"} !</Text>
         </View>
         <View style={styles.notificationSection}>
           <MaterialIcons name="notifications" size={26} color="white" />
@@ -78,34 +82,64 @@ const HomeScreen: FC = () => {
       </View>
       <ScrollView style={styles.contentWrapper}>
         <View style={{ paddingBottom: 40 }}>
-          {isPending ? (
-            <MaterialIndicator size={25} />
-          ) : myCards?.data?.data?.length === 0 ? (
-            <View style={{ backgroundColor: "#FEF3E2", padding: 8, borderRadius: 5 }}>
-              <Text style={{ color: "#FA812F", textAlign: "center" }}>
-                There is no bank card. Please add it from the <Text style={{ fontWeight: "600" }}>Account and Card </Text>
-                section.
+          {userError && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>User Error: {userError}</Text>
+            </View>
+          )}
+
+          {walletsError && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>
+                Wallets Error: {walletsError.message}
+              </Text>
+            </View>
+          )}
+
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <MaterialIndicator size={25} color="#3629B7" />
+              <Text style={styles.loadingText}>
+                {userLoading
+                  ? "Loading user data..."
+                  : "Loading your wallets..."}
+              </Text>
+            </View>
+          ) : walletsData.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>
+                No wallets found. {!userId && "User not authenticated."}
               </Text>
             </View>
           ) : (
-            <Carousel
-              ref={carouselRef}
-              loop={true}
-              width={screenWidth * 0.88}
-              height={250}
-              autoPlay={false}
-              data={myCards?.data?.data}
-              scrollAnimationDuration={500}
-              renderItem={renderItem}
-              mode="vertical-stack"
-              style={styles.carousel}
-            />
+            <>
+              <Carousel
+                ref={carouselRef}
+                loop={true}
+                width={screenWidth * 0.88}
+                height={250}
+                autoPlay={false}
+                data={walletsData}
+                scrollAnimationDuration={500}
+                renderItem={renderWalletItem}
+                mode="vertical-stack"
+                style={styles.carousel}
+              />
+
+              <View style={styles.debugInfo}>
+                <Text style={styles.debugText}>
+                  User: {userId ? `ID: ${userId}` : "Not logged in"} | Wallets:{" "}
+                  {walletsData.length}
+                </Text>
+              </View>
+            </>
           )}
+
           <View style={styles.cardsContainer}>
             <CardItem
               icon={<FontAwesome5 name="wallet" size={28} color="#3629B7" />}
-              title="Account and Card"
-              href="/(main)/(screens)/home/AccountAndCard"
+              title="Wallets"
+              href="/(main)/(screens)/home/Wallets"
             />
             <CardItem
               icon={
@@ -185,6 +219,7 @@ const styles = StyleSheet.create({
   userTitle: {
     color: "#FFF",
     fontSize: 16,
+    fontWeight: "600",
   },
   notificationSection: {
     position: "relative",
@@ -205,6 +240,7 @@ const styles = StyleSheet.create({
   notificationCounter: {
     color: "#FFF",
     fontSize: 10,
+    fontWeight: "bold",
   },
   contentWrapper: {
     backgroundColor: "#FFF",
@@ -222,6 +258,57 @@ const styles = StyleSheet.create({
   },
   carousel: {
     justifyContent: "center",
+  },
+  loadingContainer: {
+    alignItems: "center",
+    padding: 40,
+  },
+  loadingText: {
+    marginTop: 10,
+    color: "#666",
+    fontSize: 16,
+  },
+  emptyContainer: {
+    backgroundColor: "#FEF3E2",
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#FA812F",
+  },
+  emptyText: {
+    color: "#FA812F",
+    textAlign: "center",
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  debugInfo: {
+    backgroundColor: "#f8f9fa",
+    padding: 8,
+    borderRadius: 6,
+    marginTop: 10,
+    marginBottom: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: "#3629B7",
+  },
+  debugText: {
+    fontSize: 12,
+    color: "#666",
+    textAlign: "center",
+    fontFamily: "monospace",
+  },
+  errorContainer: {
+    backgroundColor: "#ffeaea",
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 20,
+    borderLeftWidth: 4,
+    borderLeftColor: "#ff4267",
+  },
+  errorText: {
+    color: "#d32f2f",
+    fontSize: 14,
+    textAlign: "center",
   },
 });
 

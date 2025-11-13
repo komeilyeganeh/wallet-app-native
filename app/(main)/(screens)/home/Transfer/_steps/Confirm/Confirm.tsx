@@ -1,33 +1,30 @@
-import SelectBox from "@/components/input/selectBox/SelectBox";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as yup from "yup";
 import styles from "./Confirm.styles";
 
-const data = [
-  { key: "190089885456", label: "1900 8988 5456" },
-  { key: "190081125222", label: "1900 8112 5222" },
-  { key: "441100001234", label: "4411 0000 1234" },
-  { key: "190089885400", label: "1900 8988 5456" },
-  { key: "190089885450", label: "1900 8988 5450" },
-];
-
 // form validation
 const schema = yup.object().shape({
-  card: yup.string().required(),
-  phoneNumber: yup.string().required(),
-  amount: yup.string().required(),
+  card: yup.string().optional(),
+  phoneNumber: yup.string().optional(),
+  amount: yup.string().optional(),
+  otp: yup.string().required()
 });
 
-const ConfirmTransfer = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
+interface ConfirmTransferProps {
+  transferData: any;
+  onBack: () => void;
+  onConfirm: (otp: string) => void;
+  isPending?: boolean;
+}
+
+const ConfirmTransfer = ({
+  transferData,
+  onBack,
+  onConfirm,
+  isPending = false,
+}: ConfirmTransferProps) => {
   const {
     control,
     handleSubmit,
@@ -35,11 +32,14 @@ const ConfirmTransfer = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      card: "",
-      phoneNumber: "",
-      amount: "",
+      otp: ""
     },
   });
+
+  const handleConfirm = (data: any) => {
+    onConfirm(data.phoneNumber);
+  };
+
   // **** jsx ****
   return (
     <View style={styles.formContainer}>
@@ -47,61 +47,45 @@ const ConfirmTransfer = () => {
         <Text style={{ fontSize: 12, color: "#989898" }}>
           Confirm transfer information
         </Text>
+
+        {/* From - نمایش اطلاعات مبدا */}
         <View>
           <Text style={styles.label}>From</Text>
-          <Controller
-            name="card"
-            control={control}
-            render={({ field }) => (
-              <TextInput
-                onChangeText={field.onChange}
-                placeholder="From"
-                placeholderTextColor="#CACACA"
-                style={styles.input}
-              />
-            )}
-          />
-        </View>
-        <View>
-          <Text style={styles.label}>To</Text>
-          <Controller
-            name="card"
-            control={control}
-            render={({ field }) => (
-              <TextInput
-                onChangeText={field.onChange}
-                placeholder="To"
-                placeholderTextColor="#CACACA"
-                style={styles.input}
-              />
-            )}
-          />
-        </View>
-        <View>
-          <Text style={styles.label}>Card number</Text>
-          <View>
-            <Controller
-              name="card"
-              control={control}
-              render={({ field }) => (
-                <SelectBox
-                  {...field}
-                  data={data}
-                  onChange={(e) => {
-                    setSelectedItem(e.label);
-                    field.onChange(e.key);
-                  }}
-                  label="Choose account/ card"
-                  value={selectedItem}
-                />
-              )}
-            />
+          <View style={styles.input}>
+            <Text>
+              {transferData?.sourceWalletId
+                ? `Wallet: ${transferData.sourceWalletId}`
+                : "Not specified"}
+            </Text>
           </View>
         </View>
+
+        {/* To - نمایش اطلاعات مقصد */}
+        <View>
+          <Text style={styles.label}>To</Text>
+          <View style={styles.input}>
+            <Text>
+              {transferData?.destinationWalletCardNumber || "Not specified"}
+            </Text>
+          </View>
+        </View>
+
+        {/* Amount - نمایش مقدار */}
+        <View>
+          <Text style={styles.label}>Amount</Text>
+          <View style={styles.input}>
+            <Text>
+              {transferData?.amount
+                ? `$${transferData.amount}`
+                : "Not specified"}
+            </Text>
+          </View>
+        </View>
+
         <View>
           <Text style={styles.label}>Transaction fee</Text>
           <Controller
-            name="phoneNumber"
+            name="card"
             control={control}
             render={({ field }) => (
               <TextInput
@@ -109,6 +93,8 @@ const ConfirmTransfer = () => {
                 placeholder="Transaction fee"
                 placeholderTextColor="#CACACA"
                 style={styles.input}
+                value="$0.00"
+                editable={false}
               />
             )}
           />
@@ -124,6 +110,8 @@ const ConfirmTransfer = () => {
                 placeholder="Content"
                 placeholderTextColor="#CACACA"
                 style={styles.input}
+                value="Transfer"
+                editable={false}
               />
             )}
           />
@@ -131,7 +119,7 @@ const ConfirmTransfer = () => {
         <View>
           <Text style={styles.label}>Amount</Text>
           <Controller
-            name="phoneNumber"
+            name="amount"
             control={control}
             render={({ field }) => (
               <TextInput
@@ -139,6 +127,8 @@ const ConfirmTransfer = () => {
                 placeholder="Amount"
                 placeholderTextColor="#CACACA"
                 style={styles.input}
+                value={transferData?.amount ? `$${transferData.amount}` : ""}
+                editable={false}
               />
             )}
           />
@@ -147,7 +137,7 @@ const ConfirmTransfer = () => {
           <View style={{ flex: 1 }}>
             <Text style={styles.label}>Get OTP to verify transaction</Text>
             <Controller
-              name="phoneNumber"
+              name="otp"
               control={control}
               render={({ field }) => (
                 <TextInput
@@ -165,13 +155,17 @@ const ConfirmTransfer = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Confirm</Text>
+      <TouchableOpacity
+        style={[styles.button, !isValid && { backgroundColor: "#CACACA" }]}
+        onPress={handleSubmit(handleConfirm)}
+        disabled={!isValid || isPending}
+      >
+        <Text style={styles.buttonText}>
+          {isPending ? "Processing..." : "Confirm"}
+        </Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-
 
 export default ConfirmTransfer;

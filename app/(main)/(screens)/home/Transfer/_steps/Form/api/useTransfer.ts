@@ -4,6 +4,6 @@ import { transferAmount } from "./actions"
 export const useTransferAmount = () => {
     return useMutation({
         mutationKey: ["transfer_amount"],
-        mutationFn: (data: any) => transferAmount(data) 
+        mutationFn: transferAmount 
     })
 }

@@ -1,27 +1,22 @@
 import SelectBox from "@/components/input/selectBox/SelectBox";
-import { AntDesign, Entypo, FontAwesome5 } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Checkbox from "expo-checkbox";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from "react-native";
 import * as yup from "yup";
 import styles from "./Form.styles";
-import { useGetCards } from "../../../AccountAndCard/_tabs/Card/api/useCards";
 import { cardNumberSpace } from "@/lib/cardNumberSpace";
 import { useTransferAmount } from "./api/useTransfer";
-import { useToast } from "react-native-toast-notifications";
 import { MaterialIndicator } from "react-native-indicators";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { clientAxios } from "@/lib/http";
-import { useRouter } from "expo-router";
 
 // form validation
 const schema = yup.object().shape({
@@ -29,52 +24,173 @@ const schema = yup.object().shape({
   destinationWalletCardNumber: yup
     .string()
     .required("Destination card number is required")
-    .min(16, "Card number must be 16 digits"),
+    .min(16, "Card number must be 16 digits")
+    .max(16, "Card number must be 16 digits"),
   amount: yup
     .string()
     .required("Amount is required")
     .test("is-positive", "Amount must be greater than zero", (value) => {
-      return Number(value) > 0;
+      const num = Number(value);
+      return !isNaN(num) && num > 0;
     }),
 });
 
-async function getWallets() {
-  const userId = await AsyncStorage.getItem("userId");
+async function getWallets(userId: string) {
   try {
-    const res = await clientAxios.get(`/User/GetById/${JSON.parse(userId!)}`);
-    return res?.data?.data?.wallets;
-  } catch (err) {
-    console.log(err);
+    const res = await clientAxios.get(`/User/GetById/${userId}`);
+    const wallets = res?.data?.data?.wallets || 
+                   res?.data?.wallets || 
+                   res?.data?.data || 
+                   [];
+    return Array.isArray(wallets) ? wallets : [];
+  } catch (err: any) {
+    console.log("Error in getWallets:", {
+      message: err.message,
+      status: err.response?.status,
+      data: err.response?.data,
+      url: err.config?.url
+    });
+    throw err;
   }
 }
 
-const TransferForm = () => {
-  // const [isChecked, setIsChecked] = useState(false);
+const TransferForm = ({
+  onFormSubmit,
+}: {
+  onFormSubmit: (data: any) => void;
+}) => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [cardOptions, setCardOptions] = useState([]);
-  // const { data: cards } = useGetCards();
-  const { mutate: mutateTransfer, isPending } = useTransferAmount();
-  const toast = useToast();
-  const router = useRouter();
-  // useEffect(() => {
-  //   if (cards?.data) {
-  //     const options = cards?.data?.data?.map((card: any) => ({ key: card?.cardToken ,label: `${cardNumberSpace(card?.cardToken)} (${card?.bankName})` }))
-  //     setCardOptions(options);
-  //   }
-  // }, [cards]);
-  useEffect(() => {
-    getWallets().then((res) => {
-      const options = res?.map((wallet: any) => ({
-        key: wallet?.id,
-        label: `${cardNumberSpace(wallet?.cardNumber)} (${wallet?.bankName})`,
-      }));
+  const [cardOptions, setCardOptions] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const { isPending } = useTransferAmount();
+
+  const loadWallets = async (isRefresh = false) => {
+    if (hasLoaded && !isRefresh) return;
+
+    try {
+      if (!isRefresh) setLoading(true);
+      setError(null);
+      const userId = await AsyncStorage.getItem("userId");
+
+      if (!userId) {
+        setError("User ID not found in storage");
+        setLoading(false);
+        return;
+      }
+      let parsedUserId;
+      try {
+        parsedUserId = JSON.parse(userId);
+      } catch (parseError) {
+        parsedUserId = userId;
+      }
+
+      if (!parsedUserId) {
+        setError("Invalid User ID");
+        setLoading(false);
+        return;
+      }
+
+      const wallets = await getWallets(parsedUserId);
+      if (wallets.length === 0) {
+        setError("No wallets found for this user");
+      }
+
+      const options = wallets.map((wallet: any) => {
+        const cardNumber = wallet?.cardNumber || wallet?.cardToken || '';
+        const bankName = wallet?.bankName || 'Unknown Bank';
+        
+        return {
+          key: wallet?.id?.toString() || wallet?.cardNumber,
+          label: `${cardNumberSpace(cardNumber)} (${bankName})`,
+          rawData: wallet
+        };
+      });
+
       setCardOptions(options);
-    });
+      setHasLoaded(true);
+      
+    } catch (err: any) {
+      setError(err.message || "Failed to load wallets");
+      setCardOptions([]);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    
+    const initialize = async () => {
+      if (!isMounted) return;
+      
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        if (userId && !hasLoaded) {
+          await loadWallets();
+        } else if (!userId) {
+          setError("User ID not found");
+          setLoading(false);
+        }
+      } catch (err) {
+        console.log("Initialization error:", err);
+        setLoading(false);
+      }
+    };
+
+    initialize();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    let intervalId: NodeJS.Timeout;
+
+    const checkUserId = async () => {
+      if (!isMounted || hasLoaded) return;
+      
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        if (userId && !hasLoaded) {
+          await loadWallets();
+          if (isMounted) {
+            clearInterval(intervalId);
+          }
+        }
+      } catch (err) {
+        console.log("Error checking userId:", err);
+      }
+    };
+
+    if (!hasLoaded && !loading) {
+      intervalId = setInterval(checkUserId, 5000);
+    }
+
+    return () => {
+      isMounted = false;
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [hasLoaded, loading]);
+
+  const onRefresh = () => {
+    if (refreshing) return;
+    setRefreshing(true);
+    loadWallets(true);
+  };
+
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -82,32 +198,59 @@ const TransferForm = () => {
       destinationWalletCardNumber: "",
       amount: "",
     },
+    mode: "onChange",
   });
-  const isFormValid = isValid && !isPending;
+
+  const isFormValid = isValid && !isPending && !loading;
+
   const handlerTransfer = (formData: any) => {
     const params = {
       ...formData,
       sourceWalletId: Number(formData?.sourceWalletId),
       amount: Number(formData?.amount),
     };
-    console.log(params);
-
-    mutateTransfer(params, {
-      onSuccess: () => {
-        toast.show("Transfer Successfully.", { type: "success" });
-        router.replace("/(main)/(screens)/home");
-      },
-      onError: (error) => {
-        toast.show("Error performing transfer", { type: "danger" });
-        console.error("Transfer error:", error);
-      },
-    });
+    onFormSubmit(params);
   };
+
+  const formValues = watch();
+
   // **** jsx ****
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView 
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl 
+          refreshing={refreshing} 
+          onRefresh={onRefresh}
+          enabled={!loading}
+        />
+      }
+    >
       <View style={styles.formContainer}>
         <View style={styles.inputs}>
+          
+          {loading && (
+            <View style={styles.statusContainer}>
+              <MaterialIndicator size={20} color="#3629B7" />
+              <Text style={styles.statusText}>Loading wallets...</Text>
+            </View>
+          )}
+          
+          {error && !loading && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>{error}</Text>
+              <TouchableOpacity 
+                onPress={() => loadWallets(true)} 
+                style={styles.retryButton}
+                disabled={loading}
+              >
+                <Text style={styles.retryButtonText}>
+                  {loading ? "Loading..." : "Retry"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
           <Text style={styles.label}>Source info</Text>
           <View>
             <Controller
@@ -118,11 +261,13 @@ const TransferForm = () => {
                   {...field}
                   data={cardOptions}
                   onChange={(e) => {
+                    console.log("Selected wallet:", e);
                     setSelectedItem(e.label);
                     field.onChange(e.key);
                   }}
                   label="Choose wallet"
                   value={selectedItem}
+                  disabled={loading || cardOptions.length === 0}
                 />
               )}
             />
@@ -131,97 +276,30 @@ const TransferForm = () => {
                 {errors.sourceWalletId.message}
               </Text>
             )}
+            {!loading && cardOptions.length === 0 && !error && (
+              <Text style={styles.infoText}>
+                No wallets available. Please check your account.
+              </Text>
+            )}
           </View>
-          {/* <View>
-            <Text style={styles.label}>Choose transaction</Text>
-            <View>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={{ marginTop: 12 }}
-              >
-                <TouchableOpacity
-                  style={[
-                    styles.transactionItem,
-                    styles.transactionItemSelected,
-                  ]}
-                >
-                  <Entypo name="home" size={34} color="#fff" />
-                  <Text style={styles.transactionItemTitle}>
-                    Transfer via card number
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.transactionItem}>
-                  <FontAwesome5 name="user-alt" size={34} color="#fff" />
-                  <Text style={styles.transactionItemTitle}>
-                    Tràner via the same bank
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.transactionItem}>
-                  <Entypo name="home" size={34} color="#fff" />
-                  <Text style={styles.transactionItemTitle}>
-                    Transfer via card number
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          </View>
-          <View>
-            <View style={styles.directorTitle}>
-              <Text style={styles.label}>Directory</Text>
-              <Text style={styles.subTitle}>Find beneficiary </Text>
-            </View>
-            <View>
-              <ScrollView
-                style={styles.directorContainer}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              >
-                <TouchableOpacity style={styles.directorItem}>
-                  <AntDesign name="pluscircle" size={60} color="#F2F1F9" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.directorItem, styles.itemSelected]}
-                >
-                  <Image
-                    source={require("../../../../../../../assets/images/girl.png")}
-                  />
-                  <Text style={[styles.directorName, styles.valueSelected]}>
-                    Amanda
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.directorItem}>
-                  <Image
-                    source={require("../../../../../../../assets/images/girl.png")}
-                  />
-                  <Text style={styles.directorName}>Lana</Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          </View> */}
+
           <Text style={styles.label}>Destination info</Text>
           <View style={styles.form}>
-            {/* <Controller
-              name="name"
-              control={control}
-              render={({ field }) => (
-                <TextInput
-                  onChangeText={field.onChange}
-                  placeholder="Name"
-                  placeholderTextColor="#CACACA"
-                  style={styles.input}
-                />
-              )}
-            /> */}
             <Controller
               name="destinationWalletCardNumber"
               control={control}
               render={({ field }) => (
                 <TextInput
-                  onChangeText={field.onChange}
-                  placeholder="Card number"
+                  {...field}
+                  onChangeText={(text) => {
+                    const numbersOnly = text.replace(/[^0-9]/g, '');
+                    field.onChange(numbersOnly);
+                  }}
+                  placeholder="Card number (16 digits)"
                   placeholderTextColor="#CACACA"
                   style={styles.input}
+                  keyboardType="numeric"
+                  maxLength={16}
                 />
               )}
             />
@@ -230,51 +308,28 @@ const TransferForm = () => {
                 {errors.destinationWalletCardNumber.message}
               </Text>
             )}
+            
             <Controller
               name="amount"
               control={control}
               render={({ field }) => (
                 <TextInput
-                  onChangeText={field.onChange}
+                  {...field}
+                  onChangeText={(text) => {
+                    const numbersOnly = text.replace(/[^0-9.]/g, '');
+                    field.onChange(numbersOnly);
+                  }}
                   placeholder="Amount"
                   placeholderTextColor="#CACACA"
                   style={styles.input}
+                  keyboardType="decimal-pad"
                 />
               )}
             />
             {errors.amount && (
               <Text style={styles.errorText}>{errors.amount.message}</Text>
             )}
-            {/* <Controller
-              name="content"
-              control={control}
-              render={({ field }) => (
-                <TextInput
-                  onChangeText={field.onChange}
-                  placeholder="Content"
-                  placeholderTextColor="#CACACA"
-                  style={styles.input}
-                />
-              )}
-            /> */}
-            {/* <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                columnGap: 10,
-                alignItems: "center",
-              }}
-            >
-              <Checkbox
-                value={isChecked}
-                onValueChange={setIsChecked}
-                color={isChecked ? "#3629B7" : ""}
-                style={styles.checkBox}
-              />
-              <Text style={{ fontSize: 14, color: "#989898" }}>
-                Save to directory of beneficiary
-              </Text>
-            </View> */}
+
             <TouchableOpacity
               style={[styles.button, !isFormValid && styles.buttonDisabled]}
               disabled={!isFormValid}
@@ -283,6 +338,8 @@ const TransferForm = () => {
               <Text style={styles.buttonText}>
                 {isPending ? (
                   <MaterialIndicator size={25} color="#fff" />
+                ) : loading ? (
+                  "Loading..."
                 ) : (
                   "Confirm"
                 )}

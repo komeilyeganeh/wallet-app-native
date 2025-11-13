@@ -2,7 +2,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import HeaderWrapper from "@/components/headerWrapper";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { cardNumberFormat } from "@/lib/cardNumberFormat";
-import { useDeleteCard } from "./_tabs/Card/api/useCards";
 import { useToast } from "react-native-toast-notifications";
 import { MaterialIndicator } from "react-native-indicators";
 
@@ -10,21 +9,9 @@ const CardDetail = () => {
   const { cardId, cardNumber, bankName } = useLocalSearchParams();
   const toast = useToast();
   const router = useRouter();
-  const { mutate: mutateDelete, isPending } = useDeleteCard();
 
   const handleDeleteCard = () => {    
-    mutateDelete(+cardId, {
-      onSuccess: () => {        
-        toast.show("Delete card was successful.", {
-          type: "success",
-        });
-        router.replace("/(main)/(screens)/home/AccountAndCard")
-      },
-      onError: (error) => {
-        console.log(error);
-        
-      }
-    });
+
   };
   // **** jsx ****
   return (
@@ -58,10 +45,9 @@ const CardDetail = () => {
         <TouchableOpacity
           style={styles.deleteButton}
           onPress={handleDeleteCard}
-          disabled={isPending}
         >
           <Text style={{ color: "#FF4267", fontSize: 16, textAlign: "center" }}>
-            {isPending ? <MaterialIndicator size={25} /> : "Delete card"}
+            {false ? <MaterialIndicator size={25} /> : "Delete card"}
           </Text>
         </TouchableOpacity>
       </View>

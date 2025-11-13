@@ -4,6 +4,6 @@ export type CreditCardPropsType = {
     accountLevel: string;
     cardNumber: string;
     accountBalance: string;
-    theme: "blue" | "yellow";
+    theme: string;
     bankName: string;
 }

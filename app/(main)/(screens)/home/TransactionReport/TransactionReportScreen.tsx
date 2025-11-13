@@ -20,9 +20,7 @@ const transactionTitle = [
 ];
 
 const TransactionReportScreen = () => {
-  const { data: transactions, isPending } = useGetTransactions();
-  console.log("transactions ::=> ",transactions?.data?.data);
-  
+  const { data: transactions, isPending } = useGetTransactions();  
   
   // **** jsx ****
   return (
@@ -91,7 +89,7 @@ const TransactionReportScreen = () => {
                         />
                       }
                       color="#3629B7"
-                      title={transactionTitle[transaction.type]}
+                      title={transactionTitle[transaction.type - 1]}
                       description="Successfully"
                       amount={transaction?.amount}
                     />

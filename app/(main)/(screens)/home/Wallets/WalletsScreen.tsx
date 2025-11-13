@@ -8,11 +8,11 @@ import {
   View,
 } from "react-native";
 import AccountTab from "./_tabs/Account";
-import CardTab from "./_tabs/Card";
-import styles from "./AccountCard.styles";
+import styles from "./Wallets.styles";
 import HeaderWrapper from "@/components/headerWrapper";
+import WalletTab from "./_tabs/Wallet";
 
-const AccountCardScreen = () => {
+const WalletsScreen = () => {
   const [activeTab, setActiveTab] = useState(1);
   // **** jsx ****
   return (
@@ -49,7 +49,7 @@ const AccountCardScreen = () => {
                 activeTab === 2 && styles.tabButtonTextActive,
               ]}
             >
-              Card
+              Wallet
             </Text>
           </TouchableOpacity>
         </View>
@@ -66,7 +66,7 @@ const AccountCardScreen = () => {
           >
             <View style={styles.content}>
               {activeTab === 1 && <AccountTab />}
-              {activeTab === 2 && <CardTab />}
+              {activeTab === 2 && <WalletTab />}
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -75,4 +75,4 @@ const AccountCardScreen = () => {
   );
 };
 
-export default AccountCardScreen;
+export default WalletsScreen;

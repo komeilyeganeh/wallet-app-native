@@ -1,15 +1,15 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import * as yup from "yup";
 import styles from "./Success.styles";
 
-// form validation
-const schema = yup.object().shape({
-  card: yup.string().required(),
-  phoneNumber: yup.string().required(),
-  amount: yup.string().required(),
-});
+interface TransferSuccessProps {
+  onConfirm: () => void;
+  transferData?: any;
+}
 
-const TransferSuccess = () => {
+const TransferSuccess = ({ onConfirm, transferData }: TransferSuccessProps) => {
+  const amount = transferData?.amount || "1,000";
+  const recipientName = "Amanda";
+
   // **** jsx ****
   return (
     <View style={styles.container}>
@@ -20,10 +20,10 @@ const TransferSuccess = () => {
       <Text style={styles.title}>Transfer successful!</Text>
       <Text style={styles.desc}>
         You have successfully transferred{" "}
-        <Text style={{ color: "#FF4267", fontWeight: "bold" }}>$ 1,000</Text> to{" "}
-        <Text style={{ color: "#281C9D", fontWeight: "bold" }}>Amanda!</Text>
+        <Text style={{ color: "#FF4267", fontWeight: "bold" }}>$ {amount}</Text> to{" "}
+        <Text style={{ color: "#281C9D", fontWeight: "bold" }}>{recipientName}!</Text>
       </Text>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={onConfirm}>
         <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>
     </View>

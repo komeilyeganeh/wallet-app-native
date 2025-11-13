@@ -132,5 +132,44 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
   },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  statusText: {
+    marginLeft: 10,
+    color: '#3629B7',
+    fontSize: 14,
+  },
+  errorContainer: {
+    backgroundColor: '#ffeaea',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  infoText: {
+    color: '#6c757d',
+    fontSize: 12,
+    fontStyle: 'italic',
+    marginTop: 5,
+  },
+  retryButton: {
+    marginTop: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    backgroundColor: '#3629B7',
+    borderRadius: 6,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
 });
 export default styles;

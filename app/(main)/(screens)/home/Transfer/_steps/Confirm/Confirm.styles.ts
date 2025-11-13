@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     columnGap: 13,
+    marginBottom: 8
   },
 });
 export default styles;

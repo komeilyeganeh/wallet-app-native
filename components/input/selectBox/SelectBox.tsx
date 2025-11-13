@@ -10,6 +10,7 @@ const SelectBox: FC<SelectBoxPropsType> = ({
   onChange,
   value,
   label,
+  disabled,
   ...rest
 }) => {
   // **** jsx ****
@@ -23,6 +24,7 @@ const SelectBox: FC<SelectBoxPropsType> = ({
       optionTextStyle={styles.optionText}
       cancelContainerStyle={styles.cancelContainer}
       cancelText="Close"
+      disabled={disabled}
       {...rest}
     >
       <TouchableOpacity style={styles.selectTrigger}>
