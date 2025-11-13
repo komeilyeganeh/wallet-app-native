@@ -23,7 +23,7 @@ const schema = yup.object().shape({
     .required("user name field is required."),
   password: yup
     .string()
-    .min(6, "password must be at least 6 characters.")
+    // .min(6, "password must be at least 6 characters.")
     .required("password field is required."),
   remember: yup.boolean().required(),
 });
@@ -44,7 +44,7 @@ const LoginForm: FC = () => {
   const { mutate: login, isPending: isPendingLogin } = useLogin();
   const router = useRouter();
   const toast = useToast();
-
+  
   const {
     control,
     handleSubmit,

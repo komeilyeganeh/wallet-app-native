@@ -11,16 +11,23 @@ import CreditCard from "@/components/creditCard";
 const CardTab = () => {
   const [isShowForm, setIsShowForm] = useState(false);
   const { data: myCards, isPending, refetch } = useGetCards();
+  
   // **** return jsx ****
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 70 }}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 70 }}
+    >
       <View style={styles.cardsWrapper}>
         {isPending ? (
           <SkypeIndicator color="#0000ff" size={40} />
         ) : myCards?.data?.count ? (
-          myCards?.data?.data?.map((card: any) => (
+          myCards?.data?.data?.map((card: any, index: any) => (
             <Link
-              href="/(main)/(screens)/home/AccountAndCard/CardDetail"
+              href={{
+                pathname: "/(main)/(screens)/home/AccountAndCard/CardDetail",
+                params: { cardId: card?.id,cardNumber: card?.cardToken, bankName: card?.bankName },
+              }}
               key={card?.id}
             >
               <CreditCard
@@ -28,7 +35,7 @@ const CardTab = () => {
                 accountLevel="Amazon Platinium"
                 cardNumber={cardNumberFormat(card?.cardToken)}
                 accountBalance="3.469.52"
-                theme={card?.id % 2 === 0 ? "yellow" : "blue"}
+                theme={index % 2 !== 0 ? "yellow" : "blue"}
                 bankName={card?.bankName}
               />
             </Link>
@@ -36,19 +43,19 @@ const CardTab = () => {
         ) : (
           <Text
             style={{
-              backgroundColor: "#ff8282ff",
+              backgroundColor: "#FEF3E2",
               padding: 8,
               borderRadius: 5,
               textAlign: "center",
               textTransform: "uppercase",
-              color: "#fff",
+              color: "#FA812F",
             }}
           >
             no cards
           </Text>
         )}
         {isShowForm && (
-          <NewCardForm setIsShowForm={setIsShowForm} refetch={refetch} />
+          <NewCardForm setIsShowForm={setIsShowForm} />
         )}
         <TouchableOpacity
           style={styles.button}

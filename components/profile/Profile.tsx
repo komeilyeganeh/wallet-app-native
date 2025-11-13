@@ -8,7 +8,7 @@ const Profile: FC<{ style?: any }> = ({ style }) => {
 
   useEffect(() => {
     loadUserData();
-  }, []);
+  }, []);  
 
   const loadUserData = async () => {
     try {

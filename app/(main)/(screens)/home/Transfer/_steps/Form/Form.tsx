@@ -2,7 +2,7 @@ import SelectBox from "@/components/input/selectBox/SelectBox";
 import { AntDesign, Entypo, FontAwesome5 } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Checkbox from "expo-checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Image,
@@ -10,31 +10,67 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import * as yup from "yup";
 import styles from "./Form.styles";
+import { useGetCards } from "../../../AccountAndCard/_tabs/Card/api/useCards";
+import { cardNumberSpace } from "@/lib/cardNumberSpace";
+import { useTransferAmount } from "./api/useTransfer";
+import { useToast } from "react-native-toast-notifications";
+import { MaterialIndicator } from "react-native-indicators";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { clientAxios } from "@/lib/http";
+import { useRouter } from "expo-router";
 
 // form validation
 const schema = yup.object().shape({
-  card: yup.string().required(),
-  name: yup.string().required(),
-  cardNumber: yup.string().required(),
-  amount: yup.string().required(),
-  content: yup.string().required(),
+  sourceWalletId: yup.string().required("Please select the source wallet"),
+  destinationWalletCardNumber: yup
+    .string()
+    .required("Destination card number is required")
+    .min(16, "Card number must be 16 digits"),
+  amount: yup
+    .string()
+    .required("Amount is required")
+    .test("is-positive", "Amount must be greater than zero", (value) => {
+      return Number(value) > 0;
+    }),
 });
 
-const data = [
-  { key: "190089885456", label: "1900 8988 5456" },
-  { key: "190081125222", label: "1900 8112 5222" },
-  { key: "441100001234", label: "4411 0000 1234" },
-  { key: "190089885400", label: "1900 8988 5456" },
-  { key: "190089885450", label: "1900 8988 5450" },
-];
+async function getWallets() {
+  const userId = await AsyncStorage.getItem("userId");
+  try {
+    const res = await clientAxios.get(`/User/GetById/${JSON.parse(userId!)}`);
+    return res?.data?.data?.wallets;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 const TransferForm = () => {
-  const [isChecked, setIsChecked] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [cardOptions, setCardOptions] = useState([]);
+  // const { data: cards } = useGetCards();
+  const { mutate: mutateTransfer, isPending } = useTransferAmount();
+  const toast = useToast();
+  const router = useRouter();
+  // useEffect(() => {
+  //   if (cards?.data) {
+  //     const options = cards?.data?.data?.map((card: any) => ({ key: card?.cardToken ,label: `${cardNumberSpace(card?.cardToken)} (${card?.bankName})` }))
+  //     setCardOptions(options);
+  //   }
+  // }, [cards]);
+  useEffect(() => {
+    getWallets().then((res) => {
+      const options = res?.map((wallet: any) => ({
+        key: wallet?.id,
+        label: `${cardNumberSpace(wallet?.cardNumber)} (${wallet?.bankName})`,
+      }));
+      setCardOptions(options);
+    });
+  }, []);
   const {
     control,
     handleSubmit,
@@ -42,37 +78,61 @@ const TransferForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      card: "",
-      name: "",
-      cardNumber: "",
+      sourceWalletId: "",
+      destinationWalletCardNumber: "",
       amount: "",
-      content: "",
     },
   });
+  const isFormValid = isValid && !isPending;
+  const handlerTransfer = (formData: any) => {
+    const params = {
+      ...formData,
+      sourceWalletId: Number(formData?.sourceWalletId),
+      amount: Number(formData?.amount),
+    };
+    console.log(params);
+
+    mutateTransfer(params, {
+      onSuccess: () => {
+        toast.show("Transfer Successfully.", { type: "success" });
+        router.replace("/(main)/(screens)/home");
+      },
+      onError: (error) => {
+        toast.show("Error performing transfer", { type: "danger" });
+        console.error("Transfer error:", error);
+      },
+    });
+  };
   // **** jsx ****
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.formContainer}>
         <View style={styles.inputs}>
+          <Text style={styles.label}>Source info</Text>
           <View>
             <Controller
-              name="card"
+              name="sourceWalletId"
               control={control}
               render={({ field }) => (
                 <SelectBox
                   {...field}
-                  data={data}
+                  data={cardOptions}
                   onChange={(e) => {
                     setSelectedItem(e.label);
                     field.onChange(e.key);
                   }}
-                  label="Choose account/ card"
+                  label="Choose wallet"
                   value={selectedItem}
                 />
               )}
             />
+            {errors.sourceWalletId && (
+              <Text style={styles.errorText}>
+                {errors.sourceWalletId.message}
+              </Text>
+            )}
           </View>
-          <View>
+          {/* <View>
             <Text style={styles.label}>Choose transaction</Text>
             <View>
               <ScrollView
@@ -138,9 +198,10 @@ const TransferForm = () => {
                 </TouchableOpacity>
               </ScrollView>
             </View>
-          </View>
+          </View> */}
+          <Text style={styles.label}>Destination info</Text>
           <View style={styles.form}>
-            <Controller
+            {/* <Controller
               name="name"
               control={control}
               render={({ field }) => (
@@ -151,9 +212,9 @@ const TransferForm = () => {
                   style={styles.input}
                 />
               )}
-            />
+            /> */}
             <Controller
-              name="cardNumber"
+              name="destinationWalletCardNumber"
               control={control}
               render={({ field }) => (
                 <TextInput
@@ -164,6 +225,11 @@ const TransferForm = () => {
                 />
               )}
             />
+            {errors.destinationWalletCardNumber && (
+              <Text style={styles.errorText}>
+                {errors.destinationWalletCardNumber.message}
+              </Text>
+            )}
             <Controller
               name="amount"
               control={control}
@@ -176,7 +242,10 @@ const TransferForm = () => {
                 />
               )}
             />
-            <Controller
+            {errors.amount && (
+              <Text style={styles.errorText}>{errors.amount.message}</Text>
+            )}
+            {/* <Controller
               name="content"
               control={control}
               render={({ field }) => (
@@ -187,8 +256,8 @@ const TransferForm = () => {
                   style={styles.input}
                 />
               )}
-            />
-            <View
+            /> */}
+            {/* <View
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -205,9 +274,19 @@ const TransferForm = () => {
               <Text style={{ fontSize: 14, color: "#989898" }}>
                 Save to directory of beneficiary
               </Text>
-            </View>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Confirm</Text>
+            </View> */}
+            <TouchableOpacity
+              style={[styles.button, !isFormValid && styles.buttonDisabled]}
+              disabled={!isFormValid}
+              onPress={handleSubmit(handlerTransfer)}
+            >
+              <Text style={styles.buttonText}>
+                {isPending ? (
+                  <MaterialIndicator size={25} color="#fff" />
+                ) : (
+                  "Confirm"
+                )}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

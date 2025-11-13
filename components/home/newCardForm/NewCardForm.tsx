@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAddCard } from "./api/useNewCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useQueryClient } from "@tanstack/react-query";
 
 const schema = yup.object().shape({
   userId: yup.number().required(),
@@ -20,8 +21,8 @@ const schema = yup.object().shape({
 
 const NewCardForm: FC<{
   setIsShowForm: (status: boolean) => void;
-  refetch: any;
-}> = ({ setIsShowForm, refetch }) => {
+}> = ({ setIsShowForm }) => {
+  const queryClient = useQueryClient();
   const {
     control,
     handleSubmit,
@@ -49,7 +50,7 @@ const NewCardForm: FC<{
       onSuccess: (res) => {
         if (res?.data) {
           setIsShowForm(false);
-          refetch();
+          queryClient.invalidateQueries({ queryKey: ["get_cards"] })
         }
       },
       onError: (err) => {

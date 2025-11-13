@@ -21,6 +21,7 @@ const transactionTitle = [
 
 const TransactionReportScreen = () => {
   const { data: transactions, isPending } = useGetTransactions();
+  console.log("transactions ::=> ",transactions?.data?.data);
   
   
   // **** jsx ****

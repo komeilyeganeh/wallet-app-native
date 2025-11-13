@@ -1,5 +1,4 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { CreditCardPropsType } from "@/types/creditCard";
 import {
   FontAwesome,
   FontAwesome5,
@@ -19,59 +18,42 @@ import Carousel from "react-native-reanimated-carousel";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CreditCard from "@/components/creditCard";
 import CardItem from "@/components/home/cardItem/CardItem";
+import { cardNumberFormat } from "@/lib/cardNumberFormat";
+import { useGetCards } from "../(screens)/home/AccountAndCard/_tabs/Card/api/useCards";
+import { MaterialIndicator } from "react-native-indicators";
 
 const { width: screenWidth } = Dimensions.get("window");
 
-const cards: CreditCardPropsType[] = [
-  {
-    id: 1,
-    name: "John Smith",
-    accountLevel: "Amazon Platinium",
-    cardNumber: "4756 **** **** 9018",
-    accountBalance: "3.469.52",
-    theme: "blue",
-    bankName: "Sepah"
-  },
-  {
-    id: 2,
-    name: "Komeil",
-    accountLevel: "Amazon Platinium",
-    cardNumber: "6164 **** **** 0022",
-    accountBalance: "9.200",
-    theme: "yellow",
-    bankName: "Mehr"
-  },
-];
-
 const HomeScreen: FC = () => {
   const [user, setUser] = useState<any>(null);
-
+  const { data: myCards, isPending } = useGetCards();
+  
   useEffect(() => {
-    loadUserData();
+    (async () => {
+      await loadUserData();
+    })();
   }, []);
-
   const loadUserData = async () => {
     try {
-      const userData = await AsyncStorage.getItem('userData');
-      
+      const userData = await AsyncStorage.getItem("userData");
+
       if (userData !== null) {
         setUser(JSON.parse(userData));
       }
     } catch (error) {
-      console.error('Error loading user data:', error);
+      console.error("Error loading user data:", error);
     }
   };
-  
-  
+
   const carouselRef = useRef<any>(null);
-  const renderItem = ({ item }: { item: any }) => {
+  const renderItem = ({ index, item }: { item: any; index: number }) => {
     return (
       <CreditCard
-        name={item?.name}
-        accountLevel={item?.accountLevel}
-        cardNumber={item?.cardNumber}
-        accountBalance={item?.accountBalance}
-        theme={item?.theme}
+        name={`${item?.user?.firstName} ${item?.user?.lastName}`}
+        accountLevel={item?.cardBrand}
+        cardNumber={cardNumberFormat(item?.cardToken)}
+        accountBalance={"120"}
+        theme={index % 2 !== 0 ? "yellow" : "blue"}
         bankName={item?.bankName}
       />
     );
@@ -96,18 +78,29 @@ const HomeScreen: FC = () => {
       </View>
       <ScrollView style={styles.contentWrapper}>
         <View style={{ paddingBottom: 40 }}>
-          <Carousel
-            ref={carouselRef}
-            loop={true}
-            width={screenWidth * 0.88}
-            height={250}
-            autoPlay={false}
-            data={cards}
-            scrollAnimationDuration={500}
-            renderItem={renderItem}
-            mode="vertical-stack"
-            style={styles.carousel}
-          />
+          {isPending ? (
+            <MaterialIndicator size={25} />
+          ) : myCards?.data?.data?.length === 0 ? (
+            <View style={{ backgroundColor: "#FEF3E2", padding: 8, borderRadius: 5 }}>
+              <Text style={{ color: "#FA812F", textAlign: "center" }}>
+                There is no bank card. Please add it from the <Text style={{ fontWeight: "600" }}>Account and Card </Text>
+                section.
+              </Text>
+            </View>
+          ) : (
+            <Carousel
+              ref={carouselRef}
+              loop={true}
+              width={screenWidth * 0.88}
+              height={250}
+              autoPlay={false}
+              data={myCards?.data?.data}
+              scrollAnimationDuration={500}
+              renderItem={renderItem}
+              mode="vertical-stack"
+              style={styles.carousel}
+            />
+          )}
           <View style={styles.cardsContainer}>
             <CardItem
               icon={<FontAwesome5 name="wallet" size={28} color="#3629B7" />}

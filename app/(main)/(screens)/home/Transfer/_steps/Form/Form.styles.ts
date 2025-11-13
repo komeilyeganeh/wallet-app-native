@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     padding: 11.5,
     fontSize: 14,
     marginTop: 7,
-    color: "#333"
+    color: "#333",
   },
   button: {
     height: 44,
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 25
+    marginTop: 25,
   },
   buttonDisabled: {
     backgroundColor: "#F2F1F9",
@@ -42,6 +42,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFF",
     fontSize: 16,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
+    marginBottom: 10,
   },
   directorContainer: {
     marginTop: 13,
@@ -112,7 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3629B7",
   },
   form: {
-    margin: 10,
+    margin: 7,
     boxShadow: "0 4px 30px #3529b711",
     borderRadius: 15,
     padding: 15,
