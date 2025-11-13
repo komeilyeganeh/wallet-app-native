@@ -73,7 +73,7 @@ const ForgotCodeForm: FC = () => {
         </Text>
       </View>
       <Text style={[styles.subTitle_two, { marginTop: 9.6 }]}>
-        This code will expired 10 minutes after this message. If you don't get a
+        This code will expired 10 minutes after this message. If you don&apos;t get a
         message.
       </Text>
       <TouchableOpacity

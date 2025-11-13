@@ -18,4 +18,11 @@ export const tokenStorage = {
       return null;
     }
   },
+  async removeToken(): Promise<void> {
+    try {
+      await SecureStore.deleteItemAsync(TOKEN_KEY);
+    } catch (error) {
+      throw new Error("Failed to remove token!");
+    }
+  },
 };

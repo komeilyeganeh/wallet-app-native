@@ -164,9 +164,14 @@ const LoginForm: FC = () => {
               });
               if (res.data) {
                 const userDecode = jwtDecode(res?.data?.data?.token);
-                await AsyncStorage.setItem("userId", JSON.stringify(userDecode?.sub))
-                await AsyncStorage.setItem("token", res?.data?.data?.token);
-                await AsyncStorage.setItem("userData", JSON.stringify(userDecode));
+                await AsyncStorage.setItem(
+                  "userId",
+                  JSON.stringify(userDecode?.sub)
+                );
+                await AsyncStorage.setItem(
+                  "userData",
+                  JSON.stringify(userDecode)
+                );
               }
               
               router.replace("/(main)/(tabs)/home");
@@ -265,7 +270,7 @@ const LoginForm: FC = () => {
         </TouchableOpacity>
       </View>
       <Text style={styles.haveAccountText}>
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/(auth)/register" style={styles.signupPageLink}>
           Sign Up
         </Link>

@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import * as SecureStore from "expo-secure-store";
 import { tokenStorage } from "../storage/tokenStorage";
 
 export const useLogOut = () => {
@@ -8,7 +7,7 @@ export const useLogOut = () => {
   const logOut = async () => {
     await AsyncStorage.removeItem("userId");
     await AsyncStorage.removeItem("userData");
-    await SecureStore.deleteItemAsync("auth_token");    
+    await tokenStorage.removeToken();
     router.replace("/");
   };
 
