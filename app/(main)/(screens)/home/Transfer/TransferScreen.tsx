@@ -77,7 +77,7 @@ const TransferScreen = () => {
                 />
               )}
               {currentStep === "success" && (
-                <TransferSuccess onConfirm={handleSuccessConfirm} />
+                <TransferSuccess onConfirm={handleSuccessConfirm} transferData={transferData}/>
               )}
             </View>
           </ScrollView>
