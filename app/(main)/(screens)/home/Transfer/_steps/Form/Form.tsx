@@ -261,7 +261,6 @@ const TransferForm = ({
                   {...field}
                   data={cardOptions}
                   onChange={(e) => {
-                    console.log("Selected wallet:", e);
                     setSelectedItem(e.label);
                     field.onChange(e.key);
                   }}

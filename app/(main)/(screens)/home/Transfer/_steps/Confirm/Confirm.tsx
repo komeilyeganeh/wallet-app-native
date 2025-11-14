@@ -34,8 +34,7 @@ const ConfirmTransfer = ({
     defaultValues: {
       otp: ""
     },
-  });
-
+  });  
   const handleConfirm = (data: any) => {
     onConfirm(data.phoneNumber);
   };
@@ -47,8 +46,6 @@ const ConfirmTransfer = ({
         <Text style={{ fontSize: 12, color: "#989898" }}>
           Confirm transfer information
         </Text>
-
-        {/* From - نمایش اطلاعات مبدا */}
         <View>
           <Text style={styles.label}>From</Text>
           <View style={styles.input}>
@@ -59,8 +56,6 @@ const ConfirmTransfer = ({
             </Text>
           </View>
         </View>
-
-        {/* To - نمایش اطلاعات مقصد */}
         <View>
           <Text style={styles.label}>To</Text>
           <View style={styles.input}>
@@ -69,8 +64,6 @@ const ConfirmTransfer = ({
             </Text>
           </View>
         </View>
-
-        {/* Amount - نمایش مقدار */}
         <View>
           <Text style={styles.label}>Amount</Text>
           <View style={styles.input}>

@@ -113,18 +113,24 @@ const HomeScreen: FC = () => {
             </View>
           ) : (
             <>
-              <Carousel
-                ref={carouselRef}
-                loop={false}
-                width={screenWidth * 0.88}
-                height={250}
-                autoPlay={false}
-                data={walletsData}
-                scrollAnimationDuration={500}
-                renderItem={renderWalletItem}
-                mode="vertical-stack"
-                style={styles.carousel}
-              />
+              {walletsData.length > 1 ? (
+                <Carousel
+                  ref={carouselRef}
+                  loop={false}
+                  width={screenWidth * 0.88}
+                  height={250}
+                  autoPlay={false}
+                  data={walletsData}
+                  scrollAnimationDuration={500}
+                  renderItem={renderWalletItem}
+                  mode="vertical-stack"
+                  style={styles.carousel}
+                />
+              ) : walletsData.length === 1 ? (
+                <View>
+                  {renderWalletItem({ item: walletsData[0], index: 0 })}
+                </View>
+              ) : null}
 
               {/* <View style={styles.debugInfo}>
                 <Text style={styles.debugText}>

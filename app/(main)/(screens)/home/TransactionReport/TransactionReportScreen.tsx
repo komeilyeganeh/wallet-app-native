@@ -112,6 +112,10 @@ const TransactionReportScreen = () => {
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>No wallets found</Text>
             </View>
+          ) : wallets.length === 1 ? (
+            <View style={{ width: screenWidth * 0.88, margin: "auto" }}>
+              {renderWalletItem({ item: wallets[0], index: 0 })}
+            </View>
           ) : (
             <Carousel
               ref={carouselRef}
