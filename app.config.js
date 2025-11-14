@@ -1,19 +1,19 @@
 export default ({ config }) => ({
   ...config,
   name: "wallet-app",
-  owner: "kml123",
+  owner: "kml00",
   slug: "wallet-app",
   extra: {
     ...config.extra,
     enableHttp: true,
     EXPO_PUBLIC_API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL,
     eas: {
-      projectId: "a2675b8d-7328-4bd4-858c-fa358af2260a",
+      projectId: "1a87c17b-8f19-4ce9-b678-9d841b4c8ace",
     },
   },
   android: {
     ...config.android,
-    package: "com.kml123.walletapp",
+    package: "com.kml00.walletapp",
     permissions: ["INTERNET"],
     usesCleartextTraffic: true
   },
