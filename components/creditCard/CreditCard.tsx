@@ -18,10 +18,9 @@ const CreditCard: FC<CreditCardPropsType> = ({
       styles.cardWrapper, 
       { 
         backgroundColor: theme === "blue" ? "#1573FF" : "#FFAF2A",
-        // اضافه کردن استایل برای حالت انتخاب شده
         borderWidth: isSelected ? 3 : 0,
         borderColor: isSelected ? "#FF4267" : "transparent",
-        transform: isSelected ? [{ scale: 0.98 }] : [{ scale: 1 }]
+        transform: isSelected ? [{ scale: 0.99 }] : [{ scale: 1 }]
       }
     ]}>
       {/* blue section */}
@@ -85,7 +84,6 @@ const CreditCard: FC<CreditCardPropsType> = ({
           </View>
         </View>
 
-        {/* نشانگر انتخاب شده */}
         {isSelected && (
           <View style={styles.selectedIndicator}>
             <Text style={styles.selectedText}>Selected</Text>

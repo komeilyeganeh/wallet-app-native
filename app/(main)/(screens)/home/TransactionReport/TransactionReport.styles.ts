@@ -42,11 +42,11 @@ const styles = StyleSheet.create({
   transactionsContainer: {
     paddingHorizontal: 20,
     paddingBottom: 50,
-    paddingTop: 20
+    paddingTop: 60
   },
   daySection: {
-    marginBottom: 20,
-    marginTop: 40,
+    // marginBottom: 20,
+    // marginTop: 40,
   },
   dayTitle: {
     fontSize: 12,

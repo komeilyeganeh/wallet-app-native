@@ -128,6 +128,13 @@ const TransactionReportScreen = () => {
               renderItem={renderWalletItem}
               mode="vertical-stack"
               style={styles.carousel}
+              modeConfig={{
+                stackInterval: 30,
+                scaleInterval: 0.1,
+                opacityInterval: 0.2,
+                moveSize: screenWidth * 0.88,
+                showLength: wallets.length === 2 ? 2 : 3,
+              }}
             />
           )}
         </View>

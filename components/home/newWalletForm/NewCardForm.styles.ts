@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   loadingText: {
-    color: "#666",
+    color: "#e95f5fff",
     fontSize: 12,
     marginTop: 5,
     fontStyle: "italic",

@@ -125,6 +125,13 @@ const HomeScreen: FC = () => {
                   renderItem={renderWalletItem}
                   mode="vertical-stack"
                   style={styles.carousel}
+                  modeConfig={{
+                    stackInterval: 30,
+                    scaleInterval: 0.10,
+                    opacityInterval: 0.2,
+                    moveSize: screenWidth * 0.88,
+                    showLength: walletsData.length === 2 ? 2 : 3,
+                  }}
                 />
               ) : walletsData.length === 1 ? (
                 <View>

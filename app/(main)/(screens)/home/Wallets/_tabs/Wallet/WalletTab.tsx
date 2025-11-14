@@ -13,8 +13,6 @@ const WalletTab = () => {
   const [isShowForm, setIsShowForm] = useState(false);
   const { user, userId } = useUserData();
   const { data: myWallets, isPending } = useGetMyWallets(userId);
-  
-
   // **** return jsx ****
   return (
     <ScrollView

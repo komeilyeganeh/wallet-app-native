@@ -12,7 +12,7 @@ export const useGetMyWallets = (userId?: string | null) => {
             filters: [
               {
                 property: "userId",
-                operation: 1,
+                operation: 5,
                 values: [userId],
               },
             ],

@@ -7,15 +7,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: "hidden",
     position: "relative",
-    // اضافه کردن shadow برای افکت بهتر
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   shapeOneSection: {
     width: 180,
@@ -62,7 +53,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
   },
-  // استایل‌های جدید برای حالت انتخاب شده
   selectedIndicator: {
     position: "absolute",
     top: 10,

@@ -14,13 +14,13 @@ export const useGetTransactions = (walletId?: string) => {
         filters.filters = [
           {
             property: "sourceWalletId",
-            operation: 1,
-            values: [walletId?.toString()],
+            operation: 5,
+            values: [walletId],
           },
           {
             property: "destinationWalletId",
-            operation: 1,
-            values: [walletId?.toString()],
+            operation: 5,
+            values: [walletId],
           },
         ];
       }      
