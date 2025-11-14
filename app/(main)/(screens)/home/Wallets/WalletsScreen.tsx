@@ -18,7 +18,7 @@ const WalletsScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <HeaderWrapper title="Account and card" />
+        <HeaderWrapper title="Wallets" />
         <View style={styles.tabsContainer}>
           <TouchableOpacity
             style={[

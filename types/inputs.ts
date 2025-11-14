@@ -3,5 +3,5 @@ export type SelectBoxPropsType = {
     onChange: (item: any) => void;
     value: any;
     label: string;
-    disabled: boolean;
+    disabled?: boolean;
 }

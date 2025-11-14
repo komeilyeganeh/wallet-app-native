@@ -19,7 +19,7 @@ import CreditCard from "@/components/creditCard";
 import CardItem from "@/components/home/cardItem/CardItem";
 import { cardNumberFormat } from "@/lib/cardNumberFormat";
 import { MaterialIndicator } from "react-native-indicators";
-import { useGetMyWallets } from "@/services/wallet/hooks/useWallet"; // import hook wallets
+import { useGetMyWallets } from "@/services/wallet/hooks";
 import { useUserData } from "@/hooks/useUserData";
 
 const { width: screenWidth } = Dimensions.get("window");
@@ -115,7 +115,7 @@ const HomeScreen: FC = () => {
             <>
               <Carousel
                 ref={carouselRef}
-                loop={true}
+                loop={false}
                 width={screenWidth * 0.88}
                 height={250}
                 autoPlay={false}
@@ -126,12 +126,12 @@ const HomeScreen: FC = () => {
                 style={styles.carousel}
               />
 
-              <View style={styles.debugInfo}>
+              {/* <View style={styles.debugInfo}>
                 <Text style={styles.debugText}>
                   User: {userId ? `ID: ${userId}` : "Not logged in"} | Wallets:{" "}
                   {walletsData.length}
                 </Text>
-              </View>
+              </View> */}
             </>
           )}
 

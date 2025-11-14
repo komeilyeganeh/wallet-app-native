@@ -6,4 +6,5 @@ export type CreditCardPropsType = {
     accountBalance: string;
     theme: string;
     bankName: string;
+    isSelected?: boolean
 }

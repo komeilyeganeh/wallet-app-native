@@ -4,4 +4,6 @@ export type ReportCardPropsType = {
     title: string;
     description: string;
     amount: number;
+    currency: string;
+    isSuccess: boolean;
 }

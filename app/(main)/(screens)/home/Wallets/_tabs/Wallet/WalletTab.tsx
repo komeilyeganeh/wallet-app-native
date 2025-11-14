@@ -3,17 +3,18 @@ import { Link } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./Wallet.styles";
 import { SkypeIndicator } from "react-native-indicators";
-import NewCardForm from "@/components/home/newCardForm";
+import NewCardForm from "@/components/home/newWalletForm";
 import { cardNumberFormat } from "@/lib/cardNumberFormat";
 import CreditCard from "@/components/creditCard";
-import { useGetMyWallets } from "@/services/wallet/hooks/useWallet";
+import { useGetMyWallets } from "@/services/wallet/hooks";
 import { useUserData } from "@/hooks/useUserData";
 
 const WalletTab = () => {
   const [isShowForm, setIsShowForm] = useState(false);
-   const { user, userId, loading: userLoading, error: userError } = useUserData();
-  const { data: myWallets, isPending, error } = useGetMyWallets(userId);
+  const { user, userId } = useUserData();
+  const { data: myWallets, isPending } = useGetMyWallets(userId);
   
+
   // **** return jsx ****
   return (
     <ScrollView
@@ -23,22 +24,24 @@ const WalletTab = () => {
       <View style={styles.cardsWrapper}>
         {isPending ? (
           <SkypeIndicator color="#0000ff" size={40} />
-        ) : myWallets?.data?.count ? (
-          myWallets?.data?.data?.map((card: any, index: any) => (
+        ) : myWallets?.data?.data?.length > 0 ? (
+          myWallets?.data?.data?.map((wallet: any, index: any) => (
             <Link
               href={{
-                pathname: "/(main)/(screens)/home/AccountAndCard/CardDetail",
-                params: { cardId: card?.id,cardNumber: card?.cardToken, bankName: card?.bankName },
+                pathname: "/(main)/(screens)/home/Wallets/WalletDetail",
+                params: { 
+                  walletId: wallet?.id,
+                },
               }}
-              key={card?.id}
+              key={wallet?.id}
             >
               <CreditCard
-                name={`${card?.user?.firstName} ${card?.user?.lastName}`}
-                accountLevel="Amazon Platinium"
-                cardNumber={cardNumberFormat(card?.cardToken)}
-                accountBalance="3.469.52"
+                name={wallet?.accountHolderName || `${user?.name}`}
+                accountLevel="Wallet"
+                cardNumber={cardNumberFormat(wallet?.cardNumber || wallet?.id)}
+                accountBalance={wallet?.balance ? `${wallet.balance}` : "$0"}
                 theme={index % 2 !== 0 ? "yellow" : "blue"}
-                bankName={card?.bankName}
+                bankName={wallet?.bankName}
               />
             </Link>
           ))
@@ -53,7 +56,7 @@ const WalletTab = () => {
               color: "#FA812F",
             }}
           >
-            no cards
+            no wallets
           </Text>
         )}
         {isShowForm && (
@@ -63,7 +66,7 @@ const WalletTab = () => {
           style={styles.button}
           onPress={() => setIsShowForm(true)}
         >
-          <Text style={styles.buttonText}>Add new card</Text>
+          <Text style={styles.buttonText}>Add new wallet</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

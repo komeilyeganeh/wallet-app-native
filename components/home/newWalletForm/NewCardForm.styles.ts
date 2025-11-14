@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     padding: 11.5,
     fontSize: 14,
     marginTop: 7,
-    color: "#333"
+    color: "#333",
   },
   button: {
     height: 44,
@@ -42,6 +42,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFF",
     fontSize: 16,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
+  },
+  loadingText: {
+    color: "#666",
+    fontSize: 12,
+    marginTop: 5,
+    fontStyle: "italic",
   },
 });
 export default styles;

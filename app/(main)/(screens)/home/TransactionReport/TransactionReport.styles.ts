@@ -6,46 +6,91 @@ const styles = StyleSheet.create({
     backgroundColor: "#3629B7",
   },
   headerWrapper: {
-    height: 220,
+    height: 110,
     paddingHorizontal: 20,
     paddingTop: 40,
   },
   headerContent: {
     display: "flex",
     flexDirection: "row",
-    columnGap: 20,
+    alignItems: "center",
+    columnGap: 12,
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
     color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   content: {
-    flex: 1,
     backgroundColor: "#FFF",
-    borderTopLeftRadius: 45,
-    borderTopRightRadius: 45,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    flex: 1,
   },
-  cardContainer: {
+  carouselContainer: {
+    paddingTop: 20,
+    paddingBottom: 10,
+    minHeight: 280,
+  },
+  carousel: {
+    margin: "auto"
+  },
+  transactionsScrollView: {
+    flex: 1,
+    marginTop: -80,
+  },
+  transactionsContainer: {
     paddingHorizontal: 20,
-    transform: "translateY(-100px)",
+    paddingBottom: 50,
+    paddingTop: 20
   },
-  chart: {
-    padding: 15,
-    borderRadius: 30,
-    boxShadow: "0 4px 30px #3529b717",
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 4,
+  daySection: {
+    marginBottom: 20,
+    marginTop: 40,
+  },
+  dayTitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#CACACA",
+    marginBottom: 12,
+    marginTop: 10,
+  },
+  loadingContainer: {
+    alignItems: "center",
+    padding: 40,
+  },
+  loadingText: {
+    marginTop: 10,
+    color: "#666",
+    fontSize: 14,
+  },
+  placeholderContainer: {
+    alignItems: "center",
+    padding: 50,
+  },
+  placeholderText: {
+    marginTop: 15,
+    color: "#CACACA",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  emptyContainer: {
+    alignItems: "center",
+    padding: 40,
+  },
+  emptyText: {
+    marginTop: 15,
+    color: "#666",
+    fontSize: 14,
+    textAlign: "center",
+  },
+  // استایل‌های موجود قبلی
+  cardContainer: {
+    // در صورت نیاز
   },
   reportItems: {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 14,
-  },
-  day: {
-    fontSize: 12,
-    color: "#989898",
+    // در صورت نیاز
   },
 });
+
 export default styles;

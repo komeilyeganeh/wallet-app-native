@@ -3,40 +3,51 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 64,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ECECEC",
-    borderRadius: 15,
+    height: 70,
     display: "flex",
     flexDirection: "row",
-    padding: 12,
-    gap: 12,
+    alignItems: "center",
+    columnGap: 12,
+    paddingVertical: 8,
   },
   icon: {
-    width: 40,
-    padding: 5,
+    width: 50,
+    height: 50,
     borderRadius: 10,
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   infoContainer: {
     flex: 1,
     display: "flex",
-    flexDirection: "column",
-    gap: 2,
+    rowGap: 4,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   messageTitle: {
     fontSize: 16,
+    fontWeight: "bold",
     color: "#343434",
+    flex: 1,
+  },
+  statusIndicator: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 8,
   },
   messageDesc: {
     fontSize: 12,
-    color: "#989898",
+    color: "#52D5BA", // رنگ پیش‌فرض برای موفق
   },
   amount: {
     fontSize: 16,
     fontWeight: "bold",
   },
 });
+
 export default styles;
