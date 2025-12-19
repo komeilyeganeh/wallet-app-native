@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "expo-router";
+import { useCallback, useState } from "react";
+import { Link, useFocusEffect } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./Wallet.styles";
 import { SkypeIndicator } from "react-native-indicators";
@@ -12,7 +12,17 @@ import { useUserData } from "@/hooks/useUserData";
 const WalletTab = () => {
   const [isShowForm, setIsShowForm] = useState(false);
   const { user, userId } = useUserData();
-  const { data: myWallets, isPending } = useGetMyWallets(userId);
+  const {
+    data: myWallets,
+    isPending,
+    refetch: refetchMyWallets,
+  } = useGetMyWallets(userId);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchMyWallets();
+    }, [])
+  );
   // **** return jsx ****
   return (
     <ScrollView
@@ -27,7 +37,7 @@ const WalletTab = () => {
             <Link
               href={{
                 pathname: "/(main)/(screens)/home/Wallets/WalletDetail",
-                params: { 
+                params: {
                   walletId: wallet?.id,
                 },
               }}
@@ -57,9 +67,7 @@ const WalletTab = () => {
             no wallets
           </Text>
         )}
-        {isShowForm && (
-          <NewCardForm setIsShowForm={setIsShowForm} />
-        )}
+        {isShowForm && <NewCardForm setIsShowForm={setIsShowForm} />}
         <TouchableOpacity
           style={styles.button}
           onPress={() => setIsShowForm(true)}
