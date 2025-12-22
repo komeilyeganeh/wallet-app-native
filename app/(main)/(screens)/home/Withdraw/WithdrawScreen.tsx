@@ -36,7 +36,7 @@ const WithdrawScreen = () => {
                 style={{ width: width - 40, height: 220 }}
                 resizeMode="contain"
               />
-              {step === 1 && <WithdrawForm setStep={() => setStep(2)} />}
+              {step === 1 && <WithdrawForm setStep={setStep} />}
               {step === 2 && <WithdrawSuccess />}
             </View>
           </ScrollView>

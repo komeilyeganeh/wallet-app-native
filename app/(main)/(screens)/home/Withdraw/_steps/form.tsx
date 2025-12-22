@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -10,36 +11,111 @@ import {
 } from "react-native";
 import * as yup from "yup";
 import SelectBox from "@/components/input/selectBox";
+import { useUserData } from "@/hooks/useUserData";
+import { useGetMyWallets } from "@/services/wallet/hooks";
+import { cardNumberSpace } from "@/lib/cardNumberSpace";
+import { useWithdraw } from "@/services/withdraw/hooks";
 
 // form validation
 const schema = yup.object().shape({
-  card: yup.string().required(),
-  phoneNumber: yup.string().required(),
-  amount: yup.string().required(),
+  walletId: yup.string().required("Please select wallet"),
+  amount: yup
+    .string()
+    .required("Please enter the amount")
+    .test(
+      "is-number",
+      "Amount must be numeric",
+      (value) => !isNaN(Number(value))
+    ),
+  description: yup.string().optional(),
 });
 
-const data = [
-  { key: "190089885456", label: "1900 8988 5456" },
-  { key: "190081125222", label: "1900 8112 5222" },
-  { key: "441100001234", label: "4411 0000 1234" },
-  { key: "190089885400", label: "1900 8988 5456" },
-  { key: "190089885450", label: "1900 8988 5450" },
-];
-
-const WithdrawForm = ({ setStep }: { setStep: () => void }) => {
+const WithdrawForm = ({ setStep }: { setStep: (step: number) => void }) => {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [cardOptions, setCardOptions] = useState<any>([]);
+  const { user, userId } = useUserData();
+  const {
+    data: myWallets,
+    isPending,
+    refetch: refetchMyWallets,
+  } = useGetMyWallets(userId);
+  const {
+    mutate: withdraw,
+    isPending: isSubmitting,
+    isError,
+    error,
+    isSuccess,
+  } = useWithdraw();
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      card: "",
-      phoneNumber: "",
+      walletId: "",
       amount: "",
+      description: "",
     },
   });
+  useEffect(() => {
+    if (myWallets && myWallets.data?.data?.length > 0) {
+      const options = myWallets?.data?.data.map((wallet: any) => ({
+        key: wallet?.id?.toString() || wallet?.cardNumber,
+        label: `${cardNumberSpace(wallet?.cardNumber)} (${wallet?.bankName})`,
+        rawData: wallet,
+      }));
+      setCardOptions(options);
+    }
+  }, [myWallets]);
+
+  const onSubmit = (data: any) => {
+    const { amount, walletId } = data;
+    const params = {
+      ...data,
+      amount: Number(amount),
+      walletId: Number(walletId),
+    };
+    const selectedWallet = cardOptions.find(
+      (option: any) => option.key === data.walletId
+    );
+    if (selectedWallet && params.amount > selectedWallet.rawData.balance) {
+      Alert.alert(
+        "Insufficient Balance",
+        `Your balance is ${selectedWallet.rawData.balance} ${selectedWallet.rawData.currency.code}. Please enter a smaller amount.`,
+        [{ text: "OK" }]
+      );
+      return;
+    }
+    withdraw(params, {
+      onSuccess: () => {
+        reset();
+        setSelectedItem(null);
+        setStep(2);
+        refetchMyWallets();
+      },
+      onError: (error: any) => {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.response?.data?.error ||
+          error.message ||
+          "Withdrawal failed. Please try again.";
+        Alert.alert("Error", errorMessage, [
+          {
+            text: "Try Again",
+            style: "default",
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: () => reset(),
+          },
+        ]);
+      },
+    });
+  };
+
   // **** jsx ****
   return (
     <View style={styles.formContainer}>
@@ -47,34 +123,19 @@ const WithdrawForm = ({ setStep }: { setStep: () => void }) => {
         <View>
           <Text style={styles.label}>Choose account/ card</Text>
           <Controller
-            name="card"
+            name="walletId"
             control={control}
             render={({ field }) => (
               <SelectBox
                 {...field}
-                data={data}
+                data={cardOptions}
                 onChange={(e) => {
                   setSelectedItem(e.label);
-                  field.onChange(e.key)
+                  field.onChange(e.key);
                 }}
-                label="Choose account/ card"
+                label="Choose wallet"
                 value={selectedItem}
-              />
-            )}
-          />
-        </View>
-        <View>
-          <Text style={styles.label}>Phone number</Text>
-          <Controller
-            name="phoneNumber"
-            control={control}
-            render={({ field }) => (
-              <TextInput
-                onChangeText={field.onChange}
-                placeholder="Phone number"
-                placeholderTextColor="#CACACA"
-                secureTextEntry
-                style={styles.input}
+                disabled={isPending || cardOptions.length === 0}
               />
             )}
           />
@@ -89,7 +150,22 @@ const WithdrawForm = ({ setStep }: { setStep: () => void }) => {
                 onChangeText={field.onChange}
                 placeholder="Amount"
                 placeholderTextColor="#CACACA"
-                secureTextEntry
+                style={styles.input}
+                keyboardType="numeric"
+              />
+            )}
+          />
+        </View>
+        <View>
+          <Text style={styles.label}>Description</Text>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <TextInput
+                onChangeText={field.onChange}
+                placeholder="description"
+                placeholderTextColor="#CACACA"
                 style={styles.input}
               />
             )}
@@ -99,9 +175,9 @@ const WithdrawForm = ({ setStep }: { setStep: () => void }) => {
       <TouchableOpacity
         style={[styles.button, !isValid && styles.buttonDisabled]}
         disabled={!isValid}
-        onPress={setStep}
+        onPress={handleSubmit(onSubmit)}
       >
-        <Text style={styles.buttonText}>Verify</Text>
+        <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
     </View>
   );
@@ -115,7 +191,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     paddingBottom: 14,
-    rowGap: 25
+    rowGap: 25,
   },
   inputs: {
     display: "flex",
@@ -133,7 +209,7 @@ const styles = StyleSheet.create({
     padding: 11.5,
     fontSize: 14,
     marginTop: 7,
-    color: "#333"
+    color: "#333",
   },
   button: {
     height: 44,

@@ -9,10 +9,20 @@ export const clientAxios = axios.create({
   },
 });
 
-clientAxios.interceptors.request.use(async (config) => {
-  const token = await tokenStorage.getToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+clientAxios.interceptors.request.use(
+  async (config) => {
+    try {
+      const token = await tokenStorage.getToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    } catch (error) {
+      console.error("Error attaching token:", error);
+      return config;
+    }
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-});
+);

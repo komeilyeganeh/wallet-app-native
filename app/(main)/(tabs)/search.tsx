@@ -1,7 +1,8 @@
 import HeaderWrapper from "@/components/headerWrapper/HeaderWrapper";
 import { Link } from "expo-router";
 import { FC } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
+import styles from "@/assets/styles/tabs/search.styles"
 
 const SearchScreen: FC = () => {
   // **** jsx ****
@@ -69,43 +70,5 @@ const SearchScreen: FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  wrapper: {
-    backgroundColor: "#FFF",
-    flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 20,
-  },
-  linksContainer: {
-    marginTop: 24,
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 28,
-  },
-  linkItem: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-  linkTitleWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 6,
-  },
-  linkTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  linkSubTitle: {
-    fontSize: 12,
-    color: "#979797",
-  },
-});
 
 export default SearchScreen;

@@ -42,7 +42,7 @@ export const useNewWallet = () => {
 // ---- hook receiving wallet ----
 export const useGetWallet = (id: string) => {
   return useQuery({
-    queryKey: ["get_wallet", id], // id باید در queryKey باشد
+    queryKey: ["get_wallet", id],
     queryFn: () => {
       if (!id) throw new Error("Wallet ID is required");
       return getWallet(id);

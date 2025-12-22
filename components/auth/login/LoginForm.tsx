@@ -5,7 +5,7 @@ import { Link, useRouter } from "expo-router";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as yup from "yup";
 import { jwtDecode } from "jwt-decode";
 import * as LocalAuthentication from "expo-local-authentication";
@@ -44,7 +44,7 @@ const LoginForm: FC = () => {
   const { mutate: login, isPending: isPendingLogin } = useLogin();
   const router = useRouter();
   const toast = useToast();
-  
+
   const {
     control,
     handleSubmit,
@@ -149,9 +149,6 @@ const LoginForm: FC = () => {
   const onSubmit = async (data: any) => {
     loginReq(data, {
       onSuccess: async (res) => {
-        if (res?.data?.data?.token) {
-          await tokenStorage.setToken(res?.data?.data?.token);
-        }
         login(
           {
             token: res?.data?.data?.token,
@@ -164,6 +161,7 @@ const LoginForm: FC = () => {
               });
               if (res.data) {
                 const userDecode = jwtDecode(res?.data?.data?.token);
+                await tokenStorage.setToken(res?.data?.data?.token);
                 await AsyncStorage.setItem(
                   "userId",
                   JSON.stringify(userDecode?.sub)
@@ -173,7 +171,7 @@ const LoginForm: FC = () => {
                   JSON.stringify(userDecode)
                 );
               }
-              
+
               router.replace("/(main)/(tabs)/home");
             },
             onError: (error: any) => {

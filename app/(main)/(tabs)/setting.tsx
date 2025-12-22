@@ -1,9 +1,10 @@
 import { FC, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
+import { Switch, Text, TouchableOpacity, View } from "react-native";
 import { useLogOut } from "@/lib/hooks/useLogOut";
 import Profile from "@/components/profile";
+import styles from "@/assets/styles/tabs/setting.styles"
 
 const SettingScreen: FC = () => {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -67,49 +68,5 @@ const SettingScreen: FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#3629B7",
-  },
-  headerWrapper: {
-    height: 110,
-    paddingTop: 8,
-    paddingHorizontal: 20,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    columnGap: 20,
-  },
-  contentWrapper: {
-    backgroundColor: "#FFF",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    flex: 1,
-    padding: 24,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#FFF",
-  },
-  links: {
-    display: "flex",
-    rowGap: 16,
-    transform: "translateY(-32px)",
-  },
-  linkItem: {
-    width: "100%",
-    height: 43,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ECECEC",
-  },
-});
 
 export default SettingScreen;

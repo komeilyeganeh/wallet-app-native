@@ -57,7 +57,6 @@ export const useUserData = () => {
     }
   };
 
-  // بارگذاری اولیه
   useEffect(() => {
     loadUserData();
   }, []);

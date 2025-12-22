@@ -1,15 +1,22 @@
 import { FC } from "react";
-import { Entypo, FontAwesome, FontAwesome5, FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet, View } from "react-native";
+import {
+  Entypo,
+  FontAwesome,
+  FontAwesome5,
+  FontAwesome6,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { View } from "react-native";
 import HeaderWrapper from "@/components/headerWrapper";
 import MessageItem from "@/components/message/MessageCard";
+import styles from "@/assets/styles/tabs/messages.styles";
 
 const MessageScreen: FC = () => {
   // **** jsx ****
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <HeaderWrapper title="Messsage"/>
+        <HeaderWrapper title="Messsage" />
         <View style={styles.messageItems}>
           <MessageItem
             icon={<Entypo name="home" size={22} color="white" />}
@@ -26,7 +33,13 @@ const MessageScreen: FC = () => {
             date="12/10"
           />
           <MessageItem
-            icon={<MaterialCommunityIcons name="cellphone-message" size={22} color="white" />}
+            icon={
+              <MaterialCommunityIcons
+                name="cellphone-message"
+                size={22}
+                color="white"
+              />
+            }
             color="#0890FE"
             title="Alert"
             description="Your statement is ready for you to..."
@@ -40,7 +53,9 @@ const MessageScreen: FC = () => {
             date="11/10"
           />
           <MessageItem
-            icon={<FontAwesome5 name="money-bill-wave" size={22} color="white" />}
+            icon={
+              <FontAwesome5 name="money-bill-wave" size={22} color="white" />
+            }
             color="#52D5BA"
             title="Withdraw"
             description="Dear customer, 2987456 is your co..."
@@ -51,22 +66,5 @@ const MessageScreen: FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  wrapper: {
-    backgroundColor: "#FFF",
-    flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 20,
-  },
-  messageItems: {
-    marginTop: 24,
-    display: "flex",
-    rowGap: 20
-  }
-});
 
 export default MessageScreen;
