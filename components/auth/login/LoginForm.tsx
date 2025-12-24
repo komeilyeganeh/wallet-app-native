@@ -180,7 +180,7 @@ const LoginForm: FC = () => {
                 error?.response?.data?.error?.message ||
                 error?.message ||
                 "Registration failed. Please try again.";
-
+              
               toast.show(errorMessage, {
                 type: "danger",
               });

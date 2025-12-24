@@ -1,25 +1,38 @@
+import { useResetPassword } from "@/services/auth/forgotPassword/hooks";
 import { ForgotCodeFormType } from "@/types/authForm";
 import { yupResolver } from "@hookform/resolvers/yup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 import { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
+  ActivityIndicator,
+  Alert,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useToast } from "react-native-toast-notifications";
 import * as yup from "yup";
 
 // form validation
 const schema = yup.object().shape({
-  code: yup
+  otp: yup.string().required(),
+  newPassword: yup
     .string()
-    .length(4, "code must be at length 4 characters.")
+    .required(),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("newPassword")], "Must match 'New Paassword' field value")
     .required(),
 });
 
 const ForgotCodeForm: FC = () => {
+  const { mutate: mutateResetPassword, isPending } = useResetPassword();
+  const router = useRouter();
+  const toast = useToast();
   const {
     control,
     handleSubmit,
@@ -27,14 +40,34 @@ const ForgotCodeForm: FC = () => {
   } = useForm<ForgotCodeFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
-      code: "",
+      otp: "",
+      newPassword: "",
+      confirmPassword: "",
     },
+    mode: "onChange",
   });
 
   //   **** functions ****
-  // const onSubmit = (data: any) => {
-  //   router.push("/(auth)/resetPassword");
-  // };
+  const onSubmit = async (data: any) => {
+    const token = await AsyncStorage.getItem("resetPasswordToken");
+    const params = {
+      ...data,
+      token,
+      otp: "123456",
+    };
+    mutateResetPassword(params, {
+      onSuccess: () => {
+        toast.show("Password changed successfully.", { type: "success" });
+        router.push("/(auth)/login");
+      },
+      onError: (error: any) => {
+        toast.show(error?.response?.data?.errors?.NewPassword[0], {
+          type: "danger",
+        });
+        console.log(error?.response?.data?.errors);
+      },
+    });
+  };
   //   **** jsx ****
   return (
     <View style={styles.formContainer}>
@@ -42,7 +75,7 @@ const ForgotCodeForm: FC = () => {
       <View style={styles.inputButtonGroup}>
         <View style={{ flex: 1 }}>
           <Controller
-            name="code"
+            name="otp"
             control={control}
             render={({ field }) => (
               <TextInput
@@ -54,34 +87,76 @@ const ForgotCodeForm: FC = () => {
             )}
           />
           {errors && (
-            <Text style={styles.errorMessage}>{errors.code?.message}</Text>
+            <Text style={styles.errorMessage}>{errors.otp?.message}</Text>
           )}
         </View>
-        <TouchableOpacity
-          onPress={() => {}}
-          style={styles.resendButton}
-        >
+        <TouchableOpacity onPress={() => {}} style={styles.resendButton}>
           <Text style={styles.submitButtonText}>Resend</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <Text style={styles.subTitle_two}>
-          We texted you a code to verify your phone number
-        </Text>
-        <Text style={{ fontSize: 14, fontWeight: "bold", color: "#281C9D" }}>
-          (+84) 0398829xxx
-        </Text>
+      <View style={styles.inputsWrapper}>
+        <View>
+          <Controller
+            name="newPassword"
+            control={control}
+            render={({ field }) => (
+              <TextInput
+                onChangeText={field.onChange}
+                value={field.value}
+                placeholder="New Password"
+                placeholderTextColor="#CACACA"
+                style={styles.input}
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry
+                editable={!isPending}
+              />
+            )}
+          />
+          {errors.newPassword && (
+            <Text style={styles.errorMessage}>
+              {errors.newPassword.message}
+            </Text>
+          )}
+        </View>
+        <View>
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field }) => (
+              <TextInput
+                onChangeText={field.onChange}
+                value={field.value}
+                placeholder="Confirm Password"
+                placeholderTextColor="#CACACA"
+                style={styles.input}
+                autoCapitalize="none"
+                secureTextEntry
+                autoCorrect={false}
+                editable={!isPending}
+              />
+            )}
+          />
+          {errors.confirmPassword && (
+            <Text style={styles.errorMessage}>
+              {errors.confirmPassword.message}
+            </Text>
+          )}
+        </View>
       </View>
-      <Text style={[styles.subTitle_two, { marginTop: 9.6 }]}>
-        This code will expired 10 minutes after this message. If you don&apos;t get a
-        message.
-      </Text>
       <TouchableOpacity
-        onPress={() => {}}
-        style={[styles.submitButton, !isValid && styles.submitButtonDisabled]}
-        disabled={!isValid}
+        onPress={handleSubmit(onSubmit)}
+        style={[
+          styles.submitButton,
+          (!isValid || isPending) && styles.submitButtonDisabled,
+        ]}
+        disabled={!isValid || isPending}
       >
-        <Text style={styles.submitButtonText}>Change password</Text>
+        {isPending ? (
+          <ActivityIndicator size="small" color="#FFF" />
+        ) : (
+          <Text style={styles.submitButtonText}>Change password</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -91,19 +166,22 @@ const styles = StyleSheet.create({
   formContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: 2,
-    marginTop: 31,
+    marginTop: 21,
+  },
+  inputsWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: 15,
   },
   inputButtonGroup: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 13,
+    gap: 5,
   },
   subTitle: {
     fontSize: 12,
     color: "#989898",
-    marginBottom: 15.8,
+    marginBottom: 8,
   },
   subTitle_two: {
     color: "#898989",
@@ -119,7 +197,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 11.5,
     fontSize: 14,
-    color: "#333"
+    color: "#333",
   },
   resendButton: {
     backgroundColor: "#3629B7",
@@ -137,7 +215,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 32
+    marginTop: 18,
   },
   submitButtonDisabled: {
     backgroundColor: "#F2F1F9",

@@ -1,29 +1,31 @@
 export type RegisterFormType = {
-    name: string;
-    userName: string;
-    phoneNumber?: string;
-    password: string;
-    email?: string;
-    family?: string;
-    displayCurrencyCode?: string;
-}
+  name: string;
+  userName: string;
+  phoneNumber?: string;
+  password: string;
+  email?: string;
+  family?: string;
+  displayCurrencyCode?: string;
+};
 export type LoginFormType = {
-    username: string;
-    password: string;
-    remember: boolean;
-}
+  username: string;
+  password: string;
+  remember: boolean;
+};
 export type ForgotFormType = {
-    phoneNumber: string;
-}
+  username: string;
+};
 export type ForgotCodeFormType = {
-    code: string;
-}
+  otp: string;
+  newPassword: string;
+  confirmPassword: string;
+};
 export type ResetPasswordFormType = {
-    password: string;
-    confirmPassword: string;
-}
+  password: string;
+  confirmPassword: string;
+};
 export type ChangePasswordFormType = {
-    recentPassword: string;
-    newPassword: string;
-    confirmPassword: string;
-}
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};

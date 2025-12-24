@@ -1,29 +1,37 @@
 import { ForgotFormType } from "@/types/authForm";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  ActivityIndicator,
 } from "react-native";
 import * as yup from "yup";
 import styles from "./Form.styles";
+import {
+  useForgotPasswordRequest,
+} from "@/services/auth/forgotPassword/hooks";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// form validation
+// form validation - فقط username
 const schema = yup.object().shape({
-  phoneNumber: yup
+  username: yup
     .string()
-    .matches(/^[0-9]{11}$/, "phone number is invalid")
-    .required("phone number field is required."),
+    .required("Username field is required.")
+    .min(2, "Username must be at least 3 characters")
+    .max(50, "Username is too long"),
 });
 
 const ForgotForm: FC<{ onChangeStep: (step: number) => void }> = ({
   onChangeStep,
 }) => {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate: mutateForgotPasswordReq } = useForgotPasswordRequest();
   const {
     control,
     handleSubmit,
@@ -31,44 +39,81 @@ const ForgotForm: FC<{ onChangeStep: (step: number) => void }> = ({
   } = useForm<ForgotFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
-      phoneNumber: "",
+      username: "",
     },
+    mode: "onChange",
   });
 
   //   **** functions ****
-  const onSubmit = (data: any) => {
-    onChangeStep(2);
+  const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
+    mutateForgotPasswordReq(data, {
+      onSuccess: async (res) => {
+        const token = await res?.data?.data?.token;
+        AsyncStorage.setItem("resetPasswordToken", token);
+        onChangeStep(2);
+      },
+    });
   };
+
   //   **** jsx ****
   return (
     <View style={styles.formContainer}>
-      <Text style={styles.subTitle}>Type your phone number</Text>
+      <Text style={styles.subTitle}>Enter your username</Text>
+
       <View>
         <Controller
-          name="phoneNumber"
+          name="username"
           control={control}
           render={({ field }) => (
             <TextInput
               onChangeText={field.onChange}
-              placeholder="Phone Number"
+              value={field.value}
+              placeholder="Username"
               placeholderTextColor="#CACACA"
               style={styles.input}
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable={!isSubmitting}
             />
           )}
         />
-        {errors && (
-          <Text style={styles.errorMessage}>{errors.phoneNumber?.message}</Text>
+        {errors.username && (
+          <Text style={styles.errorMessage}>{errors.username.message}</Text>
         )}
       </View>
+
       <Text style={styles.helpText}>
-        We texted you a code to verify your phone number
+        We'll send a recovery code to the email associated with this username
       </Text>
+
       <TouchableOpacity
         onPress={handleSubmit(onSubmit)}
-        style={[styles.submitButton, !isValid && styles.submitButtonDisabled]}
-        disabled={!isValid}
+        style={[
+          styles.submitButton,
+          (!isValid || isSubmitting) && styles.submitButtonDisabled,
+        ]}
+        disabled={!isValid || isSubmitting}
       >
-        <Text style={styles.submitButtonText}>Send</Text>
+        {isSubmitting ? (
+          <ActivityIndicator size="small" color="#FFF" />
+        ) : (
+          <Text style={styles.submitButtonText}>
+            {isSubmitting ? "Sending..." : "Send Recovery Code"}
+          </Text>
+        )}
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{ marginTop: 15 }}
+        onPress={() => router.back()}
+        disabled={isSubmitting}
+      >
+        <Text
+          style={[styles.helpText, { textAlign: "center", color: "#3629B7" }]}
+        >
+          Back to Login
+        </Text>
       </TouchableOpacity>
     </View>
   );

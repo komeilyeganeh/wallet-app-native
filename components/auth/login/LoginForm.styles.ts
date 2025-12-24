@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: "#CACACA",
     fontSize: 12,
-    marginTop: 4,
+    marginTop: 8,
   },
   biometric: {
     marginTop: 24,
