@@ -65,9 +65,7 @@ const WalletDetail = () => {
       queryClient.invalidateQueries({
         queryKey: ["get_wallet", walletId],
         refetchType: "active"
-      });
-      console.log("refetch....");
-      
+      }); 
     }, [refetchWallet, queryClient, walletId])
   );
 

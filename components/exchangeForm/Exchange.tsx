@@ -55,8 +55,6 @@ const ExchangeForm: FC = () => {
   const exchangeRateHandler = (data: any) => {
     const params = { ...data };
     params.lastUpdatedAt = Date.now();
-    console.log(params);
-    
     // exchangeRateCreate(data, {
     //   onSuccess: (res) => {
     //     console.log(res);

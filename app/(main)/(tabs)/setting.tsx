@@ -1,15 +1,31 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect, useCallback } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { Switch, Text, TouchableOpacity, View } from "react-native";
+import { Link, useFocusEffect } from "expo-router";
+import {
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { useLogOut } from "@/lib/hooks/useLogOut";
 import Profile from "@/components/profile";
-import styles from "@/assets/styles/tabs/setting.styles"
+import styles from "@/assets/styles/tabs/setting.styles";
+import { useIsTwoFactorEnabled } from "@/services/auth/twoFactor/hooks";
 
 const SettingScreen: FC = () => {
-  const [isEnabled, setIsEnabled] = useState(true);
   const { logOut } = useLogOut();
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const { data: twoFactorData, isLoading, refetch } = useIsTwoFactorEnabled();
+
+  const isTwoFactorEnabled = twoFactorData?.data?.data || false;
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+      return () => {};
+    }, [refetch])
+  );
+
   // **** jsx ****
   return (
     <View style={styles.container}>
@@ -30,28 +46,45 @@ const SettingScreen: FC = () => {
               <AntDesign name="right" color="#DCDCDC" size={16} />
             </View>
           </Link>
-          <View style={styles.linkItem}>
-            <Text onPress={toggleSwitch}>Touch ID</Text>
-            <Switch
-              trackColor={{ false: "#ddd", true: "#3629B7" }}
-              thumbColor={isEnabled ? "#FFF" : "#999"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
+
+          <Link href="/(main)/(screens)/settings/TwoFactor" asChild>
+            <TouchableOpacity>
+              <View style={styles.linkItem}>
+                <Text>Two Factor Authentication</Text>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  {isLoading ? (
+                    <ActivityIndicator size="small" color="#3629B7" />
+                  ) : (
+                    <Text
+                      style={{
+                        color: isTwoFactorEnabled ? "#4CAF50" : "#ff1414ff",
+                        fontSize: 12,
+                        marginRight: 8,
+                      }}
+                    >
+                      {isTwoFactorEnabled ? "Enabled" : "Disabled"}
+                    </Text>
+                  )}
+                  <AntDesign name="right" color="#DCDCDC" size={16} />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </Link>
+
           <Link href="/(main)/(screens)/settings/Language/LanguageScreen">
             <View style={styles.linkItem}>
               <Text>Languages</Text>
               <AntDesign name="right" color="#DCDCDC" size={16} />
             </View>
           </Link>
+
           <Link href="/(main)/(screens)/settings/AppInfo/AppInfoScreen">
             <View style={styles.linkItem}>
               <Text>App information</Text>
               <AntDesign name="right" color="#DCDCDC" size={16} />
             </View>
           </Link>
+
           <View style={styles.linkItem}>
             <Text>Customer care</Text>
             <Text
@@ -60,8 +93,11 @@ const SettingScreen: FC = () => {
               19008989
             </Text>
           </View>
-          <TouchableOpacity onPress={logOut}>
-            <Text style={{ color: "red" }}>Logout</Text>
+
+          <TouchableOpacity onPress={logOut} style={{ marginTop: 20 }}>
+            <Text style={{ color: "red", textAlign: "center", fontSize: 16 }}>
+              Logout
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

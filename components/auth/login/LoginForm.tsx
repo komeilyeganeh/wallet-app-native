@@ -14,6 +14,7 @@ import { useLogin, useLoginReq } from "./api/useLogin";
 import { MaterialIndicator } from "react-native-indicators";
 import { useToast } from "react-native-toast-notifications";
 import { tokenStorage } from "@/lib/storage/tokenStorage";
+import { useIsTwoFactorEnabled } from "@/services/auth/twoFactor/hooks";
 
 // form validation
 const schema = yup.object().shape({
@@ -42,6 +43,8 @@ const LoginForm: FC = () => {
   const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
   const { mutate: loginReq, isPending: isPendingLoginReq } = useLoginReq();
   const { mutate: login, isPending: isPendingLogin } = useLogin();
+  const { data: twoFactorEnabled, refetch } = useIsTwoFactorEnabled();
+
   const router = useRouter();
   const toast = useToast();
 
@@ -156,12 +159,27 @@ const LoginForm: FC = () => {
           },
           {
             onSuccess: async (res) => {
-              toast.show("You have successfully logged in to your account.", {
-                type: "success",
-              });
-              if (res.data) {
-                const userDecode = jwtDecode(res?.data?.data?.token);
-                await tokenStorage.setToken(res?.data?.data?.token);
+              if (res?.data?.data?.requiresTwoFactor) {
+                const loginToken =
+                  res?.data?.data?.loginToken || res?.data?.data?.token;
+                toast.show("Two-factor authentication is required.", {
+                  type: "info",
+                });
+                router.replace({
+                  pathname: "/(auth)/loginWith2FA",
+                  params: { loginToken },
+                });
+                return;
+              }
+              const finalToken = res?.data?.data?.token;
+              if (finalToken) {
+                await tokenStorage.setToken(finalToken);
+
+                toast.show("You have successfully logged in to your account.", {
+                  type: "success",
+                });
+
+                const userDecode = jwtDecode(finalToken);
                 await AsyncStorage.setItem(
                   "userId",
                   JSON.stringify(userDecode?.sub)
@@ -170,9 +188,9 @@ const LoginForm: FC = () => {
                   "userData",
                   JSON.stringify(userDecode)
                 );
-              }
 
-              router.replace("/(main)/(tabs)/home");
+                router.replace("/(main)/(tabs)/home");
+              }
             },
             onError: (error: any) => {
               const errorMessage =
@@ -180,7 +198,7 @@ const LoginForm: FC = () => {
                 error?.response?.data?.error?.message ||
                 error?.message ||
                 "Registration failed. Please try again.";
-              
+
               toast.show(errorMessage, {
                 type: "danger",
               });
