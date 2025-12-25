@@ -15,6 +15,7 @@ import { useUserData } from "@/hooks/useUserData";
 import { useGetMyWallets } from "@/services/wallet/hooks";
 import { cardNumberSpace } from "@/lib/cardNumberSpace";
 import { useWithdraw } from "@/services/withdraw/hooks";
+import { MaterialIndicator } from "react-native-indicators";
 
 // form validation
 const schema = yup.object().shape({
@@ -39,13 +40,7 @@ const WithdrawForm = ({ setStep }: { setStep: (step: number) => void }) => {
     isPending,
     refetch: refetchMyWallets,
   } = useGetMyWallets(userId);
-  const {
-    mutate: withdraw,
-    isPending: isSubmitting,
-    isError,
-    error,
-    isSuccess,
-  } = useWithdraw();
+  const { mutate: withdraw, isPending: isSubmitting } = useWithdraw();
   const {
     control,
     handleSubmit,
@@ -173,11 +168,13 @@ const WithdrawForm = ({ setStep }: { setStep: (step: number) => void }) => {
         </View>
       </View>
       <TouchableOpacity
-        style={[styles.button, !isValid && styles.buttonDisabled]}
+        style={[styles.button, (!isValid || isSubmitting) && styles.buttonDisabled]}
         disabled={!isValid}
         onPress={handleSubmit(onSubmit)}
       >
-        <Text style={styles.buttonText}>Submit</Text>
+        <Text style={styles.buttonText}>
+          {isSubmitting ? <MaterialIndicator size={25} color="#fff" /> : "Confirm"}
+        </Text>
       </TouchableOpacity>
     </View>
   );

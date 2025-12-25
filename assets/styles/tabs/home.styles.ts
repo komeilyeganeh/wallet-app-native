@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffffff",
     borderRadius: 16,
     padding: 10,
-    marginTop: 3,
+    marginTop: 5,
     elevation: 3,
     shadowColor: "#000000a6",
     shadowOffset: { width: 5, height: 4 },
@@ -65,8 +65,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   depositButtonDisabled: {
-    backgroundColor: "#A5D6A7",
-    opacity: 0.7,
+    opacity: 0.5,
   },
   depositButtonContent: {
     flexDirection: "row",
@@ -83,13 +82,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   depositTitle: {
-    color: "#60ca4aff",
     fontSize: 15,
     fontWeight: "bold",
     marginBottom: 4,
   },
   depositWarning: {
-    color: "#9b8b00ff",
+    color: "#e42a2aff",
     fontSize: 12,
     marginTop: 4,
     fontStyle: "italic",
@@ -259,10 +257,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   emptyContainer: {
-    backgroundColor: "#FEF3E2",
+    backgroundColor: "#ffffffff",
     padding: 20,
     borderRadius: 12,
-    marginBottom: 20,
+    marginBottom: 5,
     borderWidth: 1,
     borderColor: "#FA812F",
   },

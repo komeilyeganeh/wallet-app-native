@@ -94,8 +94,8 @@ const SettingScreen: FC = () => {
             </Text>
           </View>
 
-          <TouchableOpacity onPress={logOut} style={{ marginTop: 20 }}>
-            <Text style={{ color: "red", textAlign: "center", fontSize: 16 }}>
+          <TouchableOpacity onPress={logOut} style={styles.buttonLogout}>
+            <Text style={styles.buttonLogoutText}>
               Logout
             </Text>
           </TouchableOpacity>

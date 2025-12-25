@@ -28,25 +28,31 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDeposit } from "@/services/deposit/hooks";
 import * as yup from "yup";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import styles from "@/assets/styles/tabs/home.styles"
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
+import styles from "@/assets/styles/tabs/home.styles";
 
 const { width: screenWidth } = Dimensions.get("window");
 
 // Validation Schema
 const depositSchema = yup.object().shape({
-  walletId: yup.number().required("Please select wallet").min(1, "Please select a valid wallet"),
+  walletId: yup
+    .number()
+    .required("Please select wallet")
+    .min(1, "Please select a valid wallet"),
   amount: yup
     .string()
     .required("Please enter the amount")
-    .test('is-number', 'Amount must be a valid number', (value) => {
-      if (!value || value.trim() === '') return false;
-      const num = Number(value.replace(/,/g, ''));
+    .test("is-number", "Amount must be a valid number", (value) => {
+      if (!value || value.trim() === "") return false;
+      const num = Number(value.replace(/,/g, ""));
       return !isNaN(num) && isFinite(num);
     })
-    .test('is-positive', 'Amount must be greater than zero', (value) => {
-      if (!value || value.trim() === '') return false;
-      return Number(value.replace(/,/g, '')) > 0;
+    .test("is-positive", "Amount must be greater than zero", (value) => {
+      if (!value || value.trim() === "") return false;
+      return Number(value.replace(/,/g, "")) > 0;
     }),
   description: yup.string().optional(),
 });
@@ -72,7 +78,7 @@ const HomeScreen: FC = () => {
   const loading = userLoading || walletsPending;
   const carouselRef = useRef<any>(null);
   const { mutate: deposit, isPending: isDepositing } = useDeposit();
-  
+
   // Bottom Sheet ref
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -96,13 +102,16 @@ const HomeScreen: FC = () => {
   const walletsData = myWallets?.data?.data || [];
 
   // Bottom Sheet snap points
-  const snapPoints = useMemo(() => ['25%', '50%', '90%'], []);
+  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
 
-  const handleCarouselChange = useCallback((index: number) => {
-    if (walletsData.length > 0 && index >= 0 && index < walletsData.length) {
-      setSelectedWalletIndex(index);
-    }
-  }, [walletsData]);
+  const handleCarouselChange = useCallback(
+    (index: number) => {
+      if (walletsData.length > 0 && index >= 0 && index < walletsData.length) {
+        setSelectedWalletIndex(index);
+      }
+    },
+    [walletsData]
+  );
 
   const renderWalletItem = ({ item, index }: { item: any; index: number }) => {
     return (
@@ -131,10 +140,13 @@ const HomeScreen: FC = () => {
       );
       return;
     }
-    
-    const safeIndex = Math.max(0, Math.min(selectedWalletIndex, walletsData.length - 1));
+
+    const safeIndex = Math.max(
+      0,
+      Math.min(selectedWalletIndex, walletsData.length - 1)
+    );
     const selectedWallet = walletsData[safeIndex];
-    
+
     if (selectedWallet) {
       reset({
         walletId: selectedWallet.id || 0,
@@ -142,7 +154,7 @@ const HomeScreen: FC = () => {
         description: "",
       });
     }
-    
+
     setIsDepositSheetOpen(true);
     bottomSheetRef.current?.expand();
   };
@@ -159,14 +171,17 @@ const HomeScreen: FC = () => {
 
   const selectedWallet = useMemo(() => {
     if (walletsData.length === 0) return null;
-    
-    const safeIndex = Math.max(0, Math.min(selectedWalletIndex, walletsData.length - 1));
+
+    const safeIndex = Math.max(
+      0,
+      Math.min(selectedWalletIndex, walletsData.length - 1)
+    );
     const wallet = walletsData[safeIndex];
-    
+
     if (!wallet || !wallet.id) {
       return null;
     }
-    
+
     return wallet;
   }, [walletsData, selectedWalletIndex]);
 
@@ -177,8 +192,8 @@ const HomeScreen: FC = () => {
   }, [isDepositSheetOpen, selectedWallet]);
 
   const onSubmit = (data: any) => {
-    const numericAmount = Number(data.amount.replace(/,/g, ''));
-    
+    const numericAmount = Number(data.amount.replace(/,/g, ""));
+
     const depositData = {
       walletId: Number(data.walletId),
       amount: numericAmount,
@@ -214,11 +229,11 @@ const HomeScreen: FC = () => {
   };
 
   const formatAmount = (value: string) => {
-    const numericValue = value.replace(/[^0-9]/g, '');
+    const numericValue = value.replace(/[^0-9]/g, "");
     if (numericValue.length > 0) {
-      return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    return '';
+    return "";
   };
 
   const handleSheetChanges = useCallback((index: number) => {
@@ -257,8 +272,8 @@ const HomeScreen: FC = () => {
           </View>
         </View>
       </View>
-      
-      <ScrollView style={styles.contentWrapper}>
+
+      <ScrollView style={styles.contentWrapper} showsVerticalScrollIndicator={false}>
         <View style={{ paddingBottom: 40 }}>
           {userError && (
             <View style={styles.errorContainer}>
@@ -319,20 +334,41 @@ const HomeScreen: FC = () => {
               ) : null}
             </>
           )}
-          
+
           <TouchableOpacity
-            style={[styles.depositButton, walletsData.length === 0 && styles.depositButtonDisabled]}
+            style={[
+              styles.depositButton,
+              walletsData.length === 0 && styles.depositButtonDisabled,
+            ]}
             onPress={handleDepositPress}
             disabled={walletsData.length === 0}
           >
             <View style={styles.depositButtonContent}>
               <View style={styles.depositIconContainer}>
-                <Ionicons name="add-circle" size={24} color="#60ca4aff" />
+                {walletsData?.length === 0 ? (
+                  <Ionicons
+                    name="warning-outline"
+                    size={24}
+                    color="#ec2f2fff"
+                  />
+                ) : (
+                  <Ionicons name="add-circle" size={24} color="#60ca4aff" />
+                )}
               </View>
               <View style={styles.depositTextContainer}>
-                <Text style={styles.depositTitle}>Deposit</Text>
+                <Text
+                  style={[
+                    styles.depositTitle && walletsData?.length === 0
+                      ? { color: "#222" }
+                      : { color: "#60ca4aff" },
+                  ]}
+                >
+                  Deposit
+                </Text>
                 {walletsData.length === 0 && (
-                  <Text style={styles.depositWarning}>Create a wallet first</Text>
+                  <Text style={styles.depositWarning}>
+                    Create a wallet first
+                  </Text>
                 )}
               </View>
               <Ionicons
@@ -343,7 +379,7 @@ const HomeScreen: FC = () => {
               />
             </View>
           </TouchableOpacity>
-          
+
           <View style={styles.cardsContainer}>
             <CardItem
               icon={<FontAwesome5 name="wallet" size={28} color="#3629B7" />}
@@ -412,7 +448,7 @@ const HomeScreen: FC = () => {
         handleIndicatorStyle={styles.bottomSheetHandle}
         backgroundStyle={styles.bottomSheetBackground}
       >
-        <BottomSheetScrollView 
+        <BottomSheetScrollView
           style={styles.bottomSheetContent}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
@@ -427,15 +463,15 @@ const HomeScreen: FC = () => {
           {selectedWallet ? (
             <>
               <View style={styles.selectedWalletCard}>
-                <Text style={styles.selectedWalletTitle}>
-                  Selected Wallet
-                </Text>
+                <Text style={styles.selectedWalletTitle}>Selected Wallet</Text>
                 <View style={styles.walletInfo}>
                   <Text style={styles.walletBank}>
                     {selectedWallet.bankName}
                   </Text>
                   <Text style={styles.walletNumber}>
-                    {cardNumberFormat(selectedWallet.cardNumber || selectedWallet.id)}
+                    {cardNumberFormat(
+                      selectedWallet.cardNumber || selectedWallet.id
+                    )}
                   </Text>
                   <Text style={styles.walletBalance}>
                     Balance: {selectedWallet.balance}{" "}
@@ -473,7 +509,7 @@ const HomeScreen: FC = () => {
                         placeholderTextColor="#999"
                         keyboardType="numeric"
                         onChangeText={(text) => {
-                          const numericText = text.replace(/[^0-9]/g, '');
+                          const numericText = text.replace(/[^0-9]/g, "");
                           field.onChange(numericText);
                         }}
                       />
@@ -481,9 +517,7 @@ const HomeScreen: FC = () => {
                   }}
                 />
                 {errors.amount && (
-                  <Text style={styles.errorText}>
-                    {errors.amount.message}
-                  </Text>
+                  <Text style={styles.errorText}>{errors.amount.message}</Text>
                 )}
               </View>
 
@@ -534,7 +568,9 @@ const HomeScreen: FC = () => {
           ) : (
             <View style={styles.sheetLoading}>
               <ActivityIndicator size="large" color="#4CAF50" />
-              <Text style={styles.sheetLoadingText}>Loading wallet information...</Text>
+              <Text style={styles.sheetLoadingText}>
+                Loading wallet information...
+              </Text>
             </View>
           )}
         </BottomSheetScrollView>

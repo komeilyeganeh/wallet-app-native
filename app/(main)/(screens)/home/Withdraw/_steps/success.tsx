@@ -1,21 +1,22 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useRouter } from "expo-router";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as yup from "yup";
 
 const WithdrawSuccess = () => {
+  const router = useRouter();
   // **** jsx ****
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Successful withdrawal!</Text>
-        <Text style={styles.desc}>You have successfully withdrawn money!
-Please check the balance in the card
-management section.</Text>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Confirm</Text>
+      <Text style={styles.title}>Successful withdrawal!</Text>
+      <Text style={styles.desc}>
+        You have successfully withdrawn money! Please check the balance in the
+        card management section.
+      </Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push("/(main)/home")}
+      >
+        <Text style={styles.buttonText}>Home</Text>
       </TouchableOpacity>
     </View>
   );
@@ -34,14 +35,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#281C9D",
     textAlign: "center",
-    marginTop: 40
+    marginTop: 40,
   },
   desc: {
     width: 291,
     fontSize: 14,
     color: "#343434",
     textAlign: "center",
-    marginHorizontal: "auto"
+    marginHorizontal: "auto",
   },
   button: {
     height: 44,

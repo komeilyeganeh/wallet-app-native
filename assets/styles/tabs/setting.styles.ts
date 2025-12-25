@@ -152,5 +152,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 40,
   },
+  buttonLogout: {
+    paddingVertical: 7,
+    marginTop: 10,
+    borderRadius: 4,
+    backgroundColor: "#fe77081f",
+  },
+  buttonLogoutText: {
+    color: "red",
+    textAlign: "center",
+    fontSize: 14,
+  },
 });
 export default styles;
