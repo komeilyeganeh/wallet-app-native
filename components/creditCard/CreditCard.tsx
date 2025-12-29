@@ -132,7 +132,7 @@ const CreditCard: FC<CreditCardPropsType> = ({
                   { color: isSelected ? "#FFF" : styles.accountBalance.color },
                 ]}
               >
-                {isShowBalance ? `$${accountBalance}` : "****"}
+                {isShowBalance ? `${accountBalance}` : "****"}
               </Text>
               {isShowBalance ? (
                 <Entypo

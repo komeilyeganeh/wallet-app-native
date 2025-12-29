@@ -12,7 +12,7 @@ export const clientAxios = axios.create({
 clientAxios.interceptors.request.use(
   async (config) => {
     try {
-      const token = await tokenStorage.getToken();
+      const token = await tokenStorage.getToken();      
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

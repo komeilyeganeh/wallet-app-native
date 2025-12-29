@@ -10,7 +10,7 @@ const PayTheBillScreen = () => {
       <View style={styles.wrapper}>
         <HeaderWrapper title="Pay the bill" />
         <View style={styles.linksContainer}>
-          <Link href="..">
+          <Link href="/(main)/(screens)/home/PayBill/ElectricBill/ElectricBill">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Electric bill</Text>
@@ -24,7 +24,7 @@ const PayTheBillScreen = () => {
               />
             </View>
           </Link>
-          <Link href="..">
+          <Link href="/(main)/(screens)/home/PayBill/WaterBill/WaterBill">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Water bill</Text>
@@ -38,7 +38,7 @@ const PayTheBillScreen = () => {
               />
             </View>
           </Link>
-          <Link href="..">
+          <Link href="/(main)/(screens)/home/PayBill/MobileBill/MobileBill">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Mobile bill</Text>
@@ -52,7 +52,7 @@ const PayTheBillScreen = () => {
               />
             </View>
           </Link>
-          <Link href="/(main)/(screens)/home/PayBill/InternetBill">
+          <Link href="/(main)/(screens)/home/PayBill/InternetBill/InternetBill">
             <View style={styles.linkItem}>
               <View style={styles.linkTitleWrapper}>
                 <Text style={styles.linkTitle}>Internet bill</Text>

@@ -3,15 +3,15 @@ import HeaderWrapper from "@/components/headerWrapper";
 import BillInquiryForm from "@/components/bill/BillInquireForm";
 import styles from "../PayBill.styles";
 
-const InternetBill = () => {
+const MobileBill = () => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <HeaderWrapper title="Check the bill (Internet)" />
-        <BillInquiryForm defaultBillType="INTERNET" providerName="Internet" />
+        <HeaderWrapper title="Check the bill (Mobile)" />
+        <BillInquiryForm defaultBillType="MOBILE" providerName="Mobile" />
       </View>
     </View>
   );
 };
 
-export default InternetBill;
+export default MobileBill;

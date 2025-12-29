@@ -70,7 +70,7 @@ const HomeScreen: FC = () => {
     isPending: walletsPending,
     error: walletsError,
     refetch: refetchMyWallets,
-  } = useGetMyWallets(userId);
+  } = useGetMyWallets(userId); 
 
   const [isDepositSheetOpen, setIsDepositSheetOpen] = useState(false);
   const [selectedWalletIndex, setSelectedWalletIndex] = useState(0);
@@ -119,7 +119,7 @@ const HomeScreen: FC = () => {
         name={user?.name || "User"}
         accountLevel="Wallet"
         cardNumber={cardNumberFormat(item?.cardNumber || item?.id)}
-        accountBalance={item?.balance ? item.balance : "$0"}
+        accountBalance={item?.balance ? `${item?.currency?.symbol} ${item.balance}` : "$0"}
         theme={getTheme(index)}
         bankName={item?.bankName || "Bank"}
       />
@@ -192,14 +192,11 @@ const HomeScreen: FC = () => {
   }, [isDepositSheetOpen, selectedWallet]);
 
   const onSubmit = (data: any) => {
-    const numericAmount = Number(data.amount.replace(/,/g, ""));
-
     const depositData = {
       walletId: Number(data.walletId),
-      amount: numericAmount,
+      amount: +data.amount,
       description: data.description || "",
-    };
-
+    };    
     deposit(depositData, {
       onSuccess: () => {
         Alert.alert(
@@ -221,20 +218,12 @@ const HomeScreen: FC = () => {
           error.response?.data?.message ||
           error.response?.data?.error ||
           error.message ||
-          "Deposit failed. Please try again.";
-
+          "Deposit failed. Please try again.";        
         Alert.alert("Error", errorMessage, [{ text: "OK" }]);
       },
     });
   };
 
-  const formatAmount = (value: string) => {
-    const numericValue = value.replace(/[^0-9]/g, "");
-    if (numericValue.length > 0) {
-      return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-    return "";
-  };
 
   const handleSheetChanges = useCallback((index: number) => {
     if (index === -1) {
@@ -497,10 +486,8 @@ const HomeScreen: FC = () => {
                   name="amount"
                   control={control}
                   render={({ field }) => {
-                    const displayValue = formatAmount(field.value || "");
                     return (
                       <TextInput
-                        value={displayValue}
                         style={[
                           styles.input,
                           errors.amount && styles.inputError,
@@ -509,8 +496,7 @@ const HomeScreen: FC = () => {
                         placeholderTextColor="#999"
                         keyboardType="numeric"
                         onChangeText={(text) => {
-                          const numericText = text.replace(/[^0-9]/g, "");
-                          field.onChange(numericText);
+                          field.onChange(text);
                         }}
                       />
                     );
