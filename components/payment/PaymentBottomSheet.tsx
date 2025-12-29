@@ -173,7 +173,7 @@ const PaymentBottomSheet: React.FC<PaymentBottomSheetProps> = ({
 
         <View style={styles.paymentForm}>
           <View style={styles.paymentInputGroup}>
-            <Text style={styles.paymentLabel}>Select Wallet</Text>
+            <Text style={styles.paymentLabel}>Choose wallet</Text>
             <Controller
               name="walletId"
               control={control}

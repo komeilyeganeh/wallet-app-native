@@ -392,9 +392,9 @@ const HomeScreen: FC = () => {
               href="/(main)/(screens)/home/Withdraw"
             />
             <CardItem
-              icon={<FontAwesome name="dollar" size={28} color="#FFAF2A" />}
-              title="Mobile prepaid"
-              href="/(main)/(screens)/home/MobilePrepaid"
+              icon={<MaterialIcons name="sim-card" size={28} color="#FFAF2A" />}
+              title="Purchase charge"
+              href="/(main)/(screens)/home/MobileRecharge"
             />
             <CardItem
               icon={<FontAwesome name="bookmark" size={28} color="#52D5BA" />}

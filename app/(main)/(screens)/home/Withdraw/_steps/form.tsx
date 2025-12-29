@@ -116,7 +116,7 @@ const WithdrawForm = ({ setStep }: { setStep: (step: number) => void }) => {
     <View style={styles.formContainer}>
       <View style={styles.inputs}>
         <View>
-          <Text style={styles.label}>Choose account/ card</Text>
+          <Text style={styles.label}>Choose wallet</Text>
           <Controller
             name="walletId"
             control={control}
