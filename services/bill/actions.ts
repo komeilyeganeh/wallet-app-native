@@ -10,3 +10,8 @@ export const payBill = async (data: IPayBill) => {
     const res = await clientAxios.post("/BillPayment/PayBill", data);
     return res;
 }
+
+export const getMyBillPayments = async () => {
+    const res = await clientAxios.get("/BillPayment/GetMyBillPayments");
+    return res;
+}

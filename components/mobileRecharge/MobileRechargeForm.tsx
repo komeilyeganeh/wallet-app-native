@@ -65,7 +65,7 @@ const MobileRechargeForm = ({
 
   const operators = [
     { key: "mci", label: "Hamrah Aval", value: "MCI" },
-    { key: "mtn", label: "Irancell", value: "MTN" },
+    { key: "irancell", label: "Irancell", value: "Irancell" },
     { key: "rightel", label: "Rightel", value: "Rightel" },
   ];
 
@@ -133,8 +133,7 @@ const MobileRechargeForm = ({
       description:
         selectedRechargeData.description ||
         `Charge ${selectedRechargeData.operator} - ${selectedRechargeData.phoneNumber}`,
-    };
-
+    };    
     mutateRecharge(rechargePayload, {
       onSuccess: () => {
         toast.show("Charging was successful!", { type: "success" });

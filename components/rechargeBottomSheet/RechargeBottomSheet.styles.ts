@@ -5,6 +5,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
+    elevation: 30,
   },
   bottomSheetIndicator: {
     backgroundColor: "#CBCBCB",

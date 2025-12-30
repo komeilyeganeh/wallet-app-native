@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingHorizontal: 20,
   },
+   content: {
+    flex: 1,
+  },
   linksContainer: {
     marginTop: 24,
     display: "flex",

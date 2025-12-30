@@ -2,13 +2,21 @@ import { Link } from "expo-router";
 import { Image, Text, View } from "react-native";
 import styles from "./PayBill.styles";
 import HeaderWrapper from "@/components/headerWrapper";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const PayTheBillScreen = () => {
-    // **** jsx ****
+  // **** jsx ****
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <HeaderWrapper title="Pay the bill" />
+        <HeaderWrapper
+          title="Pay the bill"
+          icon={
+            <Link href="/(main)/(screens)/home/PayBill/history/BillHistoryScreen">
+              <FontAwesome5 name="history" size={22} color="black" />
+            </Link>
+          }
+        />
         <View style={styles.linksContainer}>
           <Link href="/(main)/(screens)/home/PayBill/ElectricBill/ElectricBill">
             <View style={styles.linkItem}>
@@ -71,7 +79,5 @@ const PayTheBillScreen = () => {
     </View>
   );
 };
-
-
 
 export default PayTheBillScreen;

@@ -5,6 +5,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+     shadowOpacity: 0.5,
+    shadowRadius: 20,
+    elevation: 30,
   },
   bottomSheetIndicator: {
     backgroundColor: "#CBCBCB",
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
   },
   confirmPaymentButton: {
     height: 55,
-    backgroundColor: "#34C759",
+    backgroundColor: "#3629B7",
     borderRadius: 12,
     display: "flex",
     alignItems: "center",
