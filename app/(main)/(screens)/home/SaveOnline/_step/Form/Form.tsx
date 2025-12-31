@@ -14,9 +14,9 @@ import {
 } from "react-native";
 import * as yup from "yup";
 import styles from "./Form.styles";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import HeaderWrapper from "@/components/headerWrapper";
 import SelectBox from "@/components/input/selectBox";
+import Container from "@/components/common/container";
 
 const schema = yup.object().shape({
   card: yup.string().required(),
@@ -49,8 +49,7 @@ const AddForm = () => {
   });
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="Add" />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
@@ -127,8 +126,7 @@ const AddForm = () => {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </View>
-    </View>
+    </Container>
   );
 };
 

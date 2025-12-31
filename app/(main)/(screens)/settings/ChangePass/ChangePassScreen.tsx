@@ -1,18 +1,14 @@
-import { View } from "react-native";
-import styles from "./ChangePass.styles";
 import HeaderWrapper from "@/components/headerWrapper";
 import ChangePasswordForm from "@/components/setting/changePassword";
-
+import Container from "@/components/common/container";
 
 const ChangePasswordScreen = () => {
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <HeaderWrapper title="Change password" />
-        <ChangePasswordForm />
-      </View>
-    </View>
+    <Container withWrapper>
+      <HeaderWrapper title="Change password" />
+      <ChangePasswordForm />
+    </Container>
   );
 };
 

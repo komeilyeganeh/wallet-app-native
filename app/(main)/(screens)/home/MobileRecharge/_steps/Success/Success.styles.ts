@@ -1,13 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 26,
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 25,
-  },
   title: {
     fontSize: 16,
     fontWeight: "bold",

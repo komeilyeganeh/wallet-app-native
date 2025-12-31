@@ -22,6 +22,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useGetCurrencies } from "@/services/currency/hooks";
 import SelectBox from "@/components/input/selectBox";
 import { useQueryClient } from "@tanstack/react-query";
+import Container from "@/components/common/container";
 
 const WalletDetail = () => {
   const queryClient = useQueryClient();
@@ -30,7 +31,7 @@ const WalletDetail = () => {
     data: walletData,
     isPending,
     refetch: refetchWallet,
-  } = useGetWallet(walletId as string);  
+  } = useGetWallet(walletId as string);
 
   const { data: currencies, isPending: currencyPending } = useGetCurrencies();
   const { mutate: mutateDeleteWallet } = useDeleteWallet(walletId as string);
@@ -64,8 +65,8 @@ const WalletDetail = () => {
       refetchWallet();
       queryClient.invalidateQueries({
         queryKey: ["get_wallet", walletId],
-        refetchType: "active"
-      }); 
+        refetchType: "active",
+      });
     }, [refetchWallet, queryClient, walletId])
   );
 
@@ -133,9 +134,9 @@ const WalletDetail = () => {
         toast.show("Wallet updated successfully", { type: "success" });
         setIsUpdateModalVisible(false);
         queryClient.removeQueries({ queryKey: ["get_wallet"] });
-        queryClient.invalidateQueries({ 
+        queryClient.invalidateQueries({
           queryKey: ["get_wallets"],
-          refetchType: "all"
+          refetchType: "all",
         });
         await refetchWallet();
       },
@@ -164,8 +165,8 @@ const WalletDetail = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <>
+      <Container withWrapper>
         <HeaderWrapper title="Wallet Details" />
         <View style={styles.content}>
           {isPending ? (
@@ -232,8 +233,7 @@ const WalletDetail = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
-
+      </Container>
       {/* Update Modal */}
       <Modal
         visible={isUpdateModalVisible}
@@ -355,20 +355,11 @@ const WalletDetail = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  wrapper: {
-    backgroundColor: "#FFF",
-    flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 20,
-  },
   content: {
     display: "flex",
     rowGap: 16,

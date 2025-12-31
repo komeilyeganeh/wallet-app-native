@@ -16,6 +16,7 @@ import CreditCard from "@/components/creditCard";
 import SelectBox from "@/components/input/selectBox";
 import ReportCard from "@/components/reportCard";
 import styles from "./CreditCard.styles";
+import Container from "@/components/common/container";
 
 const data = [
   { key: "190089885456", label: "1900 8988 5456" },
@@ -32,7 +33,7 @@ const CreditCardScreen = () => {
   return (
     <>
       {/* <CreditCardSuccess /> */}
-      <View style={styles.container}>
+      <Container containerStyles={{ backgroundColor: "#3629B7" }}>
         <View style={styles.headerWrapper}>
           <Link href="..">
             <AntDesign name="left" color="#FFF" size={20} />
@@ -58,7 +59,7 @@ const CreditCardScreen = () => {
                 theme="yellow"
                 bankName="Sepah"
               />
-              <View style={{ marginTop: 32, gap: 12 }}>
+              {/* <View style={{ marginTop: 32, gap: 12 }}>
                 <ReportCard
                   icon={<AntDesign name="camera" size={24} color="white" />}
                   title="Buy Camera"
@@ -87,7 +88,7 @@ const CreditCardScreen = () => {
                   color="#FF4267"
                   description="02/11/2018"
                 />
-              </View>
+              </View> */}
               <View style={styles.total}>
                 <Text style={styles.totalTitle}>total</Text>
                 <Text style={styles.totalAmount}>-$3100</Text>
@@ -129,7 +130,7 @@ const CreditCardScreen = () => {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </View>
+      </Container>
     </>
   );
 };

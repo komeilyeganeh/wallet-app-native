@@ -13,6 +13,7 @@ import {
   useIsTwoFactorEnabled,
 } from "@/services/auth/twoFactor/hooks";
 import { useToast } from "react-native-toast-notifications";
+import Container from "@/components/common/container";
 
 const TwoFactorScreen = () => {
   const router = useRouter();
@@ -66,109 +67,105 @@ const TwoFactorScreen = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <HeaderWrapper title="Two-Factor Authentication" />
+    <Container withWrapper>
+      <HeaderWrapper title="Two-Factor Authentication" />
 
-        {isLoading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#3629B7" />
-            <Text style={styles.loadingText}>Loading 2FA status...</Text>
-          </View>
-        ) : (
-          <View style={styles.content}>
-            {/* Status Card */}
-            <View style={styles.statusCard}>
-              <View style={styles.statusHeader}>
-                <Text style={styles.statusTitle}>
-                  Two-Factor Authentication Status
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#3629B7" />
+          <Text style={styles.loadingText}>Loading 2FA status...</Text>
+        </View>
+      ) : (
+        <View style={styles.content}>
+          {/* Status Card */}
+          <View style={styles.statusCard}>
+            <View style={styles.statusHeader}>
+              <Text style={styles.statusTitle}>
+                Two-Factor Authentication Status
+              </Text>
+              <View
+                style={[
+                  styles.statusBadge,
+                  isEnabled ? styles.statusEnabled : styles.statusDisabled,
+                ]}
+              >
+                <Text style={styles.statusBadgeText}>
+                  {isEnabled ? "ENABLED" : "DISABLED"}
                 </Text>
-                <View
-                  style={[
-                    styles.statusBadge,
-                    isEnabled ? styles.statusEnabled : styles.statusDisabled,
-                  ]}
-                >
-                  <Text style={styles.statusBadgeText}>
-                    {isEnabled ? "ENABLED" : "DISABLED"}
-                  </Text>
-                </View>
               </View>
+            </View>
 
-              <Text style={styles.statusDescription}>
-                {isEnabled
-                  ? "Your account is protected with two-factor authentication. You'll need to enter a verification code when signing in."
-                  : "Two-factor authentication adds an extra layer of security to your account. When enabled, you'll need to enter a verification code in addition to your password."}
+            <Text style={styles.statusDescription}>
+              {isEnabled
+                ? "Your account is protected with two-factor authentication. You'll need to enter a verification code when signing in."
+                : "Two-factor authentication adds an extra layer of security to your account. When enabled, you'll need to enter a verification code in addition to your password."}
+            </Text>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.actionsContainer}>
+            {isEnabled ? (
+              <>
+                <TouchableOpacity
+                  style={styles.secondaryButton}
+                  onPress={handleViewBackupCodes}
+                >
+                  <Text style={styles.secondaryButtonText}>
+                    View Backup Codes
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.dangerButton}
+                  onPress={handleDisable2FA}
+                >
+                  <Text style={styles.dangerButtonText}>Disable 2FA</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <TouchableOpacity
+                  style={styles.primaryButton}
+                  onPress={handleEnable2FA}
+                >
+                  <Text style={styles.primaryButtonText}>
+                    Enable Two-Factor Authentication
+                  </Text>
+                </TouchableOpacity>
+
+                <Text style={styles.helperText}>
+                  You'll need an authenticator app like Google Authenticator or
+                  Authy
+                </Text>
+              </>
+            )}
+          </View>
+
+          {/* Information Section */}
+          <View style={styles.infoSection}>
+            <Text style={styles.infoTitle}>How it works:</Text>
+            <View style={styles.infoItem}>
+              <Text style={styles.infoNumber}>1</Text>
+              <Text style={styles.infoText}>
+                Scan QR code with authenticator app
               </Text>
             </View>
-
-            {/* Action Buttons */}
-            <View style={styles.actionsContainer}>
-              {isEnabled ? (
-                <>
-            
-                  <TouchableOpacity
-                    style={styles.secondaryButton}
-                    onPress={handleViewBackupCodes}
-                  >
-                    <Text style={styles.secondaryButtonText}>
-                      View Backup Codes
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.dangerButton}
-                    onPress={handleDisable2FA}
-                  >
-                    <Text style={styles.dangerButtonText}>Disable 2FA</Text>
-                  </TouchableOpacity>
-                </>
-              ) : (
-                <>
-       
-                  <TouchableOpacity
-                    style={styles.primaryButton}
-                    onPress={handleEnable2FA}
-                  >
-                    <Text style={styles.primaryButtonText}>
-                      Enable Two-Factor Authentication
-                    </Text>
-                  </TouchableOpacity>
-
-                  <Text style={styles.helperText}>
-                    You'll need an authenticator app like Google Authenticator
-                    or Authy
-                  </Text>
-                </>
-              )}
+            <View style={styles.infoItem}>
+              <Text style={styles.infoNumber}>2</Text>
+              <Text style={styles.infoText}>
+                Enter verification code when signing in
+              </Text>
             </View>
-
-            {/* Information Section */}
-            <View style={styles.infoSection}>
-              <Text style={styles.infoTitle}>How it works:</Text>
-              <View style={styles.infoItem}>
-                <Text style={styles.infoNumber}>1</Text>
-                <Text style={styles.infoText}>
-                  Scan QR code with authenticator app
-                </Text>
-              </View>
-              <View style={styles.infoItem}>
-                <Text style={styles.infoNumber}>2</Text>
-                <Text style={styles.infoText}>
-                  Enter verification code when signing in
-                </Text>
-              </View>
-              <View style={styles.infoItem}>
-                <Text style={styles.infoNumber}>3</Text>
-                <Text style={styles.infoText}>
-                  Use backup codes if you lose access
-                </Text>
-              </View>
+            <View style={styles.infoItem}>
+              <Text style={styles.infoNumber}>3</Text>
+              <Text style={styles.infoText}>
+                Use backup codes if you lose access
+              </Text>
             </View>
           </View>
-        )}
-      </View>
-    </View>
+        </View>
+      )}
+    </Container>
   );
 };
 

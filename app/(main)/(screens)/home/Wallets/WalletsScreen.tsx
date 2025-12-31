@@ -11,13 +11,13 @@ import AccountTab from "./_tabs/Account";
 import styles from "./Wallets.styles";
 import HeaderWrapper from "@/components/headerWrapper";
 import WalletTab from "./_tabs/Wallet";
+import Container from "@/components/common/container";
 
 const WalletsScreen = () => {
   const [activeTab, setActiveTab] = useState(1);
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="Wallets" />
         <View style={styles.tabsContainer}>
           <TouchableOpacity
@@ -55,7 +55,7 @@ const WalletsScreen = () => {
         </View>
         {/* tabs render */}
         <KeyboardAvoidingView
-          style={styles.container}
+          style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
         >
@@ -70,8 +70,7 @@ const WalletsScreen = () => {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </View>
-    </View>
+    </Container>
   );
 };
 

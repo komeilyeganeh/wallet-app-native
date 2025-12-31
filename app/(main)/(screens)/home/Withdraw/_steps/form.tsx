@@ -16,6 +16,7 @@ import { useGetMyWallets } from "@/services/wallet/hooks";
 import { cardNumberSpace } from "@/lib/cardNumberSpace";
 import { useWithdraw } from "@/services/withdraw/hooks";
 import { MaterialIndicator } from "react-native-indicators";
+import { useToast } from "react-native-toast-notifications";
 
 // form validation
 const schema = yup.object().shape({
@@ -32,9 +33,10 @@ const schema = yup.object().shape({
 });
 
 const WithdrawForm = ({ setStep }: { setStep: (step: number) => void }) => {
+  const toast = useToast();
   const [selectedItem, setSelectedItem] = useState(null);
   const [cardOptions, setCardOptions] = useState<any>([]);
-  const { user, userId } = useUserData();
+  const { userId } = useUserData();
   const {
     data: myWallets,
     isPending,
@@ -96,17 +98,7 @@ const WithdrawForm = ({ setStep }: { setStep: (step: number) => void }) => {
           error.response?.data?.error ||
           error.message ||
           "Withdrawal failed. Please try again.";
-        Alert.alert("Error", errorMessage, [
-          {
-            text: "Try Again",
-            style: "default",
-          },
-          {
-            text: "Cancel",
-            style: "cancel",
-            onPress: () => reset(),
-          },
-        ]);
+        toast.show(errorMessage, { type: "danger" });
       },
     });
   };
@@ -168,12 +160,19 @@ const WithdrawForm = ({ setStep }: { setStep: (step: number) => void }) => {
         </View>
       </View>
       <TouchableOpacity
-        style={[styles.button, (!isValid || isSubmitting) && styles.buttonDisabled]}
+        style={[
+          styles.button,
+          (!isValid || isSubmitting) && styles.buttonDisabled,
+        ]}
         disabled={!isValid}
         onPress={handleSubmit(onSubmit)}
       >
         <Text style={styles.buttonText}>
-          {isSubmitting ? <MaterialIndicator size={25} color="#fff" /> : "Confirm"}
+          {isSubmitting ? (
+            <MaterialIndicator size={25} color="#fff" />
+          ) : (
+            "Confirm"
+          )}
         </Text>
       </TouchableOpacity>
     </View>

@@ -16,6 +16,7 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useSetupTwoFactor } from "@/services/auth/twoFactor/hooks";
 import QRCode from "react-native-qrcode-svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Container from "@/components/common/container";
 
 interface SetupResponse {
   qrImageCode: string;
@@ -100,237 +101,223 @@ const SetupScreen: FC = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <HeaderWrapper title="Setup Two-Factor" />
+    <Container withWrapper containerStyles={{ backgroundColor: "#FFF" }}>
+      <HeaderWrapper title="Setup Two-Factor" />
 
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Progress Indicator */}
-          <View style={styles.progressContainer}>
-            <View style={styles.progressStep}>
-              <View style={[styles.progressCircle, styles.progressActive]}>
-                <Text style={styles.progressNumber}>1</Text>
-              </View>
-              <Text style={styles.progressLabel}>Setup</Text>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Progress Indicator */}
+        <View style={styles.progressContainer}>
+          <View style={styles.progressStep}>
+            <View style={[styles.progressCircle, styles.progressActive]}>
+              <Text style={styles.progressNumber}>1</Text>
             </View>
-            <View style={styles.progressLine} />
-            <View style={styles.progressStep}>
-              <View style={[styles.progressCircle, styles.progressInactive]}>
-                <Text style={styles.progressNumber}>2</Text>
-              </View>
-              <Text style={styles.progressLabel}>Enable</Text>
-            </View>
-            <View style={styles.progressLine} />
-            <View style={styles.progressStep}>
-              <View style={[styles.progressCircle, styles.progressInactive]}>
-                <Text style={styles.progressNumber}>3</Text>
-              </View>
-              <Text style={styles.progressLabel}>Verify</Text>
-            </View>
+            <Text style={styles.progressLabel}>Setup</Text>
           </View>
-
-          {isPending ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#3629B7" />
-              <Text style={styles.loadingText}>Generating setup codes...</Text>
+          <View style={styles.progressLine} />
+          <View style={styles.progressStep}>
+            <View style={[styles.progressCircle, styles.progressInactive]}>
+              <Text style={styles.progressNumber}>2</Text>
             </View>
-          ) : setupData ? (
-            <>
-              {/* Instructions */}
-              <View style={styles.instructionCard}>
-                <Text style={styles.instructionTitle}>
-                  Step 1: Scan QR Code
-                </Text>
-                <Text style={styles.instructionText}>
-                  Open your authenticator app (Google Authenticator, Authy,
-                  etc.) and scan the QR code below.
-                </Text>
-              </View>
+            <Text style={styles.progressLabel}>Enable</Text>
+          </View>
+          <View style={styles.progressLine} />
+          <View style={styles.progressStep}>
+            <View style={[styles.progressCircle, styles.progressInactive]}>
+              <Text style={styles.progressNumber}>3</Text>
+            </View>
+            <Text style={styles.progressLabel}>Verify</Text>
+          </View>
+        </View>
 
-              {/* QR Code Section */}
-              <View style={styles.qrCard}>
-                <View style={styles.qrContainer}>
-                  {setupData?.data?.data.qrCodeImageBase64 ? (
-                    setupData?.data?.data?.qrCodeImageBase64.startsWith(
-                      "data:image"
-                    ) ? (
-                      <Image
-                        src={setupData?.data?.data?.qrCodeImageBase64}
-                        style={styles.qrImage}
-                        resizeMode="contain"
-                      />
-                    ) : (
-                      <QRCode
-                        value={setupData?.data?.data?.qrCodeImageBase64}
-                        size={220}
-                        color="#000"
-                        backgroundColor="#FFF"
-                      />
-                    )
-                  ) : (
-                    <Text style={styles.errorText}>QR Code not available</Text>
-                  )}
-                </View>
-
-                <TouchableOpacity
-                  style={styles.regenerateButton}
-                  onPress={generateSetup}
-                  disabled={isPending}
-                >
-                  <MaterialIcons name="refresh" size={20} color="#3629B7" />
-                  <Text style={styles.regenerateButtonText}>
-                    Regenerate QR Code
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Secret Key Section */}
-              <View style={styles.secretCard}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>
-                    Can't scan? Use Secret Key
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() =>
-                      copyToClipboard(
-                        setupData?.data?.data.secretKey,
-                        "Secret key"
-                      )
-                    }
-                    style={styles.copyButton}
-                  >
-                    <MaterialIcons
-                      name={isCopied ? "check" : "content-copy"}
-                      size={20}
-                      color={isCopied ? "#4CAF50" : "#3629B7"}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <View style={styles.secretKeyContainer}>
-                  <Text style={styles.secretKeyText} selectable>
-                    {setupData?.data?.data.secretKey}
-                  </Text>
-                </View>
-
-                <Text style={styles.helperText}>
-                  Enter this code manually in your authenticator app
-                </Text>
-              </View>
-
-              {/* Backup Codes Section */}
-              <View style={styles.backupCard}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>Backup Codes</Text>
-                  <TouchableOpacity
-                    onPress={markBackupCodesSaved}
-                    style={[
-                      styles.saveButton,
-                      savedBackupCodes && styles.saveButtonActive,
-                    ]}
-                  >
-                    <Text style={styles.saveButtonText}>
-                      {savedBackupCodes ? "✓ Saved" : "Mark as Saved"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                <Text style={styles.warningText}>
-                  ⚠️ Save these codes in a secure location! You'll need them if
-                  you lose access to your authenticator app.
-                </Text>
-
-                <View style={styles.backupCodesGrid}>
-                  {setupData?.data?.data?.backupCodes?.map(
-                    (code: any, index: any) => (
-                      <View key={index} style={styles.backupCodeItem}>
-                        <Text style={styles.backupCodeText} selectable>
-                          {code}
-                        </Text>
-                        <TouchableOpacity
-                          style={styles.smallCopyButton}
-                          onPress={() =>
-                            copyToClipboard(code, `Backup code ${index + 1}`)
-                          }
-                        >
-                          <MaterialIcons
-                            name="content-copy"
-                            size={16}
-                            color="#666"
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    )
-                  )}
-                </View>
-
-                <TouchableOpacity
-                  style={styles.copyAllButton}
-                  onPress={() => {
-                    const allCodes =
-                      setupData?.data?.data?.backupCodes.join("\n");
-                    copyToClipboard(allCodes, "All backup codes");
-                  }}
-                >
-                  <MaterialIcons name="content-copy" size={18} color="#FFF" />
-                  <Text style={styles.copyAllButtonText}>Copy All Codes</Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Next Step Button */}
-              <TouchableOpacity
-                style={[
-                  styles.nextButton,
-                  !savedBackupCodes && styles.nextButtonDisabled,
-                ]}
-                onPress={proceedToNextStep}
-                disabled={!savedBackupCodes && !isPending}
-              >
-                <Text style={styles.nextButtonText}>Continue to Next Step</Text>
-                <AntDesign name="arrowright" size={20} color="#FFF" />
-              </TouchableOpacity>
-
-              {/* Warning */}
-              {!savedBackupCodes && (
-                <Text style={styles.warningMessage}>
-                  Please save your backup codes before proceeding
-                </Text>
-              )}
-            </>
-          ) : error ? (
-            <View style={styles.errorContainer}>
-              <MaterialIcons name="error-outline" size={50} color="#FF3B30" />
-              <Text style={styles.errorMessage}>
-                Failed to generate setup data
+        {isPending ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#3629B7" />
+            <Text style={styles.loadingText}>Generating setup codes...</Text>
+          </View>
+        ) : setupData ? (
+          <>
+            {/* Instructions */}
+            <View style={styles.instructionCard}>
+              <Text style={styles.instructionTitle}>Step 1: Scan QR Code</Text>
+              <Text style={styles.instructionText}>
+                Open your authenticator app (Google Authenticator, Authy, etc.)
+                and scan the QR code below.
               </Text>
+            </View>
+
+            {/* QR Code Section */}
+            <View style={styles.qrCard}>
+              <View style={styles.qrContainer}>
+                {setupData?.data?.data.qrCodeImageBase64 ? (
+                  setupData?.data?.data?.qrCodeImageBase64.startsWith(
+                    "data:image"
+                  ) ? (
+                    <Image
+                      src={setupData?.data?.data?.qrCodeImageBase64}
+                      style={styles.qrImage}
+                      resizeMode="contain"
+                    />
+                  ) : (
+                    <QRCode
+                      value={setupData?.data?.data?.qrCodeImageBase64}
+                      size={220}
+                      color="#000"
+                      backgroundColor="#FFF"
+                    />
+                  )
+                ) : (
+                  <Text style={styles.errorText}>QR Code not available</Text>
+                )}
+              </View>
+
               <TouchableOpacity
-                style={styles.retryButton}
+                style={styles.regenerateButton}
                 onPress={generateSetup}
+                disabled={isPending}
               >
-                <Text style={styles.retryButtonText}>Try Again</Text>
+                <MaterialIcons name="refresh" size={20} color="#3629B7" />
+                <Text style={styles.regenerateButtonText}>
+                  Regenerate QR Code
+                </Text>
               </TouchableOpacity>
             </View>
-          ) : null}
-        </ScrollView>
-      </View>
-    </View>
+
+            {/* Secret Key Section */}
+            <View style={styles.secretCard}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>
+                  Can't scan? Use Secret Key
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    copyToClipboard(
+                      setupData?.data?.data.secretKey,
+                      "Secret key"
+                    )
+                  }
+                  style={styles.copyButton}
+                >
+                  <MaterialIcons
+                    name={isCopied ? "check" : "content-copy"}
+                    size={20}
+                    color={isCopied ? "#4CAF50" : "#3629B7"}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.secretKeyContainer}>
+                <Text style={styles.secretKeyText} selectable>
+                  {setupData?.data?.data.secretKey}
+                </Text>
+              </View>
+
+              <Text style={styles.helperText}>
+                Enter this code manually in your authenticator app
+              </Text>
+            </View>
+
+            {/* Backup Codes Section */}
+            <View style={styles.backupCard}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Backup Codes</Text>
+                <TouchableOpacity
+                  onPress={markBackupCodesSaved}
+                  style={[
+                    styles.saveButton,
+                    savedBackupCodes && styles.saveButtonActive,
+                  ]}
+                >
+                  <Text style={styles.saveButtonText}>
+                    {savedBackupCodes ? "✓ Saved" : "Mark as Saved"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.warningText}>
+                ⚠️ Save these codes in a secure location! You'll need them if
+                you lose access to your authenticator app.
+              </Text>
+
+              <View style={styles.backupCodesGrid}>
+                {setupData?.data?.data?.backupCodes?.map(
+                  (code: any, index: any) => (
+                    <View key={index} style={styles.backupCodeItem}>
+                      <Text style={styles.backupCodeText} selectable>
+                        {code}
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.smallCopyButton}
+                        onPress={() =>
+                          copyToClipboard(code, `Backup code ${index + 1}`)
+                        }
+                      >
+                        <MaterialIcons
+                          name="content-copy"
+                          size={16}
+                          color="#666"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )
+                )}
+              </View>
+
+              <TouchableOpacity
+                style={styles.copyAllButton}
+                onPress={() => {
+                  const allCodes =
+                    setupData?.data?.data?.backupCodes.join("\n");
+                  copyToClipboard(allCodes, "All backup codes");
+                }}
+              >
+                <MaterialIcons name="content-copy" size={18} color="#FFF" />
+                <Text style={styles.copyAllButtonText}>Copy All Codes</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Next Step Button */}
+            <TouchableOpacity
+              style={[
+                styles.nextButton,
+                !savedBackupCodes && styles.nextButtonDisabled,
+              ]}
+              onPress={proceedToNextStep}
+              disabled={!savedBackupCodes && !isPending}
+            >
+              <Text style={styles.nextButtonText}>Continue to Next Step</Text>
+              <AntDesign name="arrowright" size={20} color="#FFF" />
+            </TouchableOpacity>
+
+            {/* Warning */}
+            {!savedBackupCodes && (
+              <Text style={styles.warningMessage}>
+                Please save your backup codes before proceeding
+              </Text>
+            )}
+          </>
+        ) : error ? (
+          <View style={styles.errorContainer}>
+            <MaterialIcons name="error-outline" size={50} color="#FF3B30" />
+            <Text style={styles.errorMessage}>
+              Failed to generate setup data
+            </Text>
+            <TouchableOpacity
+              style={styles.retryButton}
+              onPress={generateSetup}
+            >
+              <Text style={styles.retryButtonText}>Try Again</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+      </ScrollView>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
-  wrapper: {
-    backgroundColor: "#FFF",
-    flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 20,
-  },
   scrollView: {
     flex: 1,
     paddingHorizontal: 20,

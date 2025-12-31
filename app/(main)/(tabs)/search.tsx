@@ -3,12 +3,12 @@ import { Link } from "expo-router";
 import { FC } from "react";
 import { Image, Text, View } from "react-native";
 import styles from "@/assets/styles/tabs/search.styles"
+import Container from "@/components/common/container";
 
 const SearchScreen: FC = () => {
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="Search" />
         <View style={styles.linksContainer}>
           <Link href="/(main)/(tabs)/home">
@@ -66,8 +66,7 @@ const SearchScreen: FC = () => {
             </View>
           </Link>
         </View>
-      </View>
-    </View>
+    </Container>
   );
 };
 

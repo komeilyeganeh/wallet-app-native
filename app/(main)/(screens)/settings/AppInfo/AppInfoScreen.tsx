@@ -1,13 +1,13 @@
 import { Text, View } from "react-native";
 import styles from "./AppInfo.styles";
 import HeaderWrapper from "@/components/headerWrapper";
+import Container from "@/components/common/container";
 
 
 const AppInfoScreen = () => {
     // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="App information"/>
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>CaBank E-mobile Banking</Text>
@@ -38,8 +38,7 @@ const AppInfoScreen = () => {
             </Text>
           </View>
         </View>
-      </View>
-    </View>
+    </Container>
   );
 };
 

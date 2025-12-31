@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useVerifyTwoFactor } from "@/services/auth/twoFactor/hooks";
+import Container from "@/components/common/container";
 
 // Validation schema
 const verifySchema: yup.ObjectSchema<VerifyFormData> = yup.object().shape({
@@ -201,8 +202,7 @@ const VerifyScreen: FC = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper containerStyles={{ backgroundColor: "#FFF" }}>
         <HeaderWrapper title="Verify Code" />
 
         <KeyboardAvoidingView
@@ -462,22 +462,11 @@ const VerifyScreen: FC = () => {
             )}
           </ScrollView>
         </KeyboardAvoidingView>
-      </View>
-    </View>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
-  wrapper: {
-    backgroundColor: "#FFF",
-    flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 20,
-  },
   keyboardView: {
     flex: 1,
   },

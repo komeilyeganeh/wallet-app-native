@@ -18,6 +18,7 @@ import { useEnableTwoFactor } from "@/services/auth/twoFactor/hooks";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Container from "@/components/common/container";
 
 // Validation schema
 const enableSchema = yup.object().shape({
@@ -131,147 +132,142 @@ const EnableScreen: FC = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <HeaderWrapper title="Enable Two-Factor" />
+    <Container withWrapper containerStyles={{ backgroundColor: "#FFF" }}>
+      <HeaderWrapper title="Enable Two-Factor" />
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.keyboardView}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.keyboardView}
+      >
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
         >
-          <ScrollView
-            style={styles.scrollView}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Progress Indicator */}
-            <View style={styles.progressContainer}>
-              <View style={styles.progressStep}>
-                <View style={[styles.progressCircle, styles.progressCompleted]}>
-                  <MaterialIcons name="check" size={20} color="#FFF" />
-                </View>
-                <Text style={styles.progressLabel}>Setup</Text>
+          {/* Progress Indicator */}
+          <View style={styles.progressContainer}>
+            <View style={styles.progressStep}>
+              <View style={[styles.progressCircle, styles.progressCompleted]}>
+                <MaterialIcons name="check" size={20} color="#FFF" />
               </View>
-              <View style={styles.progressLineCompleted} />
-              <View style={styles.progressStep}>
-                <View style={[styles.progressCircle, styles.progressActive]}>
-                  <Text style={styles.progressNumber}>2</Text>
-                </View>
-                <Text style={styles.progressLabel}>Enable</Text>
-              </View>
-              <View style={styles.progressLine} />
-              <View style={styles.progressStep}>
-                <View style={[styles.progressCircle, styles.progressInactive]}>
-                  <Text style={styles.progressNumber}>3</Text>
-                </View>
-                <Text style={styles.progressLabel}>Verify</Text>
-              </View>
+              <Text style={styles.progressLabel}>Setup</Text>
             </View>
-
-            {/* Instructions */}
-            <View style={styles.instructionCard}>
-              <View style={styles.instructionIcon}>
-                <MaterialIcons name="smartphone" size={30} color="#3629B7" />
+            <View style={styles.progressLineCompleted} />
+            <View style={styles.progressStep}>
+              <View style={[styles.progressCircle, styles.progressActive]}>
+                <Text style={styles.progressNumber}>2</Text>
               </View>
-              <Text style={styles.instructionTitle}>
-                Step 2: Enter Phone Number
-              </Text>
-              <Text style={styles.instructionText}>
-                Enter your phone number to receive SMS backup codes. This is
-                optional but recommended.
-              </Text>
+              <Text style={styles.progressLabel}>Enable</Text>
             </View>
-
-            {/* Form */}
-            <View style={styles.formCard}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Phone Number</Text>
-                <Controller
-                  name="phoneNumber"
-                  control={control}
-                  render={({ field }) => (
-                    <TextInput
-                      value={field.value}
-                      onChangeText={(text) => {
-                        const numeric = text.replace(/[^0-9]/g, "");
-                        field.onChange(numeric);
-                      }}
-                      placeholder="09123456789"
-                      placeholderTextColor="#999"
-                      style={[
-                        styles.input,
-                        errors.phoneNumber && styles.inputError,
-                      ]}
-                      keyboardType="phone-pad"
-                      maxLength={11}
-                      editable={!isSubmitting}
-                      autoFocus
-                    />
-                  )}
-                />
-                {errors.phoneNumber && (
-                  <Text style={styles.errorText}>
-                    {errors.phoneNumber.message}
-                  </Text>
-                )}
-
-                <View style={styles.phoneHelper}>
-                  <MaterialIcons name="info-outline" size={16} color="#666" />
-                  <Text style={styles.helperText}>
-                    Enter 11-digit phone number (optional)
-                  </Text>
-                </View>
+            <View style={styles.progressLine} />
+            <View style={styles.progressStep}>
+              <View style={[styles.progressCircle, styles.progressInactive]}>
+                <Text style={styles.progressNumber}>3</Text>
               </View>
+              <Text style={styles.progressLabel}>Verify</Text>
+            </View>
+          </View>
 
-              {/* Phone Benefits */}
-              <View style={styles.benefitsCard}>
-                <Text style={styles.benefitsTitle}>Why add phone number?</Text>
-                <View style={styles.benefitItem}>
-                  <MaterialIcons name="sms" size={20} color="#4CAF50" />
-                  <Text style={styles.benefitText}>
-                    Receive SMS backup codes if you lose authenticator app
-                  </Text>
-                </View>
-                <View style={styles.benefitItem}>
-                  <MaterialIcons name="security" size={20} color="#4CAF50" />
-                  <Text style={styles.benefitText}>
-                    Extra layer of account recovery
-                  </Text>
-                </View>
-                <View style={styles.benefitItem}>
-                  <MaterialIcons
-                    name="notifications"
-                    size={20}
-                    color="#4CAF50"
+          {/* Instructions */}
+          <View style={styles.instructionCard}>
+            <View style={styles.instructionIcon}>
+              <MaterialIcons name="smartphone" size={30} color="#3629B7" />
+            </View>
+            <Text style={styles.instructionTitle}>
+              Step 2: Enter Phone Number
+            </Text>
+            <Text style={styles.instructionText}>
+              Enter your phone number to receive SMS backup codes. This is
+              optional but recommended.
+            </Text>
+          </View>
+
+          {/* Form */}
+          <View style={styles.formCard}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Phone Number</Text>
+              <Controller
+                name="phoneNumber"
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    value={field.value}
+                    onChangeText={(text) => {
+                      const numeric = text.replace(/[^0-9]/g, "");
+                      field.onChange(numeric);
+                    }}
+                    placeholder="09123456789"
+                    placeholderTextColor="#999"
+                    style={[
+                      styles.input,
+                      errors.phoneNumber && styles.inputError,
+                    ]}
+                    keyboardType="phone-pad"
+                    maxLength={11}
+                    editable={!isSubmitting}
+                    autoFocus
                   />
-                  <Text style={styles.benefitText}>
-                    Get notified of important security events
-                  </Text>
-                </View>
+                )}
+              />
+              {errors.phoneNumber && (
+                <Text style={styles.errorText}>
+                  {errors.phoneNumber.message}
+                </Text>
+              )}
+
+              <View style={styles.phoneHelper}>
+                <MaterialIcons name="info-outline" size={16} color="#666" />
+                <Text style={styles.helperText}>
+                  Enter 11-digit phone number (optional)
+                </Text>
               </View>
+            </View>
 
-              {/* Actions */}
-              <View style={styles.actionsContainer}>
-                <TouchableOpacity
-                  style={[
-                    styles.primaryButton,
-                    (!isValid || isSubmitting) && styles.primaryButtonDisabled,
-                  ]}
-                  onPress={handleSubmit(handleEnable)}
-                  disabled={!isValid || isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <ActivityIndicator size="small" color="#FFF" />
-                  ) : (
-                    <>
-                      <Text style={styles.primaryButtonText}>
-                        Enable & Continue
-                      </Text>
-                      <AntDesign name="arrowright" size={20} color="#FFF" />
-                    </>
-                  )}
-                </TouchableOpacity>
+            {/* Phone Benefits */}
+            <View style={styles.benefitsCard}>
+              <Text style={styles.benefitsTitle}>Why add phone number?</Text>
+              <View style={styles.benefitItem}>
+                <MaterialIcons name="sms" size={20} color="#4CAF50" />
+                <Text style={styles.benefitText}>
+                  Receive SMS backup codes if you lose authenticator app
+                </Text>
+              </View>
+              <View style={styles.benefitItem}>
+                <MaterialIcons name="security" size={20} color="#4CAF50" />
+                <Text style={styles.benefitText}>
+                  Extra layer of account recovery
+                </Text>
+              </View>
+              <View style={styles.benefitItem}>
+                <MaterialIcons name="notifications" size={20} color="#4CAF50" />
+                <Text style={styles.benefitText}>
+                  Get notified of important security events
+                </Text>
+              </View>
+            </View>
 
-                {/* {phoneNumber && (
+            {/* Actions */}
+            <View style={styles.actionsContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.primaryButton,
+                  (!isValid || isSubmitting) && styles.primaryButtonDisabled,
+                ]}
+                onPress={handleSubmit(handleEnable)}
+                disabled={!isValid || isSubmitting}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator size="small" color="#FFF" />
+                ) : (
+                  <>
+                    <Text style={styles.primaryButtonText}>
+                      Enable & Continue
+                    </Text>
+                    <AntDesign name="arrowright" size={20} color="#FFF" />
+                  </>
+                )}
+              </TouchableOpacity>
+
+              {/* {phoneNumber && (
                 <TouchableOpacity
                   style={styles.linkButton}
                   onPress={handleUseDifferentPhone}
@@ -282,55 +278,44 @@ const EnableScreen: FC = () => {
                   </Text>
                 </TouchableOpacity>
               )} */}
-              </View>
+            </View>
 
-              {/* Next Steps Info */}
-              <View style={styles.nextStepsCard}>
-                <Text style={styles.nextStepsTitle}>What's Next?</Text>
-                <View style={styles.nextStepItem}>
-                  <View style={styles.nextStepNumber}>
-                    <Text style={styles.nextStepNumberText}>1</Text>
-                  </View>
-                  <Text style={styles.nextStepText}>
-                    Check your authenticator app for a 6-digit code
-                  </Text>
+            {/* Next Steps Info */}
+            <View style={styles.nextStepsCard}>
+              <Text style={styles.nextStepsTitle}>What's Next?</Text>
+              <View style={styles.nextStepItem}>
+                <View style={styles.nextStepNumber}>
+                  <Text style={styles.nextStepNumberText}>1</Text>
                 </View>
-                <View style={styles.nextStepItem}>
-                  <View style={styles.nextStepNumber}>
-                    <Text style={styles.nextStepNumberText}>2</Text>
-                  </View>
-                  <Text style={styles.nextStepText}>
-                    Enter the code in the next step
-                  </Text>
+                <Text style={styles.nextStepText}>
+                  Check your authenticator app for a 6-digit code
+                </Text>
+              </View>
+              <View style={styles.nextStepItem}>
+                <View style={styles.nextStepNumber}>
+                  <Text style={styles.nextStepNumberText}>2</Text>
                 </View>
-                <View style={styles.nextStepItem}>
-                  <View style={styles.nextStepNumber}>
-                    <Text style={styles.nextStepNumberText}>3</Text>
-                  </View>
-                  <Text style={styles.nextStepText}>
-                    Two-factor authentication will be activated
-                  </Text>
+                <Text style={styles.nextStepText}>
+                  Enter the code in the next step
+                </Text>
+              </View>
+              <View style={styles.nextStepItem}>
+                <View style={styles.nextStepNumber}>
+                  <Text style={styles.nextStepNumberText}>3</Text>
                 </View>
+                <Text style={styles.nextStepText}>
+                  Two-factor authentication will be activated
+                </Text>
               </View>
             </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </View>
-    </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
-  wrapper: {
-    backgroundColor: "#FFF",
-    flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 20,
-  },
   keyboardView: {
     flex: 1,
   },

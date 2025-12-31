@@ -1,39 +1,29 @@
+import Container from "@/components/common/container";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const AddSaveOnlineSuccess = () => {
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <Image
-          source={require("../../../../../../assets/images/add-save-online.webp")}
-          style={{ marginHorizontal: "auto", width: 316, height: 234 }}
-        />
-        <Text style={styles.title}>Save online successfully!</Text>
-        <Text style={styles.desc}>
-          Congratulations! You have save money online successfully!
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Confirm</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <Container
+      withWrapper
+      wrapperStyles={{ display: "flex", flexDirection: "column", rowGap: 25 }}
+    >
+      <Image
+        source={require("../../../../../../assets/images/add-save-online.webp")}
+        style={{ marginHorizontal: "auto", width: 316, height: 234 }}
+      />
+      <Text style={styles.title}>Save online successfully!</Text>
+      <Text style={styles.desc}>
+        Congratulations! You have save money online successfully!
+      </Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Confirm</Text>
+      </TouchableOpacity>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  wrapper: {
-    backgroundColor: "#FFF",
-    flex: 1,
-    paddingTop: 100,
-    paddingHorizontal: 20,
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 25,
-  },
   title: {
     fontSize: 16,
     fontWeight: "bold",

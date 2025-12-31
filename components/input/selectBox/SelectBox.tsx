@@ -1,4 +1,4 @@
-import { SelectBoxPropsType } from "@/types/inputs";
+import { SelectBoxPropsType } from "@/types/components/inputs";
 import { FontAwesome } from "@expo/vector-icons";
 import { FC } from "react";
 import { Text, TouchableOpacity } from "react-native";

@@ -15,6 +15,7 @@ import { useToast } from "react-native-toast-notifications";
 import { useInquireBill, usePayBill } from "@/services/bill/hooks";
 import PaymentBottomSheet from "@/components/payment/PaymentBottomSheet";
 import styles from "./BillInquireForm.styles";
+import Container from "../common/container";
 
 // form validation
 const schema = yup.object().shape({
@@ -139,7 +140,7 @@ const BillInquiryForm = ({ defaultBillType }: BillInquiryFormProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <Container containerStyles={{ paddingTop: 20 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.formContainer}>
           <View style={styles.inputs}>
@@ -305,7 +306,7 @@ const BillInquiryForm = ({ defaultBillType }: BillInquiryFormProps) => {
         onPaymentSubmit={handlePaymentSubmit}
         isSubmitting={isPendingPayment}
       />
-    </View>
+    </Container>
   );
 };
 

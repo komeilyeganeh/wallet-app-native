@@ -1,20 +1,18 @@
 import { View } from "react-native";
 import styles from "../PayBill.styles";
 import HeaderWrapper from "@/components/headerWrapper";
-import RechargesHistory from "@/components/mobileRecharge/rechargeHistory/RechargeHistory";
 import BillPaymentsHistory from "@/components/bill/billHistory/BillHistory";
+import Container from "@/components/common/container";
 
 const RechargesHistoryScreen = () => {
     // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="History recharges" />
         <View style={styles.content}>
            <BillPaymentsHistory />
         </View>
-      </View>
-    </View>
+    </Container>
   );
 };
 

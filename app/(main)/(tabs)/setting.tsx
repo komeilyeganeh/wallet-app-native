@@ -12,6 +12,7 @@ import { useLogOut } from "@/lib/hooks/useLogOut";
 import Profile from "@/components/profile";
 import styles from "@/assets/styles/tabs/setting.styles";
 import { useIsTwoFactorEnabled } from "@/services/auth/twoFactor/hooks";
+import Container from "@/components/common/container";
 
 const SettingScreen: FC = () => {
   const { logOut } = useLogOut();
@@ -28,7 +29,7 @@ const SettingScreen: FC = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
+    <Container containerStyles={{backgroundColor: "#3629B7",}}>
       <View style={styles.headerWrapper}>
         <Link href="..">
           <AntDesign name="left" color="#FFF" size={20} />
@@ -101,7 +102,7 @@ const SettingScreen: FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </Container>
   );
 };
 

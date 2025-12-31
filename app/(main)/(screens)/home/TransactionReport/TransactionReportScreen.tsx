@@ -18,6 +18,7 @@ import Carousel from "react-native-reanimated-carousel";
 import { useGetMyWallets } from "@/services/wallet/hooks";
 import { useUserData } from "@/hooks/useUserData";
 import { cardNumberFormat } from "@/lib/cardNumberFormat";
+import Container from "@/components/common/container";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -91,7 +92,7 @@ const TransactionReportScreen = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
+    <Container>
       <View style={styles.headerWrapper}>
         <View style={styles.headerContent}>
           <Link href="..">
@@ -192,7 +193,7 @@ const TransactionReportScreen = () => {
           </View>
         </ScrollView>
       </View>
-    </View>
+    </Container>
   );
 };
 

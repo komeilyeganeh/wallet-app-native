@@ -1,61 +1,31 @@
 import { FC, useRef, useState, useMemo, useEffect, useCallback } from "react";
-import {
-  FontAwesome,
-  FontAwesome5,
-  FontAwesome6,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import {
   Alert,
   Dimensions,
-  Image,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
-  ActivityIndicator,
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import CreditCard from "@/components/creditCard";
-import CardItem from "@/components/home/cardItem/CardItem";
 import { cardNumberFormat } from "@/lib/cardNumberFormat";
 import { MaterialIndicator } from "react-native-indicators";
 import { useGetMyWallets } from "@/services/wallet/hooks";
 import { useUserData } from "@/hooks/useUserData";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import { useDeposit } from "@/services/deposit/hooks";
-import * as yup from "yup";
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import styles from "@/assets/styles/tabs/home.styles";
+import UserProfileHeader from "@/components/userProfileHeader";
+import DashboardCards from "@/components/dashboardCards";
+import BottomSheetDeposit from "@/components/home/bottomSheetDeposit";
+import { useToast } from "react-native-toast-notifications";
+import { useFocusEffect } from "expo-router";
+import Container from "@/components/common/container";
 
 const { width: screenWidth } = Dimensions.get("window");
-
-// Validation Schema
-const depositSchema = yup.object().shape({
-  walletId: yup
-    .number()
-    .required("Please select wallet")
-    .min(1, "Please select a valid wallet"),
-  amount: yup
-    .string()
-    .required("Please enter the amount")
-    .test("is-number", "Amount must be a valid number", (value) => {
-      if (!value || value.trim() === "") return false;
-      const num = Number(value.replace(/,/g, ""));
-      return !isNaN(num) && isFinite(num);
-    })
-    .test("is-positive", "Amount must be greater than zero", (value) => {
-      if (!value || value.trim() === "") return false;
-      return Number(value.replace(/,/g, "")) > 0;
-    }),
-  description: yup.string().optional(),
-});
 
 const HomeScreen: FC = () => {
   const {
@@ -70,11 +40,17 @@ const HomeScreen: FC = () => {
     isPending: walletsPending,
     error: walletsError,
     refetch: refetchMyWallets,
-  } = useGetMyWallets(userId); 
+  } = useGetMyWallets(userId);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchMyWallets();
+    }, [])
+  );
 
   const [isDepositSheetOpen, setIsDepositSheetOpen] = useState(false);
   const [selectedWalletIndex, setSelectedWalletIndex] = useState(0);
-
+  const toast = useToast();
   const loading = userLoading || walletsPending;
   const carouselRef = useRef<any>(null);
   const { mutate: deposit, isPending: isDepositing } = useDeposit();
@@ -82,27 +58,9 @@ const HomeScreen: FC = () => {
   // Bottom Sheet ref
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isValid },
-    reset,
-    setValue,
-    watch,
-  } = useForm({
-    resolver: yupResolver(depositSchema),
-    defaultValues: {
-      walletId: 0,
-      amount: "",
-      description: "",
-    },
-    mode: "onChange",
-  });
+  const { reset } = useForm();
 
   const walletsData = myWallets?.data?.data || [];
-
-  // Bottom Sheet snap points
-  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
 
   const handleCarouselChange = useCallback(
     (index: number) => {
@@ -119,7 +77,9 @@ const HomeScreen: FC = () => {
         name={user?.name || "User"}
         accountLevel="Wallet"
         cardNumber={cardNumberFormat(item?.cardNumber || item?.id)}
-        accountBalance={item?.balance ? `${item?.currency?.symbol} ${item.balance}` : "$0"}
+        accountBalance={
+          item?.balance ? `${item?.currency?.symbol} ${item.balance}` : "$0"
+        }
         theme={getTheme(index)}
         bankName={item?.bankName || "Bank"}
       />
@@ -196,7 +156,7 @@ const HomeScreen: FC = () => {
       walletId: Number(data.walletId),
       amount: +data.amount,
       description: data.description || "",
-    };    
+    };
     deposit(depositData, {
       onSuccess: () => {
         Alert.alert(
@@ -218,12 +178,11 @@ const HomeScreen: FC = () => {
           error.response?.data?.message ||
           error.response?.data?.error ||
           error.message ||
-          "Deposit failed. Please try again.";        
-        Alert.alert("Error", errorMessage, [{ text: "OK" }]);
+          "Deposit failed. Please try again.";
+        toast.show(errorMessage, { type: "danger" });
       },
     });
   };
-
 
   const handleSheetChanges = useCallback((index: number) => {
     if (index === -1) {
@@ -245,24 +204,14 @@ const HomeScreen: FC = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.headerWrapper}>
-        <View style={styles.userWrapper}>
-          <Image
-            source={require("../../../assets/images/user.png")}
-            style={{ width: 50, height: 50 }}
-          />
-          <Text style={styles.userTitle}>Hi, {user?.name || "User"} !</Text>
-        </View>
-        <View style={styles.notificationSection}>
-          <MaterialIcons name="notifications" size={26} color="white" />
-          <View style={styles.notificationCount}>
-            <Text style={styles.notificationCounter}>3</Text>
-          </View>
-        </View>
-      </View>
+    <Container containerStyles={{ backgroundColor: "#3629B7" }}>
+      {/* =============== user profile header =============== */}
+      <UserProfileHeader user={user} />
 
-      <ScrollView style={styles.contentWrapper} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.contentWrapper}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={{ paddingBottom: 40 }}>
           {userError && (
             <View style={styles.errorContainer}>
@@ -310,8 +259,8 @@ const HomeScreen: FC = () => {
                   style={styles.carousel}
                   modeConfig={{
                     stackInterval: 30,
-                    scaleInterval: 0.1,
-                    opacityInterval: 0.2,
+                    scaleInterval: 0.13,
+                    opacityInterval: 0.4,
                     moveSize: screenWidth * 0.88,
                     showLength: Math.min(walletsData.length, 3),
                   }}
@@ -369,199 +318,22 @@ const HomeScreen: FC = () => {
             </View>
           </TouchableOpacity>
 
-          <View style={styles.cardsContainer}>
-            <CardItem
-              icon={<FontAwesome5 name="wallet" size={28} color="#3629B7" />}
-              title="Wallets"
-              href="/(main)/(screens)/home/Wallets"
-            />
-            <CardItem
-              icon={
-                <Ionicons
-                  name="git-compare-outline"
-                  size={30}
-                  color="#FF4267"
-                />
-              }
-              title="Transfer"
-              href="/(main)/(screens)/home/Transfer"
-            />
-            <CardItem
-              icon={<Ionicons name="card" size={28} color="#0890FE" />}
-              title="Withdraw"
-              href="/(main)/(screens)/home/Withdraw"
-            />
-            <CardItem
-              icon={<MaterialIcons name="sim-card" size={28} color="#FFAF2A" />}
-              title="Purchase charge"
-              href="/(main)/(screens)/home/MobileRecharge"
-            />
-            <CardItem
-              icon={<FontAwesome name="bookmark" size={28} color="#52D5BA" />}
-              title="Pay the bill"
-              href="/(main)/(screens)/home/PayBill"
-            />
-            <CardItem
-              icon={<Ionicons name="save" size={28} color="#5655B9" />}
-              title="Save online"
-              href="/(main)/(screens)/home/SaveOnline"
-            />
-            <CardItem
-              icon={<Ionicons name="card" size={28} color="#FB6B18" />}
-              title="Credit card"
-              href="/(main)/(screens)/home/CreditCard"
-            />
-            <CardItem
-              icon={<MaterialIcons name="list-alt" size={28} color="#3629B7" />}
-              title="Transaction report"
-              href="/(main)/(screens)/home/TransactionReport"
-            />
-            <CardItem
-              icon={
-                <FontAwesome6 name="contact-book" size={28} color="#FF4267" />
-              }
-              title="Beneficiary"
-              href="/(main)/(screens)/home/Beneficiary"
-            />
-          </View>
+          {/* =============== render of dashboard cards =============== */}
+          <DashboardCards />
+          
         </View>
       </ScrollView>
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        enablePanDownToClose={true}
-        backdropComponent={renderBackdrop}
-        handleIndicatorStyle={styles.bottomSheetHandle}
-        backgroundStyle={styles.bottomSheetBackground}
-      >
-        <BottomSheetScrollView
-          style={styles.bottomSheetContent}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View style={styles.sheetHeader}>
-            <Text style={styles.sheetTitle}>Deposit Funds</Text>
-            <TouchableOpacity onPress={handleCloseDepositSheet}>
-              <Ionicons name="close" size={24} color="#333" />
-            </TouchableOpacity>
-          </View>
-
-          {selectedWallet ? (
-            <>
-              <View style={styles.selectedWalletCard}>
-                <Text style={styles.selectedWalletTitle}>Selected Wallet</Text>
-                <View style={styles.walletInfo}>
-                  <Text style={styles.walletBank}>
-                    {selectedWallet.bankName}
-                  </Text>
-                  <Text style={styles.walletNumber}>
-                    {cardNumberFormat(
-                      selectedWallet.cardNumber || selectedWallet.id
-                    )}
-                  </Text>
-                  <Text style={styles.walletBalance}>
-                    Balance: {selectedWallet.balance}{" "}
-                    {selectedWallet.currency?.code || ""}
-                  </Text>
-                </View>
-                <Controller
-                  name="walletId"
-                  control={control}
-                  render={({ field }) => (
-                    <TextInput
-                      value={field.value?.toString()}
-                      editable={false}
-                      style={styles.hiddenInput}
-                    />
-                  )}
-                />
-              </View>
-
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Amount *</Text>
-                <Controller
-                  name="amount"
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <TextInput
-                        style={[
-                          styles.input,
-                          errors.amount && styles.inputError,
-                        ]}
-                        placeholder="Enter amount"
-                        placeholderTextColor="#999"
-                        keyboardType="numeric"
-                        onChangeText={(text) => {
-                          field.onChange(text);
-                        }}
-                      />
-                    );
-                  }}
-                />
-                {errors.amount && (
-                  <Text style={styles.errorText}>{errors.amount.message}</Text>
-                )}
-              </View>
-
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Description (Optional)</Text>
-                <Controller
-                  name="description"
-                  control={control}
-                  render={({ field }) => (
-                    <TextInput
-                      value={field.value || ""}
-                      style={[styles.input, styles.textArea]}
-                      placeholder="Enter description"
-                      placeholderTextColor="#999"
-                      multiline
-                      numberOfLines={3}
-                      onChangeText={field.onChange}
-                      textAlignVertical="top"
-                    />
-                  )}
-                />
-              </View>
-
-              <View style={styles.sheetActions}>
-                <TouchableOpacity
-                  style={[
-                    styles.submitButton,
-                    (!isValid || isDepositing) && styles.submitButtonDisabled,
-                  ]}
-                  onPress={handleSubmit(onSubmit)}
-                  disabled={!isValid || isDepositing}
-                >
-                  {isDepositing ? (
-                    <ActivityIndicator size="small" color="#FFF" />
-                  ) : (
-                    <Text style={styles.submitButtonText}>Deposit Now</Text>
-                  )}
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.cancelButton}
-                  onPress={handleCloseDepositSheet}
-                >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          ) : (
-            <View style={styles.sheetLoading}>
-              <ActivityIndicator size="large" color="#4CAF50" />
-              <Text style={styles.sheetLoadingText}>
-                Loading wallet information...
-              </Text>
-            </View>
-          )}
-        </BottomSheetScrollView>
-      </BottomSheet>
-    </View>
+      <BottomSheetDeposit
+        bottomSheetRef={bottomSheetRef}
+        selectedWallet={selectedWallet}
+        renderBackdrop={renderBackdrop}
+        handleSheetChanges={handleSheetChanges}
+        handleCloseDepositSheet={handleCloseDepositSheet}
+        onSubmit={onSubmit}
+        isDepositing={isDepositing}
+      />
+    </Container>
   );
 };
 

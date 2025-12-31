@@ -23,6 +23,7 @@ import { tokenStorage } from "@/lib/storage/tokenStorage";
 import { jwtDecode } from "jwt-decode";
 import styles from "./LoginWith2FA.styles";
 import { useCompleteLoginWith2FA } from "@/services/auth/twoFactor/hooks";
+import Container from "@/components/common/container";
 
 // Validation schema
 const verifyTwoFactorSchema: yup.ObjectSchema<VerifyTwoFactorFormData> = yup
@@ -185,7 +186,7 @@ const LoginWith2FAScreen: FC = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
+    <>
       {/* Backup Code Modal */}
       <Modal
         visible={showBackupModal}
@@ -251,7 +252,7 @@ const LoginWith2FAScreen: FC = () => {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-      <View style={styles.wrapper}>
+      <Container withWrapper containerStyles={{ backgroundColor: "#FFF" }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.keyboardView}
@@ -436,8 +437,8 @@ const LoginWith2FAScreen: FC = () => {
             )}
           </ScrollView>
         </KeyboardAvoidingView>
-      </View>
-    </View>
+      </Container>
+    </>
   );
 };
 

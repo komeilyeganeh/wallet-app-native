@@ -11,14 +11,14 @@ import WithdrawForm from "./_steps/form";
 import WithdrawSuccess from "./_steps/success";
 import styles from "./Withdraw.styles";
 import HeaderWrapper from "@/components/headerWrapper";
+import Container from "@/components/common/container";
 
 const WithdrawScreen = () => {
   const { width } = Dimensions.get("window");
   const [step, setStep] = useState(1);
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="Withdraw" />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
@@ -41,8 +41,7 @@ const WithdrawScreen = () => {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </View>
-    </View>
+    </Container>
   );
 };
 

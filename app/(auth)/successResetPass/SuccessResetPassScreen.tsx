@@ -3,19 +3,18 @@ import { Link } from "expo-router";
 import { View } from "react-native";
 import styles from "./SuccessResetPass.styles";
 import SuccessResetPassword from "@/components/auth/successResetPass";
+import Container from "@/components/common/container";
 
 const SuccessResetPasswordScreen = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <View style={styles.headerWrapper}>
-          <Link href="/(auth)/login">
-            <AntDesign name="left" color="#343434" size={20} />
-          </Link>
-        </View>
-        <SuccessResetPassword />
+    <Container withWrapper>
+      <View style={styles.headerWrapper}>
+        <Link href="/(auth)/login">
+          <AntDesign name="left" color="#343434" size={20} />
+        </Link>
       </View>
-    </View>
+      <SuccessResetPassword />
+    </Container>
   );
 };
 

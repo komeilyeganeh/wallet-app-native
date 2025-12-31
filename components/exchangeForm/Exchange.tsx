@@ -1,11 +1,10 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import SelectBox from "../input/selectBox";
 import styles from "./Exchange.styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useGetCurrency } from "./api/useExchange";
 
 const schema = yup.object().shape({
   fromCurrencyId: yup.number().required(),

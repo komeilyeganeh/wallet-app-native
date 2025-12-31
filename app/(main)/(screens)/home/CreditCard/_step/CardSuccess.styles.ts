@@ -1,18 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  wrapper: {
-    backgroundColor: "#FFF",
-    flex: 1,
-    paddingTop: 100,
-    paddingHorizontal: 20,
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 25,
-  },
   title: {
     fontSize: 16,
     fontWeight: "bold",

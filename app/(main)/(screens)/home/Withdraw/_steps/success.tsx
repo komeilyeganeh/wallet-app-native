@@ -1,3 +1,4 @@
+import Container from "@/components/common/container";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as yup from "yup";
@@ -6,7 +7,14 @@ const WithdrawSuccess = () => {
   const router = useRouter();
   // **** jsx ****
   return (
-    <View style={styles.container}>
+    <Container
+      containerStyles={{
+        marginTop: 26,
+        display: "flex",
+        flexDirection: "column",
+        rowGap: 25,
+      }}
+    >
       <Text style={styles.title}>Successful withdrawal!</Text>
       <Text style={styles.desc}>
         You have successfully withdrawn money! Please check the balance in the
@@ -18,18 +26,11 @@ const WithdrawSuccess = () => {
       >
         <Text style={styles.buttonText}>Home</Text>
       </TouchableOpacity>
-    </View>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 26,
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 25,
-  },
   title: {
     fontSize: 16,
     fontWeight: "bold",

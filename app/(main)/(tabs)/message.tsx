@@ -10,12 +10,12 @@ import { View } from "react-native";
 import HeaderWrapper from "@/components/headerWrapper";
 import MessageItem from "@/components/message/MessageCard";
 import styles from "@/assets/styles/tabs/messages.styles";
+import Container from "@/components/common/container";
 
 const MessageScreen: FC = () => {
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+   <Container withWrapper>
         <HeaderWrapper title="Messsage" />
         <View style={styles.messageItems}>
           <MessageItem
@@ -62,8 +62,7 @@ const MessageScreen: FC = () => {
             date="11/10"
           />
         </View>
-      </View>
-    </View>
+    </Container>
   );
 };
 

@@ -22,6 +22,7 @@ import { useUserData } from "@/hooks/useUserData";
 import { cardNumberSpace } from "@/lib/cardNumberSpace";
 import { useMobileRecharge } from "@/services/recharge/hooks";
 import RechargeConfirmationSheet from "../rechargeBottomSheet/RechargeBottomSheet";
+import Container from "../common/container";
 
 // form validation
 const schema = yup.object().shape({
@@ -104,7 +105,7 @@ const MobileRechargeForm = ({
     }
   }, [myWallets]);
 
-  const onSubmit = (data: any) => {    
+  const onSubmit = (data: any) => {
     const rechargeData: RechargeData = {
       walletId: watch("walletId"),
       operator: data.operator,
@@ -112,7 +113,7 @@ const MobileRechargeForm = ({
       amount: data.amount,
       description:
         data.description || `Charge ${data.operator} - ${data.phoneNumber}`,
-    };    
+    };
     setSelectedRechargeData(rechargeData);
     setShowConfirmationSheet(true);
   };
@@ -133,7 +134,7 @@ const MobileRechargeForm = ({
       description:
         selectedRechargeData.description ||
         `Charge ${selectedRechargeData.operator} - ${selectedRechargeData.phoneNumber}`,
-    };    
+    };
     mutateRecharge(rechargePayload, {
       onSuccess: () => {
         toast.show("Charging was successful!", { type: "success" });
@@ -163,7 +164,7 @@ const MobileRechargeForm = ({
   };
 
   return (
-    <View style={styles.container}>
+    <Container containerStyles={{ paddingTop: 20 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.formContainer}>
           <View style={styles.inputs}>
@@ -351,7 +352,7 @@ const MobileRechargeForm = ({
         onConfirm={handleRechargeSubmit}
         isSubmitting={isPendingRecharge}
       />
-    </View>
+    </Container>
   );
 };
 

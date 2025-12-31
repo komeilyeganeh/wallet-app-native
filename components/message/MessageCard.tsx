@@ -1,4 +1,4 @@
-import { MessageItemPropsType } from "@/types/messageItem";
+import { MessageItemPropsType } from "@/types/components/messageItem";
 import { Link } from "expo-router";
 import { FC } from "react";
 import { Text, View } from "react-native";

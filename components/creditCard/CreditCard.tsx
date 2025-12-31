@@ -1,7 +1,7 @@
-import { CreditCardPropsType } from "@/types/creditCard";
+import { CreditCardPropsType } from "@/types/components/creditCard";
 import { FC, useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import styles from "./CreditCard.styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

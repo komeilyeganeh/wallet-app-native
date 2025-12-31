@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useTransferAmount } from "./_steps/Form/api/useTransfer";
 import { useToast } from "react-native-toast-notifications";
 import { useRouter } from "expo-router";
+import Container from "@/components/common/container";
 
 const TransferScreen = () => {
   const [currentStep, setCurrentStep] = useState<"form" | "confirm" | "success">("form");
@@ -51,8 +52,7 @@ const TransferScreen = () => {
 
   // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="Transfer" />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
@@ -82,8 +82,7 @@ const TransferScreen = () => {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </View>
-    </View>
+    </Container>
   );
 };
 

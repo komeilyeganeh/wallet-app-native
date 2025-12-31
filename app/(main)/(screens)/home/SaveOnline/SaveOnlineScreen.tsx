@@ -2,12 +2,12 @@ import { Link } from "expo-router";
 import { Image, Text, View } from "react-native";
 import styles from "./SaveOnline.styles";
 import HeaderWrapper from "@/components/headerWrapper";
+import Container from "@/components/common/container";
 
 const SaveOnlineScreen = () => {
     // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="Save online" />
         <View style={styles.linksContainer}>
           <Link href="/(main)/(screens)/home/SaveOnline/_step/Form">
@@ -39,8 +39,7 @@ const SaveOnlineScreen = () => {
             </View>
           </Link>
         </View>
-      </View>
-    </View>
+    </Container>
   );
 };
 

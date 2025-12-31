@@ -1,12 +1,12 @@
 import { Text, View } from "react-native";
 import styles from "./AccountManagement.styles";
 import HeaderWrapper from "@/components/headerWrapper";
+import Container from "@/components/common/container";
 
 const AccountManagementScreen = () => {
     // **** jsx ****
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
+    <Container withWrapper>
         <HeaderWrapper title="Management" />
         <View style={styles.content}>
           <View style={styles.card}>
@@ -54,8 +54,7 @@ const AccountManagementScreen = () => {
             </View>
           </View>
         </View>
-      </View>
-    </View>
+    </Container>
   );
 };
 
