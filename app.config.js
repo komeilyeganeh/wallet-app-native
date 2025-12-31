@@ -15,6 +15,7 @@ export default ({ config }) => ({
     ...config.android,
     package: "com.kml00.walletapp",
     permissions: ["INTERNET"],
-    usesCleartextTraffic: true
+    usesCleartextTraffic: true,
+    enableHermesEngine: true,
   },
 });
