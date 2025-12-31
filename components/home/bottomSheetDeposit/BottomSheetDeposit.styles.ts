@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     padding: 14,
     fontSize: 16,
     backgroundColor: "#FFF",
+    color: "#333"
   },
   inputError: {
     borderColor: "#FF3B30",
